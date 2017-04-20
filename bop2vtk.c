@@ -2,9 +2,9 @@
 #include "endian.h"
 
 #define MAX_PART_NUM 1000000
-#define nfpp   6     /* number of fields per particle */
+#define MAX_LINE     15     /* max number of fields per particle */
 
-float fbuf[nfpp*MAX_PART_NUM];
+float fbuf[MAX_LINE*MAX_PART_NUM];
 int ib; /* position in the buffer */
 
 #define dataType "float"
@@ -13,6 +13,7 @@ float rr[3*MAX_PART_NUM];
 float vvx[MAX_PART_NUM], vvy[MAX_PART_NUM], vvz[MAX_PART_NUM];
 
 int n; /* number of particles */
+int nfpp; /* number of fields per particle */
 
 FILE* fo;  /* output file descriptor */
 #define pr(...) fprintf(fo, __VA_ARGS__)
@@ -23,29 +24,43 @@ void sf(float fl) { fbuf[ib++] = FloatSwap(fl);}
 /* [w]rite buffer to a file*/
 #define wb(b) fwrite((b), (ib), sizeof((b)[0]), fo)
 
-/* [r]ead to buffer */
-#define rb(b, n) fread((b), (n), sizeof((b)[0]), fi)
+
+long nflo(FILE* fd) { /* return a number floats in file */
+  long end, curr;
+  curr = ftell(fd);
+  fseek(fd, 0, SEEK_END); end = ftell(fd);
+  fseek(fd, curr, SEEK_SET); /* go back */
+  return (end - curr)/sizeof(float);
+}
+
+void read_file0(FILE* f) { /* sets `n' and `nfpp' */
+  /* [r]ead to [b]uffer */
+  #define rb(b, n) fread((b), (n), sizeof((b)[0]), f)
+  fread(&n, 1, sizeof(n), f);
+  nfpp  = nflo(f) / n;
+  fprintf(stderr, "(bop2vtk) n, nfpp: %d %d\n", n, nfpp);
+  rb(fbuf, n*nfpp);
+  #undef rb  
+}
 
 void read_file(const char* fn) {
   fprintf(stderr, "(bop2vtk) reading: %s\n", fn);
-  FILE* fi = fopen(fn, "r");
-  fread(&n, 1, sizeof(n), fi);
-  fprintf(stderr, "(bop2vtk) n: %d\n", n);
-  rb(fbuf, n*nfpp);
-  fclose(fi);
+  FILE* f = fopen(fn, "r");
+  read_file0(f);
+  fclose(f);
 }
 
 void buf2fields(void) {
-  int ir = 0, iv = 0;
-  ib = 0;
-  while (ib < n*nfpp) {
-    rr[ir++] = fbuf[ib++]; rr[ir++] = fbuf[ib++]; rr[ir++] = fbuf[ib++];
-    vvx[iv] = fbuf[ib++]; vvy[iv] = fbuf[ib++]; vvz[iv] = fbuf[ib++]; iv++;
+  enum {X, Y, Z}; int i;
+  for (i = 0; i < n; i++, ib = nfpp * i) {
+    float *r = &rr[3*i];
+    r[X]   = fbuf[ib++]; r[Y]   = fbuf[ib++]; r[Z]   = fbuf[ib++];
+    vvx[i] = fbuf[ib++]; vvy[i] = fbuf[ib++]; vvz[i] = fbuf[ib++];
   }
 }
 
 void write_version(void) {pr("# vtk DataFile Version 2.0\n");}
-void write_header(void) {pr("Created with vrbc bop2vtk\n");}
+void write_header(void) {pr("Created with bop2vtk\n");}
 void write_format(void) {pr("BINARY\n");}
 void write_vertices(void) {
   pr("DATASET POLYDATA\n");
