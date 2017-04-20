@@ -100,9 +100,9 @@ void write_file(const char* fn) {
 }
 
 int main(int argc, char *argv[]) {
-  read_file(argv[1]);
+  read_file(argv[2]);
   buf2fields();
 
-  write_file(argv[2]);
+  write_file(argv[1]);
   return 0;
 }
