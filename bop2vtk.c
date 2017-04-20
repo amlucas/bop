@@ -51,7 +51,7 @@ void read_file(const char* fn) {
 
 void buf2fields(void) {
   enum {X, Y, Z};
-  int i, ib;
+  long i, ib;
   for (i = 0; i < n; i++) {
     ib = nfpp * i;
     float *r = &rr[3*i];
@@ -66,7 +66,7 @@ void write_format(void) {pr("BINARY\n");}
 void write_vertices(void) {
   pr("DATASET POLYDATA\n");
   pr("POINTS %d %s\n", n, dataType);
-  int i, ib = 0;
+  long i, ib = 0;
   for (i = 0; i < n; i++) {
     sf(rr[3*i]); sf(rr[3*i+1]); sf(rr[3*i+2]);
   }
@@ -74,12 +74,12 @@ void write_vertices(void) {
   pr("\n");
 }
 
-void write_attributes_header(void) {pr("POINT_DATA %d\n", n);}
+void write_attributes_header(void) { pr("POINT_DATA %d\n", n); }
 
 void write_attribute(const char *name, float *data) {
   pr("SCALARS %s %s\n", name, dataType);
   pr("LOOKUP_TABLE default\n");
-  int i, ib = 0;
+  long i, ib = 0;
   for (i = 0; i < n; i++) sf(data[i]);
   wb(fbuf);
 }
@@ -92,9 +92,9 @@ void write_file(const char* fn) {
   write_vertices();
   write_attributes_header();
 
-  write_attribute("dx", vvx);
-  write_attribute("dy", vvy);
-  write_attribute("dz", vvz);
+  write_attribute("vx", vvx);
+  write_attribute("vy", vvy);
+  write_attribute("vz", vvz);
 
   fclose(fo);
 }
