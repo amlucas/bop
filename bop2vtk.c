@@ -5,7 +5,6 @@
 #define MAX_LINE     15     /* max number of fields per particle */
 
 float fbuf[MAX_LINE*MAX_PART_NUM];
-int ib; /* position in the buffer */
 
 #define dataType "float"
 
@@ -19,7 +18,7 @@ FILE* fo;  /* output file descriptor */
 #define pr(...) fprintf(fo, __VA_ARGS__)
 
 /* [s]wap [f]loat and put it into buffer */
-void sf(float fl) { fbuf[ib++] = FloatSwap(fl);}
+#define sf(fl) fbuf[ib++] = FloatSwap((fl))
 
 /* [w]rite buffer to a file*/
 #define wb(b) fwrite((b), (ib), sizeof((b)[0]), fo)
@@ -40,7 +39,7 @@ void read_file0(FILE* f) { /* sets `n' and `nfpp' */
   nfpp  = nflo(f) / n;
   fprintf(stderr, "(bop2vtk) n, nfpp: %d %d\n", n, nfpp);
   rb(fbuf, n*nfpp);
-  #undef rb  
+  #undef rb
 }
 
 void read_file(const char* fn) {
@@ -51,8 +50,10 @@ void read_file(const char* fn) {
 }
 
 void buf2fields(void) {
-  enum {X, Y, Z}; int i;
-  for (i = 0; i < n; i++, ib = nfpp * i) {
+  enum {X, Y, Z};
+  int i, ib;
+  for (i = 0; i < n; i++) {
+    ib = nfpp * i;
     float *r = &rr[3*i];
     r[X]   = fbuf[ib++]; r[Y]   = fbuf[ib++]; r[Z]   = fbuf[ib++];
     vvx[i] = fbuf[ib++]; vvy[i] = fbuf[ib++]; vvz[i] = fbuf[ib++];
@@ -65,8 +66,7 @@ void write_format(void) {pr("BINARY\n");}
 void write_vertices(void) {
   pr("DATASET POLYDATA\n");
   pr("POINTS %d %s\n", n, dataType);
-  int i;
-  ib = 0;
+  int i, ib = 0;
   for (i = 0; i < n; i++) {
     sf(rr[3*i]); sf(rr[3*i+1]); sf(rr[3*i+2]);
   }
@@ -79,7 +79,7 @@ void write_attributes_header(void) {pr("POINT_DATA %d\n", n);}
 void write_attribute(const char *name, float *data) {
   pr("SCALARS %s %s\n", name, dataType);
   pr("LOOKUP_TABLE default\n");
-  int i; ib = 0;
+  int i, ib = 0;
   for (i = 0; i < n; i++) sf(data[i]);
   wb(fbuf);
 }
