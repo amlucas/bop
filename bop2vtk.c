@@ -91,9 +91,7 @@ void write0(long n) {
 void write(const char* fn, long n) {
   fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
   fo = fopen(fn, "w");
-  
   write0(n);
-  
   fclose(fo);
 }
 
