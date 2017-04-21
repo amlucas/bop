@@ -1,8 +1,8 @@
 Tools for BOP (brick of particles) files
-================
+========================================
 
 Introduction
-----------
+============
 bop file format:
 
     n
@@ -10,4 +10,4 @@ bop file format:
 	...
 	x y z vx vy vz ...
 
-`n` : number of particles is `int`, the rest are `float`
+`n` : number of particles is `long`, the rest are `float`
