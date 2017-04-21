@@ -6,7 +6,7 @@ long nreal(FILE* fd) { /* return a number of reals in the file */
   return (end - curr)/sizeof(real);
 }
 
-long read0(FILE* f, real* buf, int* nrpp) {
+long read_bop0(FILE *f, real *buf, int *nrpp) {
   /* [r]ead to [b]uffer */
   int n0; long n; /* TODO: should be long in udx */
   fread(&n0, 1, sizeof(n0), f); n = n0;
@@ -18,10 +18,10 @@ long read0(FILE* f, real* buf, int* nrpp) {
 }
 
 /* fn: file name; buf: input buffer; nrpp: number of reals per file */
-long read(const char* fn, real* buf, int *nrpp) {
-  fprintf(stderr, "(bop2vtk) reading: %s\n", fn);
+long read_bop(const char *fn, real *buf, int *nrpp) {
+  fprintf(stderr, "(bop.utils) reading: %s\n", fn);
   FILE* f = fopen(fn, "r");
-  long n = read0(f, buf, nrpp);
+  long n = read_bop0(f, buf, nrpp);
   fclose(f);
   return n;
 }
@@ -40,7 +40,7 @@ vy1 vy2
 ...
 
 */
-void in2out(real* ibuf, long n, int nrpp, /**/ real* obuf) {
+void in2out(real *ibuf, long n, int nrpp, /**/ real *obuf) {
   long i, j, dim = 3;
   for (i = 0; i < n; i++) {
     j = 0;

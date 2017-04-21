@@ -8,7 +8,7 @@ typedef float real;
 #define MAX_LINE     15     /* max number of fields per particle */
 real buf[MAX_LINE*MAX_PART_NUM]; /* input and output buffers */
 
-void write(real* buf, long n, int nrpp) {
+void write(real *buf, long n, int nrpp) {
   int i, j;
   for (i = 0; i < n; i++) {
     for (j = 0; j < nrpp; j++) {
@@ -23,7 +23,7 @@ void write(real* buf, long n, int nrpp) {
 int main(int argc, char *argv[]) {
   int nrpp; /* [n]umber of [r]eals [p]er [p]article */
   long n = 0; /* number of particles */
-  for (/**/; --argc; ++argv)  n += read(argv[1], buf, &nrpp);
+  for (/**/; --argc; ++argv)  n += read_bop(argv[1], buf, &nrpp);
   write(buf, n, nrpp);
   return 0;
 }
