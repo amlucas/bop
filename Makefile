@@ -6,7 +6,7 @@ CFLAGS = -std=c99 -pedantic -Wall -Os
 all: $(PROGS)
 %: %.o; $(CC) -o $@ $< ${LDFLAGS}
 
-bop2vtk.o: endian.h
+bop2vtk.o: endian.h bop.utils.h
 
 install: all
 	mkdir -p $(BIN)
