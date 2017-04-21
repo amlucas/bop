@@ -1,31 +1,24 @@
 #include <stdio.h>
 #include "endian.h"
 
-#define MAX_PART_NUM 1000000
-#define MAX_LINE     15     /* max number of fields per particle */
-
 #define endswap(e) FloatSwap((e))
 #define dataType "float"
 typedef float real;
 
-real fbuf[MAX_LINE*MAX_PART_NUM];
+char* ANAMES[] = {"vx", "vy", "vz", "id", "p"};
 
-real rr[3*MAX_PART_NUM];
-real vvx[MAX_PART_NUM], vvy[MAX_PART_NUM], vvz[MAX_PART_NUM];
+#define MAX_PART_NUM 1000000
+#define MAX_LINE     15     /* max number of fields per particle */
+
+real ibuf[MAX_LINE*MAX_PART_NUM]; /* input and output buffers */
+real obuf[MAX_LINE*MAX_PART_NUM];
 
 int nfpp; /* number of fields per particle */
 
 FILE* fo;  /* output file descriptor */
-#define pr(...) fprintf(fo, __VA_ARGS__)
+#define PR(...) fprintf(fo, __VA_ARGS__)
 
-/* [s]wap [f]loat and put it into buffer */
-#define sf(fl) fbuf[ib++] = endswap((fl))
-
-/* [w]rite buffer to a file*/
-#define wb(b) fwrite((b), (ib), sizeof((b)[0]), fo)
-
-
-long nflo(FILE* fd) { /* return a number reals in file */
+long nreal(FILE* fd) { /* return a number of reals */
   long end, curr;
   curr = ftell(fd);
   fseek(fd, 0, SEEK_END); end = ftell(fd);
@@ -35,14 +28,11 @@ long nflo(FILE* fd) { /* return a number reals in file */
 
 long read_file0(FILE* f) { /* sets `nfpp' */
   /* [r]ead to [b]uffer */
-#define rb(b, n) fread((b), (n), sizeof((b)[0]), f)
-  int n0; long n;
+  int n0; long n; /* TODO: should be long in udx */
   fread(&n0, 1, sizeof(n0), f); n = n0;
-  
-  nfpp  = nflo(f) / n;
+  nfpp  = nreal(f) / n;
   fprintf(stderr, "(bop2vtk) n, nfpp: %ld %d\n", n, nfpp);
-  rb(fbuf, n*nfpp);
-#undef rb
+  fread(ibuf, n*nfpp, sizeof(ibuf[0]), f);
   return n;
 }
 
@@ -55,59 +45,61 @@ long read_file(const char* fn) {
 }
 
 void buf2fields(long n) {
-  enum {X, Y, Z};
-  long i, ib;
+  int i, j, dim = 3;
   for (i = 0; i < n; i++) {
-    ib = nfpp * i;
-    real *r = &rr[3*i];
-    r[X]   = fbuf[ib++]; r[Y]   = fbuf[ib++]; r[Z]   = fbuf[ib++];
-    vvx[i] = fbuf[ib++]; vvy[i] = fbuf[ib++]; vvz[i] = fbuf[ib++];
+    j = 0;
+    for (/**/; j < dim;  j++)
+      obuf[3*i + j] = endswap(ibuf[i*nfpp + j]);
+    for (/**/; j < nfpp; j++)
+      obuf[j*n + i] = endswap(ibuf[i*nfpp + j]);
   }
 }
 
-void write_version(void) {pr("# vtk DataFile Version 2.0\n");}
-void write_header(void) {pr("Created with bop2vtk\n");}
-void write_format(void) {pr("BINARY\n");}
-void write_vertices(long n) {
-  pr("DATASET POLYDATA\n");
-  pr("POINTS %ld %s\n", n, dataType);
-  long i, ib = 0;
-  for (i = 0; i < n; i++) {
-    sf(rr[3*i]); sf(rr[3*i+1]); sf(rr[3*i+2]);
-  }
-  wb(fbuf); /* write buffer */
-  pr("\n");
+void write_version(void) {PR("# vtk DataFile Version 2.0\n");}
+void write_header(void) {PR("Created with bop2vtk\n");}
+void write_format(void) {PR("BINARY\n");}
+void write_vertices(real** pbuf, long n) {
+  PR("DATASET POLYDATA\n");
+  PR("POINTS %ld %s\n", n, dataType);
+  int sz = sizeof(*pbuf[0]);
+  fwrite(*pbuf, 3*n, sz, fo); *pbuf += 3*n;
+  PR("\n");
 }
 
-void write_attributes_header(long n) {pr("POINT_DATA %ld\n", n);}
+void write_attributes_header(long n) {PR("POINT_DATA %ld\n", n);}
 
-void write_attribute(const char *name, real *data, long n) {
-  pr("SCALARS %s %s\n", name, dataType);
-  pr("LOOKUP_TABLE default\n");
-  long i, ib = 0;
-  for (i = 0; i < n; i++) sf(data[i]);
-  wb(fbuf);
+void write_attribute(const char *name, real **pbuf, long n) {
+  PR("SCALARS %s %s\n", name, dataType);
+  PR("LOOKUP_TABLE default\n");
+  int sz = sizeof(*pbuf[0]);
+  fwrite(*pbuf, n, sz, fo); *pbuf += n;
 }
 void write_file(const char* fn, long n) {
+  real* buf = obuf;
+
   fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
   fo = fopen(fn, "w");
   write_version();
   write_header();
   write_format();
-  write_vertices(n);
+  write_vertices(&buf, n);
   write_attributes_header(n);
 
-  write_attribute("vx", vvx, n);
-  write_attribute("vy", vvy, n);
-  write_attribute("vz", vvz, n);
+  int ia, na = sizeof ANAMES; /* number of attributes */
+  for (ia = 0; ia < na && ia + 3 < nfpp; ia++)
+    write_attribute(ANAMES[ia], &buf, n);
 
   fclose(fo);
 }
 
 int main(int argc, char *argv[]) {
-  long n = read_file(argv[2]);
-  buf2fields(n);
+  int iarg = 1;
+  char *out = argv[iarg++];
 
-  write_file(argv[1], n);
+  long n = 0; /* number of particles */
+  while (iarg < argc) n += read_file(argv[iarg++]);
+
+  buf2fields(n);
+  write_file(out, n);
   return 0;
 }
