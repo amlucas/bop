@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "endian.h"
 
-#define endswap(e) FloatSwap((e))
+#define endswap(e) FloatSwap((e)) /* change to have different type */
 #define dataType "float"
 typedef float real;
 
@@ -26,7 +26,7 @@ long nreal(FILE* fd) { /* return a number of reals */
   return (end - curr)/sizeof(real);
 }
 
-long read_file0(FILE* f) { /* sets `nfpp' */
+long read0(FILE* f) { /* sets `nfpp' */
   /* [r]ead to [b]uffer */
   int n0; long n; /* TODO: should be long in udx */
   fread(&n0, 1, sizeof(n0), f); n = n0;
@@ -36,16 +36,16 @@ long read_file0(FILE* f) { /* sets `nfpp' */
   return n;
 }
 
-long read_file(const char* fn) {
+long read(const char* fn) {
   fprintf(stderr, "(bop2vtk) reading: %s\n", fn);
   FILE* f = fopen(fn, "r");
-  long n = read_file0(f);
+  long n = read0(f);
   fclose(f);
   return n;
 }
 
 void buf2fields(long n) {
-  int i, j, dim = 3;
+  long i, j, dim = 3;
   for (i = 0; i < n; i++) {
     j = 0;
     for (/**/; j < dim;  j++)
@@ -55,10 +55,10 @@ void buf2fields(long n) {
   }
 }
 
-void write_version(void) {PR("# vtk DataFile Version 2.0\n");}
-void write_header(void) {PR("Created with bop2vtk\n");}
-void write_format(void) {PR("BINARY\n");}
-void write_vertices(real** pbuf, long n) {
+void version(void) {PR("# vtk DataFile Version 2.0\n");}
+void header(void) {PR("Created with bop2vtk\n");}
+void format(void) {PR("BINARY\n");}
+void vertices(real** pbuf, long n) {
   PR("DATASET POLYDATA\n");
   PR("POINTS %ld %s\n", n, dataType);
   int sz = sizeof(*pbuf[0]);
@@ -66,29 +66,34 @@ void write_vertices(real** pbuf, long n) {
   PR("\n");
 }
 
-void write_attributes_header(long n) {PR("POINT_DATA %ld\n", n);}
+void attributes_header(long n) {PR("POINT_DATA %ld\n", n);}
 
-void write_attribute(const char *name, real **pbuf, long n) {
+void attribute(const char *name, real **pbuf, long n) {
   PR("SCALARS %s %s\n", name, dataType);
   PR("LOOKUP_TABLE default\n");
   int sz = sizeof(*pbuf[0]);
   fwrite(*pbuf, n, sz, fo); *pbuf += n;
 }
-void write_file(const char* fn, long n) {
-  real* buf = obuf;
 
-  fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
-  fo = fopen(fn, "w");
-  write_version();
-  write_header();
-  write_format();
-  write_vertices(&buf, n);
-  write_attributes_header(n);
+void write0(long n) {
+  real* buf = obuf;
+  version();
+  header();
+  format();
+  vertices(&buf, n);
+  attributes_header(n);
 
   int ia, na = sizeof ANAMES; /* number of attributes */
   for (ia = 0; ia < na && ia + 3 < nfpp; ia++)
-    write_attribute(ANAMES[ia], &buf, n);
+    attribute(ANAMES[ia], &buf, n);
+}
 
+void write(const char* fn, long n) {
+  fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
+  fo = fopen(fn, "w");
+  
+  write0(n);
+  
   fclose(fo);
 }
 
@@ -97,9 +102,9 @@ int main(int argc, char *argv[]) {
   char *out = argv[iarg++];
 
   long n = 0; /* number of particles */
-  while (iarg < argc) n += read_file(argv[iarg++]);
+  while (iarg < argc) n += read(argv[iarg++]);
 
   buf2fields(n);
-  write_file(out, n);
+  write(out, n);
   return 0;
 }
