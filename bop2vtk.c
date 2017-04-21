@@ -4,57 +4,62 @@
 #define MAX_PART_NUM 1000000
 #define MAX_LINE     15     /* max number of fields per particle */
 
-float fbuf[MAX_LINE*MAX_PART_NUM];
-
+#define endswap(e) FloatSwap((e))
 #define dataType "float"
+typedef float real;
 
-float rr[3*MAX_PART_NUM];
-float vvx[MAX_PART_NUM], vvy[MAX_PART_NUM], vvz[MAX_PART_NUM];
+real fbuf[MAX_LINE*MAX_PART_NUM];
 
-int n; /* number of particles */
+real rr[3*MAX_PART_NUM];
+real vvx[MAX_PART_NUM], vvy[MAX_PART_NUM], vvz[MAX_PART_NUM];
+
 int nfpp; /* number of fields per particle */
 
 FILE* fo;  /* output file descriptor */
 #define pr(...) fprintf(fo, __VA_ARGS__)
 
 /* [s]wap [f]loat and put it into buffer */
-#define sf(fl) fbuf[ib++] = FloatSwap((fl))
+#define sf(fl) fbuf[ib++] = endswap((fl))
 
 /* [w]rite buffer to a file*/
 #define wb(b) fwrite((b), (ib), sizeof((b)[0]), fo)
 
 
-long nflo(FILE* fd) { /* return a number floats in file */
+long nflo(FILE* fd) { /* return a number reals in file */
   long end, curr;
   curr = ftell(fd);
   fseek(fd, 0, SEEK_END); end = ftell(fd);
   fseek(fd, curr, SEEK_SET); /* go back */
-  return (end - curr)/sizeof(float);
+  return (end - curr)/sizeof(real);
 }
 
-void read_file0(FILE* f) { /* sets `n' and `nfpp' */
+long read_file0(FILE* f) { /* sets `nfpp' */
   /* [r]ead to [b]uffer */
-  #define rb(b, n) fread((b), (n), sizeof((b)[0]), f)
-  fread(&n, 1, sizeof(n), f);
+#define rb(b, n) fread((b), (n), sizeof((b)[0]), f)
+  int n0; long n;
+  fread(&n0, 1, sizeof(n0), f); n = n0;
+  
   nfpp  = nflo(f) / n;
-  fprintf(stderr, "(bop2vtk) n, nfpp: %d %d\n", n, nfpp);
+  fprintf(stderr, "(bop2vtk) n, nfpp: %ld %d\n", n, nfpp);
   rb(fbuf, n*nfpp);
-  #undef rb
+#undef rb
+  return n;
 }
 
-void read_file(const char* fn) {
+long read_file(const char* fn) {
   fprintf(stderr, "(bop2vtk) reading: %s\n", fn);
   FILE* f = fopen(fn, "r");
-  read_file0(f);
+  long n = read_file0(f);
   fclose(f);
+  return n;
 }
 
-void buf2fields(void) {
+void buf2fields(long n) {
   enum {X, Y, Z};
-  int i, ib;
+  long i, ib;
   for (i = 0; i < n; i++) {
     ib = nfpp * i;
-    float *r = &rr[3*i];
+    real *r = &rr[3*i];
     r[X]   = fbuf[ib++]; r[Y]   = fbuf[ib++]; r[Z]   = fbuf[ib++];
     vvx[i] = fbuf[ib++]; vvy[i] = fbuf[ib++]; vvz[i] = fbuf[ib++];
   }
@@ -63,10 +68,10 @@ void buf2fields(void) {
 void write_version(void) {pr("# vtk DataFile Version 2.0\n");}
 void write_header(void) {pr("Created with bop2vtk\n");}
 void write_format(void) {pr("BINARY\n");}
-void write_vertices(void) {
+void write_vertices(long n) {
   pr("DATASET POLYDATA\n");
-  pr("POINTS %d %s\n", n, dataType);
-  int i, ib = 0;
+  pr("POINTS %ld %s\n", n, dataType);
+  long i, ib = 0;
   for (i = 0; i < n; i++) {
     sf(rr[3*i]); sf(rr[3*i+1]); sf(rr[3*i+2]);
   }
@@ -74,35 +79,35 @@ void write_vertices(void) {
   pr("\n");
 }
 
-void write_attributes_header(void) {pr("POINT_DATA %d\n", n);}
+void write_attributes_header(long n) {pr("POINT_DATA %ld\n", n);}
 
-void write_attribute(const char *name, float *data) {
+void write_attribute(const char *name, real *data, long n) {
   pr("SCALARS %s %s\n", name, dataType);
   pr("LOOKUP_TABLE default\n");
-  int i, ib = 0;
+  long i, ib = 0;
   for (i = 0; i < n; i++) sf(data[i]);
   wb(fbuf);
 }
-void write_file(const char* fn) {
+void write_file(const char* fn, long n) {
   fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
   fo = fopen(fn, "w");
   write_version();
   write_header();
   write_format();
-  write_vertices();
-  write_attributes_header();
+  write_vertices(n);
+  write_attributes_header(n);
 
-  write_attribute("dx", vvx);
-  write_attribute("dy", vvy);
-  write_attribute("dz", vvz);
+  write_attribute("vx", vvx, n);
+  write_attribute("vy", vvy, n);
+  write_attribute("vz", vvz, n);
 
   fclose(fo);
 }
 
 int main(int argc, char *argv[]) {
-  read_file(argv[2]);
-  buf2fields();
+  long n = read_file(argv[2]);
+  buf2fields(n);
 
-  write_file(argv[1]);
+  write_file(argv[1], n);
   return 0;
 }
