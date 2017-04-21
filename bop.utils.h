@@ -26,6 +26,20 @@ long read(const char* fn, real* buf, int *nrpp) {
   return n;
 }
 
+/* convert from
+x1 y1 z1 vx1 vy1 vz1
+...
+
+to
+
+x1 y1 z1 x2 y2 z2
+...
+vx1 vx2
+...
+vy1 vy2
+...
+
+*/
 void in2out(real* ibuf, long n, int nrpp, /**/ real* obuf) {
   long i, j, dim = 3;
   for (i = 0; i < n; i++) {

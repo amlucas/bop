@@ -6,12 +6,12 @@ CFLAGS = -std=c99 -pedantic -Wall -Os
 all: $(PROGS)
 %: %.o; $(CC) -o $@ $< ${LDFLAGS}
 
-bop2vtk.o: endian.h bop.utils.h
-bop2txt.o: endian.h bop.utils.h
+bop2vtk.o: bop.utils.h endian.h
+bop2txt.o: bop.utils.h
 
 install: all
 	mkdir -p $(BIN)
-	cp bop2vtk $(BIN)
+	cp $(PROGS) $(BIN)
 
 clean:; rm -f $(PROGS) $(OBJ)
 .PHONY: clean install
