@@ -11,7 +11,7 @@ long read_bop0(FILE *f, real *buf, int *nrpp) {
   long n;
   fread(&n, 1, sizeof(n), f);
   *nrpp  = nreal(f) / n;
-  fprintf(stderr, "(bop2vtk) n, nrpp: %ld %d\n", n, *nrpp);
+  fprintf(stderr, "(bop.utils) n, nrpp: %ld %d\n", n, *nrpp);
   int sz = (*nrpp)*n;
   fread(buf, sz, sizeof(buf[0]), f);
   return n;
