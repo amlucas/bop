@@ -9,9 +9,7 @@ typedef float real;
 real buf[MAX_LINE*MAX_PART_NUM]; /* input and output buffers */
 
 void write0(real *buf, long n, int nrpp, FILE *f) {
-  int n0 = n;
-  printf("%d\n", n0);
-  fwrite(&n0, sizeof(n0), 1, f);
+  fwrite(&n, sizeof(n), 1, f);
   fwrite(buf, sizeof(buf[0]), n*nrpp, f);
 }
 
