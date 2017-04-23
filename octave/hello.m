@@ -1,9 +1,9 @@
 % read example
 
-fn  = '../test_data/0005000.bop';
+fn  = '../test_data/0008000.bop';
 
 fd = fopen(fn);
-n = fread(fd, 1, 'int32');
+n = fread(fd, 1, 'int64')
 D = fread(fd, 'float32');
 fclose(fd);
 

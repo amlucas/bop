@@ -1,10 +1,10 @@
 % bop to vtk converter
 
-fn  = '../test_data/0005000.bop';
+fn  = '../test_data/0008000.bop';
 fo  = 'o.vtk';
 
 fd = fopen(fn);
-n = fread(fd, 1, 'int32');
+n = fread(fd, 1, 'int64');
 D = fread(fd, 'float32');
 fclose(fd);
 D = reshape(D, [], n);

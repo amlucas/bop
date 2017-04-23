@@ -8,8 +8,8 @@ long nreal(FILE* fd) { /* return a number of reals in the file */
 
 long read_bop0(FILE *f, real *buf, int *nrpp) {
   /* [r]ead to [b]uffer */
-  int n0; long n; /* TODO: should be long in udx */
-  fread(&n0, 1, sizeof(n0), f); n = n0;
+  long n;
+  fread(&n, 1, sizeof(n), f);
   *nrpp  = nreal(f) / n;
   fprintf(stderr, "(bop2vtk) n, nrpp: %ld %d\n", n, *nrpp);
   int sz = (*nrpp)*n;
