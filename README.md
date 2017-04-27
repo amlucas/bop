@@ -11,3 +11,10 @@ bop file format:
 	x y z vx vy vz ...
 
 `n` : number of particles is `long`, the rest are `float`
+
+Installation
+============
+
+```sh
+make && make install
+```
