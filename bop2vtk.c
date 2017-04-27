@@ -81,3 +81,11 @@ int main(int argc, char *argv[]) {
   write(obuf, n, out);
   return 0;
 }
+
+/*
+
+# TEST: bop2vtk.t0
+# make bop2vtk
+# ./bop2vtk o.out.vtk test_data/0008000.bop
+
+ */
