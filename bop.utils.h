@@ -19,8 +19,8 @@ long read_bop0(FILE *f, real *buf, int *nrpp) {
 
 /* fn: file name; buf: input buffer; nrpp: number of reals per file */
 long read_bop(const char *fn, real *buf, int *nrpp) {
-  fprintf(stderr, "(bop.utils) reading: %s\n", fn);
   FILE* f = fopen(fn, "r");
+  if (f == NULL) {fprintf(stderr, "bop.utils: cannot open %s\n", fn); exit(1);}
   long n = read_bop0(f, buf, nrpp);
   fclose(f);
   return n;

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "endian.h"
 
 typedef float real;
@@ -16,6 +17,9 @@ real obuf[MAX_LINE*MAX_PART_NUM];
 
 int nrpp; /* [n]umber of [r]eals [p]er [p]article */
 FILE* fo;  /* output file descriptor */
+
+void usage(void) { fprintf(stderr, "usage: bop2vtk output.file input.file [input.file]\n"); }
+void die(void)   { usage(); exit(1); }
 
 #define PR(...) fprintf(fo, __VA_ARGS__)
 void version(void) {PR("# vtk DataFile Version 2.0\n");}
@@ -50,8 +54,10 @@ void write0(real *buf, long n) {
 }
 
 void write(real *buf, long n, const char *fn) {
-  fprintf(stderr, "(bop2vtk) writing: %s\n", fn);
-  fo = fopen(fn, "w");
+  if ((fo = fopen(fn, "w")) == NULL) {
+    fprintf(stderr, "bop2vtk: cannot write %s\n", fn);
+    die();
+  }
   write0(buf, n);
   fclose(fo);
 }
@@ -61,8 +67,10 @@ void endswap(real *buf, long n) {
 }
 
 int main(int argc, char *argv[]) {
+  if (argc < 3) die();
   int iarg = 1;
   char *out = argv[iarg++];
+  if (out[0] == '-' && out[1] == 'h') die(); /* help */
 
   long n = 0; /* number of particles */
   while (iarg < argc) n += read_bop(argv[iarg++], ibuf, &nrpp);
