@@ -3,14 +3,21 @@ Tools for BOP (brick of particles) files
 
 Introduction
 ============
-bop file format:
+`file.bop` format (ascii, `<N>` is a number of particles):
 
-    n
-    x y z vx vy vz ...
-	...
-	x y z vx vy vz ...
+     <N>
+     DATA_FILE: <file.values>
+     DATA_FORMAT: <float|double|ascii>
+     VARIABLES: <x> <y> <z> <vx> <vy> <vz> <id> ...
 
-`n` : number of particles is `long`, the rest are `float`
+`file.values` format:
+
+
+    x[0] y[0] z[0] vx[0] vy[0] vz[0] id[0]
+    ...
+
+    x[N-1] y[N-1] ...
+	
 
 Installation
 ============
