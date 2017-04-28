@@ -2,7 +2,7 @@ Tools for BOP (brick of particles) files
 ========================================
 
 Introduction
-============
+------------
 `file.bop` format (ascii, `<N>` is a number of particles):
 
 	 <N>
@@ -19,7 +19,7 @@ Introduction
 	x[N-1] y[N-1] ...
 
 Installation
-============
+------------
 
 ```sh
 make && make install
