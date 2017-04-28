@@ -2,5 +2,6 @@ namespace reader
 {
     long n;
     int nvars;
-    float *data;
+    float *fdata;
+    double *ddata;
 }

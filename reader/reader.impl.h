@@ -1,25 +1,29 @@
 namespace reader
 {
+    enum Type {FLOAT, DOUBLE, ASCII};
+    
 #define xstr(s) str(s)
 #define str(s) #s
 
 #define CBUFSIZE 256
 
-#define ERR(...) do {                                     \
-        fprintf(stderr,"(reader)" __VA_ARGS__);           \
-        exit(1);                                          \
+#define ERR(...) do {                                      \
+        fprintf(stderr,"(reader) " __VA_ARGS__);           \
+        exit(1);                                           \
     } while(0)
 
     void init()
     {
         n = -1;
         nvars = 6;
-        data = NULL;
+        fdata = NULL;
+        ddata = NULL;
     }
 
     void finalize()
     {
-        if (data) delete[] data;
+        if (fdata) delete[] fdata;
+        if (ddata) delete[] ddata;
     }
 
     static void get_path(const char *full, char *path)
@@ -43,14 +47,14 @@ namespace reader
     }
 
     template<typename real>
-    static long read_values(const char *fn)
+    static long read_values(const char *fn, real *data)
     {
         FILE *f = fopen(fn, "r");
 
         if (f == NULL)
         ERR("could not open <%s>\n", fn);
 
-        const long nreals = nvals<float>(f);
+        const long nreals = nvals<real>(f);
 
         data = new real[nreals];
         
@@ -59,6 +63,14 @@ namespace reader
         fclose(f);
 
         return nreals / n;
+    }
+
+    static void readline(FILE *f, char *buf) // read full line unless it excess CBUFSIZE chars 
+    {
+        memset(buf, 0, CBUFSIZE * sizeof(char));
+
+        if (fscanf(f, " %[^\n]" xstr(CBUFSIZE) "c", buf) != 1)
+        ERR("line too long\n");
     }
     
     void read(const char *fnbop)
@@ -74,20 +86,43 @@ namespace reader
 
         printf("n = %ld\n", n);
 
-        char cbuf[CBUFSIZE] = {0};
+        char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0};
 
         // parse datafile name
-        if (fscanf(fh, "DATA_FILE: %" xstr(CBUFSIZE) "s", cbuf) != 1)
+        readline(fh, line);
+        
+        if (sscanf(line, "DATA_FILE: %" xstr(CBUFSIZE) "s", cbuf) != 1)
         ERR("could not read data file name\n");
 
         char fnval[CBUFSIZE] = {0};
         get_path(fnbop, fnval);
         strcat(fnval, cbuf);
+
+        // parse data format
+        readline(fh, line);
+        
+        Type type;
+        {        
+            if (sscanf(line, "DATA_FORMAT: %" xstr(CBUFSIZE) "s", cbuf) != 1)
+            ERR("could not read data file format\n");
+
+            if      (strcmp(cbuf,  "float") == 0) type = FLOAT;
+            else if (strcmp(cbuf, "double") == 0) type = DOUBLE;
+            else if (strcmp(cbuf,  "ascii") == 0) type = ASCII;
+            else     ERR("wrong DATA_FORMAT\n");
+        }
         
         // read datafile
-        nvars = read_values<float>(fnval);
+        switch (type)
+        {
+        case FLOAT:  nvars = read_values<float> (fnval, fdata); break;
+        case DOUBLE: nvars = read_values<double>(fnval, ddata); break;
+        case ASCII: ERR("Not implemented\n");
+        };
 
-        printf("(reader) found %ld fields\n", nvars);
+        printf("(reader) found %d fields\n", nvars);
+
+        // read variables (TODO)
         
         fclose(fh);
     }
