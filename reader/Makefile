@@ -10,6 +10,7 @@ all: $(PROGS)
 %: %.o; $(CXX) $(CXXFLAGS) -o $@ $< ${LDFLAGS}
 
 test.o: test.cpp reader.decl.h reader.impl.h
+bop2vtk.o: bop2vtk.cpp reader.decl.h reader.impl.h
 
 install: all
 	mkdir -p $(BIN)
