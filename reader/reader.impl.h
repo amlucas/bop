@@ -3,9 +3,9 @@ namespace reader
 #define xstr(s) str(s)
 #define str(s) #s
 
-#define ERR(...) do {                                      \
-        fprintf(stderr,"(reader) " __VA_ARGS__);           \
-        exit(1);                                           \
+#define ERR(...) do {                                   \
+        fprintf(stderr,"(reader) " __VA_ARGS__);        \
+        exit(1);                                        \
     } while(0)
 
     void init()
@@ -44,7 +44,7 @@ namespace reader
     }
 
     template<typename real>
-    static long read_values(const char *fn, real *data)
+    static long read_values(const char *fn, real **data)
     {
         FILE *f = fopen(fn, "r");
 
@@ -52,8 +52,8 @@ namespace reader
         ERR("could not open <%s>\n", fn);
 
         const long nreals = nvals<real>(f);
-        data = new real[nreals];
-        fread(data, sizeof(real), nreals, f); 
+        *data = new real[nreals];
+        fread(*data, sizeof(real), nreals, f); 
 
         fclose(f);
         return nreals / n;
@@ -121,8 +121,8 @@ namespace reader
         // read datafile
         switch (type)
         {
-        case FLOAT:  nvars = read_values<float> (fnval, fdata); break;
-        case DOUBLE: nvars = read_values<double>(fnval, ddata); break;
+        case FLOAT:  nvars = read_values<float> (fnval, &fdata); break;
+        case DOUBLE: nvars = read_values<double>(fnval, &ddata); break;
         case ASCII: ERR("Not implemented\n");
         };
 
