@@ -9,6 +9,7 @@ int main(int argc, char **argv)
 {
     reader::init();
     reader::read(argv[1]);
+    reader::summary();
     reader::finalize();
     
     return 0;
