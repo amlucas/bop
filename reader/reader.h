@@ -3,8 +3,8 @@
 struct Cbuf {char c[CBUFSIZE];};
 enum Type {FLOAT, DOUBLE, ASCII};
 
-namespace reader
-{    
+struct ReadData
+{
     long n;
 
     int nvars;
@@ -13,4 +13,9 @@ namespace reader
     
     float *fdata;
     double *ddata;
-}
+};
+
+void init(ReadData *d);
+void finalize(ReadData *d);
+void read(const char *fnbop, ReadData *d);
+void summary(const ReadData *d);

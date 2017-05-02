@@ -2,15 +2,17 @@ BIN = $(HOME)/bin # where to install
 CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
 CXX=g++
 
-SRC = $(wildcard *.cpp)
-PROGS = $(SRC:.cpp=)
-
+PROGS = bop2vtk
+OBJS  = reader.o
 
 all: $(PROGS)
-%: %.o; $(CXX) $(CXXFLAGS) -o $@ $< ${LDFLAGS}
+%: %.o $(OBJS); $(CXX) $(CXXFLAGS) -o $@ $< $(OBJS) ${LDFLAGS}
 
-bop2txt.o: bop2txt.cpp reader.decl.h reader.impl.h
-bop2vtk.o: bop2vtk.cpp reader.decl.h reader.impl.h
+reader.o: reader.cpp reader.h
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+#bop2txt.o: bop2txt.cpp reader.decl.h reader.impl.h
+bop2vtk.o: bop2vtk.cpp reader.h
 
 install: all
 	mkdir -p $(BIN)

@@ -1,9 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
-#include <cstring>
 
-#include "reader.decl.h"
-#include "reader.impl.h"
+#include "reader.h"
 
 float FloatSwap(float f) {
   union {
@@ -97,32 +95,33 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    reader::init();
-    reader::read(argv[2]);
-    reader::summary();
+    ReadData d;
+    init(&d);
+    read(argv[2], &d);
+    summary(&d);
 
     FILE *f = fopen(argv[1], "w");
 
     
-    switch (reader::type)
+    switch (d.type)
     {
     case FLOAT:
     case ASCII:
-        vtk::init(reader::n, reader::nvars, reader::fdata);
+        vtk::init(d.n, d.nvars, d.fdata);
         break;
     case DOUBLE:
-        vtk::init(reader::n, reader::nvars, reader::ddata);
+        vtk::init(d.n, d.nvars, d.ddata);
         break;
     };
 
-    vtk::header  (f, reader::n);
-    vtk::vertices(f, reader::n);
-    vtk::fields  (f, reader::n, reader::nvars, reader::vars);
+    vtk::header  (f, d.n);
+    vtk::vertices(f, d.n);
+    vtk::fields  (f, d.n, d.nvars, d.vars);
     vtk::finalize();
 
     fclose(f);
     
-    reader::finalize();
+    finalize(&d);
     
     return 0;
 }
