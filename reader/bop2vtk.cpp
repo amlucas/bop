@@ -89,19 +89,30 @@ namespace vtk
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
+    if (argc < 3)
     {
-        fprintf(stderr, "usage: %s <out.vtk> <in.bop>\n", argv[0]);
+        fprintf(stderr, "usage: %s <out.vtk> <in1.bop> <in2.bop> ...\n", argv[0]);
         exit(1);
+    }
+    const int nd = argc-2;
+    ReadData *dd = new ReadData[nd];
+
+    for (int i = 0; i < nd; ++i)
+    {
+        init(dd + i);
+        read(argv[2+i], dd + i);
+        //summary(dd + i);
     }
 
     ReadData d;
     init(&d);
-    read(argv[2], &d);
+    concatenate(nd, dd, /**/ &d);
+
     summary(&d);
-
+    
+    printf("Done concatenate\n");
+    
     FILE *f = fopen(argv[1], "w");
-
     
     switch (d.type)
     {
@@ -120,8 +131,12 @@ int main(int argc, char **argv)
     vtk::finalize();
 
     fclose(f);
-    
+
+    for (int i = 0; i < nd; ++i)
+    finalize(dd + i);
     finalize(&d);
+
+    delete[] dd;
     
     return 0;
 }

@@ -162,7 +162,7 @@ void summary(const ReadData *d)
 
 void concatenate(const int nd, const ReadData *dd, ReadData *dall)
 {
-    long n = 0;
+    long n          = dd[0].n;
     const Type type = dd[0].type;
     const int nvars = dd[0].nvars;
     
@@ -172,6 +172,10 @@ void concatenate(const int nd, const ReadData *dd, ReadData *dall)
         if (type != dd[i].type || nvars != dd[i].nvars)
         ERR("concatenate: All files must have the same format\n"); 
     }
+
+    dall->vars = new Cbuf[nvars];
+    for (int i = 0; i < nvars; ++i)
+    memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
     
     switch (type)
     {
