@@ -159,3 +159,55 @@ void summary(const ReadData *d)
     fprintf(stderr, " %s", d->vars[i].c);
     fprintf(stderr, "\n");
 }
+
+void concatenate(const int nd, const ReadData *dd, ReadData *dall)
+{
+    long n = 0;
+    const Type type = dd[0].type;
+    const int nvars = dd[0].nvars;
+    
+    for (int i = 1; i < nd; ++i)
+    {
+        n += dd[i].n;
+        if (type != dd[i].type || nvars != dd[i].nvars)
+        ERR("concatenate: All files must have the same format\n"); 
+    }
+    
+    switch (type)
+    {
+    case ASCII:
+    case FLOAT:
+        dall->fdata = new float[n*nvars];
+        break;
+    case DOUBLE:
+        dall->ddata = new double[n*nvars];
+        break;
+    };
+
+    dall->n = n;
+    dall->nvars = nvars;
+    dall->type = type;
+    
+    long start = 0;
+    
+    for (int i = 0; i < nd; ++i)
+    {
+        const long ni = dd[i].n;
+        
+        if (type == DOUBLE)
+        {
+            const double *src = dd[i].ddata;
+            double *dst = dall->ddata + start;
+            memcpy(dst, src, ni * nvars * sizeof(float));
+        }
+        else // float
+        {
+            const float *src = dd[i].fdata;
+            float *dst = dall->fdata + start;
+            memcpy(dst, src, ni * nvars * sizeof(float));
+        }
+
+        start += ni * nvars;
+    }
+}
+
