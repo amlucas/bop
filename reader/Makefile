@@ -9,6 +9,7 @@ PROGS = $(SRC:.cpp=)
 all: $(PROGS)
 %: %.o; $(CXX) $(CXXFLAGS) -o $@ $< ${LDFLAGS}
 
+bop2txt.o: bop2txt.cpp reader.decl.h reader.impl.h
 bop2vtk.o: bop2vtk.cpp reader.decl.h reader.impl.h
 
 install: all

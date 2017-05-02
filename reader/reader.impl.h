@@ -143,16 +143,16 @@ namespace reader
 
     void summary()
     {
-        printf("(reader) found %ld entries, %d fields\n", n, nvars);
+        fprintf(stderr, "(reader) found %ld entries, %d fields\n", n, nvars);
         switch(type)
         {
-        case FLOAT:  printf("\tformat: float \n"); break;
-        case DOUBLE: printf("\tformat: double\n"); break;
-        case ASCII:  printf("\tformat: ascii \n"); break;
+        case FLOAT:  fprintf(stderr, "\tformat: float \n"); break;
+        case DOUBLE: fprintf(stderr, "\tformat: double\n"); break;
+        case ASCII:  fprintf(stderr, "\tformat: ascii \n"); break;
         };
-        printf("\tvars:");
+        fprintf(stderr, "\tvars:");
         for (int i = 0; i < nvars; ++i)
-        printf(" %s", vars[i].c);
-        printf("\n");
+        fprintf(stderr, " %s", vars[i].c);
+        fprintf(stderr, "\n");
     }
 }
