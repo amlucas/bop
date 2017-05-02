@@ -2,8 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "reader.decl.h"
-#include "reader.impl.h"
+#include "reader.h"
 
 template <typename real>
 void print(const real *data, const long n, const int nvars)
@@ -24,22 +23,24 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    reader::init();
-    reader::read(argv[1]);
-    reader::summary();
+    ReadData d;
     
-    switch (reader::type)
+    init(&d);
+    read(argv[1], &d);
+    summary(&d);
+    
+    switch (d.type)
     {
     case FLOAT:
     case ASCII:
-        print(reader::fdata, reader::n, reader::nvars);
+        print(d.fdata, d.n, d.nvars);
         break;
     case DOUBLE:
-        print(reader::ddata, reader::n, reader::nvars);
+        print(d.ddata, d.n, d.nvars);
         break;
     };
     
-    reader::finalize();
+    finalize(&d);
     
     return 0;
 }
