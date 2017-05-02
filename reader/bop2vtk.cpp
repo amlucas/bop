@@ -80,11 +80,11 @@ namespace vtk
 
         fprintf(f, "POINT_DATA %ld\n", n);
 
-        for (int i = 3, j = 0; i < nvars; ++i)
+        for (int i = 3; i < nvars; ++i)
         {
             fprintf(f, "SCALARS %s float\n", vars[i].c);
             fprintf(f, "LOOKUP_TABLE default\n");
-            fwrite(ff + j*n, n, sizeof(float), f);
+            fwrite(ff + (i-3)*n, n, sizeof(float), f);
         }
     }
 }
