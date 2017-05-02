@@ -16,30 +16,33 @@ void print(const real *data, const long n, const int nvars)
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    if (argc < 2)
     {
-        fprintf(stderr, "usage: %s <in.bop>\n", argv[0]);
+        fprintf(stderr, "usage: %s <in1.bop> <in2.bop> ...\n", argv[0]);
         exit(1);
     }
 
-    ReadData d;
-    
-    init(&d);
-    read(argv[1], &d);
-    summary(&d);
-    
-    switch (d.type)
+    for (int i = 1; i < argc; ++i)
     {
-    case FLOAT:
-    case ASCII:
-        print(d.fdata, d.n, d.nvars);
-        break;
-    case DOUBLE:
-        print(d.ddata, d.n, d.nvars);
-        break;
-    };
+        ReadData d;
     
-    finalize(&d);
+        init(&d);
+        read(argv[i], &d);
+        summary(&d);
+    
+        switch (d.type)
+        {
+        case FLOAT:
+        case ASCII:
+            print(d.fdata, d.n, d.nvars);
+            break;
+        case DOUBLE:
+            print(d.ddata, d.n, d.nvars);
+            break;
+        };
+    
+        finalize(&d);
+    }
     
     return 0;
 }

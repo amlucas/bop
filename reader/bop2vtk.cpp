@@ -101,7 +101,6 @@ int main(int argc, char **argv)
     {
         init(dd + i);
         read(argv[2+i], dd + i);
-        //summary(dd + i);
     }
 
     ReadData d;
