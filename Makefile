@@ -1,18 +1,22 @@
 BIN = $(HOME)/bin # where to install
-PROGS = bop2vtk bop2txt txt2bop # what to install
-OBJ = bop2vtk.o bop2txt
-CFLAGS = -std=c99 -pedantic -Wall -Os
+CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
+CXX=g++
+
+PROGS = bop2vtk bop2txt
+OBJS  = reader.o
 
 all: $(PROGS)
-%: %.o; $(CC) -o $@ $< ${LDFLAGS}
+%: %.o $(OBJS); $(CXX) $(CXXFLAGS) -o $@ $< $(OBJS) ${LDFLAGS}
 
-bop2vtk.o: bop.utils.h endian.h
-bop2txt.o: bop.utils.h
-txt2bop.o: bop.utils.h
+reader.o: reader.cpp reader.h
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+bop2txt.o: bop2txt.cpp reader.h
+bop2vtk.o: bop2vtk.cpp reader.h
 
 install: all
 	mkdir -p $(BIN)
 	cp $(PROGS) $(BIN)
 
-clean:; rm -f $(PROGS) $(OBJ)
+clean:; rm -f $(PROGS) *.o
 .PHONY: clean install

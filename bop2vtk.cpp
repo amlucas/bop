@@ -108,9 +108,7 @@ int main(int argc, char **argv)
     concatenate(nd, dd, /**/ &d);
 
     summary(&d);
-    
-    printf("Done concatenate\n");
-    
+        
     FILE *f = fopen(argv[1], "w");
     
     switch (d.type)
