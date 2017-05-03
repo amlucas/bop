@@ -137,3 +137,11 @@ int main(int argc, char **argv)
     
     return 0;
 }
+
+/*
+
+# nTEST: bop2vtk.t0
+# make 
+# ./bop2vtk test.out.vtk data/test.bop
+
+*/
