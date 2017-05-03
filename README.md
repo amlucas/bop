@@ -33,3 +33,8 @@ Convert bop files `in1.bop`, `in2.bop`, ..., `inN.bop` into a single vtk file `o
 ```sh
 bop2vtk out.vtk in1.bop in2.bop ... inN.bop
 ```
+
+Dump ascii data from bop files `in1.bop`, `in2.bop`, ..., `inN.bop` into out.txt:
+```sh
+bop2vtk in1.bop in2.bop ... inN.bop > out.txt
+```
