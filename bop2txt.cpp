@@ -46,3 +46,11 @@ int main(int argc, char **argv)
     
     return 0;
 }
+
+/*
+
+# nTEST: bop2txt.t0
+# make 
+# ./bop2txt data/test.bop > test.out.txt
+
+*/
