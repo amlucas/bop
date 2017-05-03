@@ -38,3 +38,12 @@ Dump ascii data from bop files `in1.bop`, `in2.bop`, ..., `inN.bop` into `out.tx
 ```sh
 bop2vtk in1.bop in2.bop ... inN.bop > out.txt
 ```
+
+Testing
+-------
+Uses `atest` framework (https://gitlab.ethz.ch/mavt-cse/atest)
+
+```sh
+atest bop2txt.cpp
+atest bop2vtk.cpp
+```
