@@ -82,7 +82,7 @@ int readword(const char *in, char *word)
 {
     reinitc(word);
     if (sscanf(in, " %" xstr(CBUFSIZE) "[^ ]c", word) != 1)
-    ERR("could not read variable\n");
+    ERR("could not read variable (wrong number of fields?)\n");
         
     return strlen(word) + nspaces(in);
 }
