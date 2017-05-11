@@ -1,3 +1,3 @@
-void grid2vtk(const char *f,
-	      long   *n, double *org, double *sp,
-	      double *vv,  double *rho);
+void grid2vtk(const char*,
+	      long*, double*, double*,
+	      double **, const char *nname[], int);

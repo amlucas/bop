@@ -6,7 +6,7 @@ PROGS = bop2grid
 OBJS  = reader.o grid2vtk.o
 
 all: $(PROGS)
-%: %.o $(OBJS); $(CXX) $(CXXFLAGS) -o $@ $< $(OBJS) ${LDFLAGS}
+%: %.o $(OBJS); $(CXX) -o $@ $< $(OBJS) ${LDFLAGS}
 
 reader.o  :   reader.cpp reader.h;   $(CXX) $(CXXFLAGS) -o $@ -c $<
 grid2vtk.o: grid2vtk.cpp grid2vtk.h; $(CXX) $(CXXFLAGS) -o $@ -c $<

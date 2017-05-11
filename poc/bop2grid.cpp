@@ -18,35 +18,57 @@ float FloatSwap(float f) {
   return dat2.f;
 }
 
-int main(int argc, char **argv)
-{
-    if (argc < 3)
-    {
-        fprintf(stderr, "usage: %s <out.vtk> <in1.bop> <in2.bop> ...\n", argv[0]);
-        exit(1);
-    }
-    const int nd = argc-2;
-    ReadData *dd = new ReadData[nd];
+int nx, ny;
+double ox, oy;
+double sx, sy;
 
-    for (int i = 0; i < nd; ++i)
-    {
-        init(dd + i);
-        read(argv[2+i], dd + i);
-    }
+char *fo; /* output file */
 
-    ReadData d;
-    init(&d);
-    concatenate(nd, dd, /**/ &d);
+int main(int argc, char **argv) {
+  int iarg = 1;
+  /* fprintf(stderr, "usage: %s <out.vtk> <nx> <ny> <ox> <oy> <sx> <sy> <in1.bop> <in2.bop> ...\n", argv[iarg++]); */
+  fo =      argv[iarg++];
+  
+  nx = atoi(argv[iarg++]);
+  ny = atoi(argv[iarg++]);
 
-    summary(&d);
+  ox = atof(argv[iarg++]);
+  oy = atof(argv[iarg++]);
+
+  sx = atof(argv[iarg++]);
+  sy = atof(argv[iarg++]);
+
+  const int nd = argc - iarg;
+  printf("nd: %d\n", nd);
+  ReadData *dd = new ReadData[nd];
+
+  for (int i = 0; i < nd; i++, iarg++) {
+    init(dd + i);
+    read(argv[iarg], dd + i);
+  }
+
+  ReadData d;
+  init(&d);
+  concatenate(nd, dd, /**/ &d);
+
+  summary(&d);
 
     long     n[] = { 10,  20,  30};
     double org[] = {1.0, 2.0, 3,0};
     double sp[]  = {0.1, 0.2, 0.3};
-    double *vv,  *rho;
-    grid2vtk(argv[1],
+    double *vy, *vx;
+    char   const *nname[] = {"vx", "vy"};
+    int    ns = sizeof nname / sizeof nname[0];
+
+    long np = (n[0]+1)*(n[1]+1)*(n[2]+1);
+    vx = (double*)malloc(np*sizeof vx[0]);
+    vy = (double*)malloc(np*sizeof vy[0]);
+    for (long i = 0; i < np; i++) vx[i] = -i;
+    for (long i = 0; i < np; i++) vy[i] =  i;
+    double *vars[] = {vx, vy};
+    grid2vtk(fo,
 	     n, org, sp,
-	     vv, rho);
+	     vars, nname, ns);
 
     for (int i = 0; i < nd; ++i)
     finalize(dd + i);
