@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
   int iarg = 1;
   /* fprintf(stderr, "usage: %s <out.vtk> <nx> <ny> <ox> <oy> <sx> <sy> <in1.bop> <in2.bop> ...\n", argv[iarg++]); */
   fo =      argv[iarg++];
-  
+
   nx = atoi(argv[iarg++]);
   ny = atoi(argv[iarg++]);
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
   grid2vtk(fo,
 	   n, org, sp,
 	   vars, nname, ns);
-  
+
   for (int i = 0; i < nd; ++i) finalize(dd + i);
   finalize(&d);
   delete[] dd;
