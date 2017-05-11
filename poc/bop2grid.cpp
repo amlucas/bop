@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "reader.h"
+#include "grid2vtk.h"
 
 float FloatSwap(float f) {
   union {
@@ -38,6 +39,13 @@ int main(int argc, char **argv)
     concatenate(nd, dd, /**/ &d);
 
     summary(&d);
+
+    long  n[] = {10, 20, 30};
+    float *org, *sp;
+    float *rr, *vv,  *rho;
+    grid2vtk(argv[1],
+	      n, org, sp,
+	     rr, vv, rho);
 
     for (int i = 0; i < nd; ++i)
     finalize(dd + i);
