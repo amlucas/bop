@@ -1,0 +1,72 @@
+#!/usr/bin/awk -f
+
+# Convert distributions.txt to vtk
+# usage:
+#  ./d2vtk test_data/distributions.txt > o.vtk
+
+function ini(   i) {
+    X = 1; Y = 2; Z = 3
+    nd[X]  = 64; nd[Y] = 64            # dimensions
+    sp[X]  = sp[Y] = 0.5               # spacing
+    org[X] = sp[X]/2; org[Y] = sp[Y]/2 # origin
+
+    vars[i++] = "vx"
+    vars[i++] = "vy"
+    vars[i++] = "vz"
+    vars[i++] = "density"
+
+    # fake dimensions
+    nd[Z] = 1; sp[Z] = 0; org[Z] = 0
+
+    np = nd[X] * nd[Y] * nd[Z]
+}
+
+function read_var(  i, ib) { # fills `buf'
+    while (getline < f) {
+	if (NF == 0) break
+	for (i = 1; i <= NF; i++) buf[ib++] = fn($(i))
+    }
+}
+
+function write_var(var,   i) {
+    printf "SCALARS %s double\n", var
+    print  "LOOKUP_TABLE density"
+    for (i = 0; i < np; i++)
+	print buf[i]
+}
+
+BEGIN {
+    ini()
+    f = ARGV[1]
+    header()
+    topology()
+    data_header()
+
+    for (i = 0; i in vars; i++) {
+	var = vars[i]
+	read_var()
+	write_var(var)
+    }
+}
+
+function header() {
+    print "# vtk DataFile Version 2.0"
+    print "created with d2vtk"
+    print "ASCII"
+}
+
+function topology() {
+  print  "DATASET STRUCTURED_POINTS"
+  printf "DIMENSIONS %s %s %s\n",  nd[X], nd[Y],  nd[Z]
+  printf "ORIGIN  %s %s %s\n",    org[X],org[Y], org[Z]
+  printf "SPACING %s %s %s\n",    sp[X], sp[Y],  sp[Z]
+}
+
+function data_header() {
+    printf "POINT_DATA %s\n", np
+}
+
+function fn(e) { return (e ~ /nan/) ? 0 : e } # force numeric
+
+# TEST: d2vtk.t0
+# ./d2vtk test_data/distributions.txt > o.out.vtk
