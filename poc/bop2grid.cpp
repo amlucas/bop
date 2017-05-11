@@ -40,12 +40,13 @@ int main(int argc, char **argv)
 
     summary(&d);
 
-    long  n[] = {10, 20, 30};
-    float *org, *sp;
-    float *rr, *vv,  *rho;
+    long     n[] = { 10,  20,  30};
+    double org[] = {1.0, 2.0, 3,0};
+    double sp[]  = {0.1, 0.2, 0.3};
+    double *vv,  *rho;
     grid2vtk(argv[1],
-	      n, org, sp,
-	     rr, vv, rho);
+	     n, org, sp,
+	     vv, rho);
 
     for (int i = 0; i < nd; ++i)
     finalize(dd + i);
