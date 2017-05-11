@@ -23,3 +23,4 @@ ssh daint ls -d $d/bop/'*.bop'
 ```
 
 
+    ./bop2grid o.vtk 10 20 0.0 0.0  0.1 0.1  solvent-00303.bop solvent-00303.bop

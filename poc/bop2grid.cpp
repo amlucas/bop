@@ -50,31 +50,26 @@ int main(int argc, char **argv) {
   ReadData d;
   init(&d);
   concatenate(nd, dd, /**/ &d);
-
   summary(&d);
 
-    long     n[] = { 10,  20,  30};
-    double org[] = {1.0, 2.0, 3,0};
-    double sp[]  = {0.1, 0.2, 0.3};
-    double *vy, *vx;
-    char   const *nname[] = {"vx", "vy"};
-    int    ns = sizeof nname / sizeof nname[0];
+  long     n[] = {nx, ny, 1};
+  double org[] = {ox, oy, 0};
+  double sp[]  = {sx, sy, 0};
+  double *vy, *vx;
+  char   const *nname[] = {"vx", "vy"};
+  int    ns = sizeof nname / sizeof nname[0];
 
-    long np = (n[0]+1)*(n[1]+1)*(n[2]+1);
-    vx = (double*)malloc(np*sizeof vx[0]);
-    vy = (double*)malloc(np*sizeof vy[0]);
-    for (long i = 0; i < np; i++) vx[i] = -i;
-    for (long i = 0; i < np; i++) vy[i] =  i;
-    double *vars[] = {vx, vy};
-    grid2vtk(fo,
-	     n, org, sp,
-	     vars, nname, ns);
-
-    for (int i = 0; i < nd; ++i)
-    finalize(dd + i);
-    finalize(&d);
-
-    delete[] dd;
-    
-    return 0;
+  long np = nx * ny;
+  vx = (double*)malloc(np*sizeof vx[0]);
+  vy = (double*)malloc(np*sizeof vy[0]);
+  for (long i = 0; i < np; i++) vx[i] = -i;
+  for (long i = 0; i < np; i++) vy[i] =  i;
+  double *vars[] = {vx, vy};
+  grid2vtk(fo,
+	   n, org, sp,
+	   vars, nname, ns);
+  
+  for (int i = 0; i < nd; ++i) finalize(dd + i);
+  finalize(&d);
+  delete[] dd;
 }
