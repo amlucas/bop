@@ -13,7 +13,7 @@ grid2vtk.o: grid2vtk.h
 reader.o: reader.h
 
 bop2grid: bop2grid.o grid2vtk.o reader.o
-bop2line: bop2line.o grid2vtk.o reader.o
+bop2line: bop2line.o reader.o
 
 %: %.o; $(LINK) $^ $(LDLIBS) -o $@
 
