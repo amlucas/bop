@@ -30,10 +30,4 @@ int main(int argc, char **argv) {
   init(&d);
   concatenate(nd, dd, /**/ &d);
   summary(&d);
-
-  
-
-  for (int i = 0; i < nd; ++i) finalize(dd + i);
-  finalize(&d);
-  delete[] dd;
 }
