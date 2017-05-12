@@ -21,20 +21,6 @@ function ini(   i) {
     np = nd[X] * nd[Y] * nd[Z]
 }
 
-function read_var(  i, ib) { # fills `buf'
-    while (getline < f) {
-	if (NF == 0) break
-	for (i = 1; i <= NF; i++) buf[ib++] = fn($(i))
-    }
-}
-
-function write_var(var,   i) {
-    printf "SCALARS %s double\n", var
-    print  "LOOKUP_TABLE density"
-    for (i = 0; i < np; i++)
-	print buf[i]
-}
-
 BEGIN {
     ini()
     f = ARGV[1]
@@ -47,6 +33,20 @@ BEGIN {
 	read_var()
 	write_var(var)
     }
+}
+
+function read_var(  i, ib) { # fills `buf'
+    while (getline < f) {
+	if (NF == 0) break
+	for (i = 1; i <= NF; i++) buf[ib++] = fn($(i))
+    }
+}
+
+function write_var(var,   i) {
+    printf "SCALARS %s double\n", var
+    print  "LOOKUP_TABLE density"
+    for (i = 0; i < np; i++)
+	print buf[i]
 }
 
 function header() {
@@ -66,7 +66,8 @@ function data_header() {
     printf "POINT_DATA %s\n", np
 }
 
-function fn(e) { return (e ~ /nan/) ? 0 : e } # force numeric
+# function fn(e) { return (e ~ /nan/) ? 0 : e } # force numeric
+function fn(e) { return e } # force numeric
 
 # TEST: d2vtk.t0
 # ./d2vtk test_data/distributions.txt > o.out.vtk
