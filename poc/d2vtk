@@ -18,12 +18,13 @@ function ini(   i) {
     # fake dimensions
     nd[Z] = 1; sp[Z] = 0; org[Z] = 0
 
+    # number of points
     np = nd[X] * nd[Y] * nd[Z]
 }
 
 BEGIN {
     ini()
-    f = ARGV[1]
+    f = ARGV[1] # input file
     header()
     topology()
     data_header()
@@ -45,8 +46,7 @@ function read_var(  i, ib) { # fills `buf'
 function write_var(var,   i) {
     printf "SCALARS %s double\n", var
     print  "LOOKUP_TABLE density"
-    for (i = 0; i < np; i++)
-	print buf[i]
+    for (i = 0; i < np; i++) print buf[i]
 }
 
 function header() {
@@ -59,12 +59,10 @@ function topology() {
   print  "DATASET STRUCTURED_POINTS"
   printf "DIMENSIONS %s %s %s\n",  nd[X], nd[Y],  nd[Z]
   printf "ORIGIN  %s %s %s\n",    org[X],org[Y], org[Z]
-  printf "SPACING %s %s %s\n",    sp[X], sp[Y],  sp[Z]
+  printf "SPACING %s %s %s\n",     sp[X], sp[Y],  sp[Z]
 }
 
-function data_header() {
-    printf "POINT_DATA %s\n", np
-}
+function data_header() { printf "POINT_DATA %s\n", np }
 
 function fn(e) { return (e ~ /nan/) ? 0 : e } # force numeric
 
