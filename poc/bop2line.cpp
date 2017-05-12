@@ -27,18 +27,12 @@ int main(int argc, char **argv) {
   s = atof(argv[iarg++]);
 
   const int nd = argc - iarg;
-  ReadData *dd = new ReadData[nd];
 
   for (int i = 0; i < nd; i++, iarg++) {
-    init(dd + i);
-    read(argv[iarg], dd + i);
+    init(&d);
+    read(argv[iarg], &d);
+    process();
   }
-
-  init(&d);
-  concatenate(nd, dd, /**/ &d);
-  summary(&d);
-
-  process();
   write();
 }
 
