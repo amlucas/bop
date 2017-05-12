@@ -1,3 +1,8 @@
+/* Usage:
+  bop2line <n> <o> <s>  <in1.bop> <in2.bop>
+  bop2line 64 0.0 0.5 solvent-00302.bop > profile.dat
+*/
+
 #include <cstdlib>
 #include <cstdio>
 #include "reader.h"
@@ -8,7 +13,6 @@ enum {X, Y, Z};
 int n;    /* number of steps */
 double o; /* origin */
 double s; /* spacing */
-char *fo; /* output file */
 
 double   nnd[MAX_LINE]; /* number density and velocity histogram */
 double    vv[MAX_LINE];
@@ -19,9 +23,7 @@ void write();
 
 int main(int argc, char **argv) {
   int iarg = 1;
-  /* fprintf(stderr, "usage: %s <out.vtk> <n> <o> <s>  <in1.bop> <in2.bop> ...\n", argv[iarg++]); */
-  fo =      argv[iarg++];
-
+  /* fprintf(stderr, "usage: %s <n> <o> <s>  <in1.bop> <in2.bop> ...\n", argv[iarg++]); */
   n = atoi(argv[iarg++]);
   o = atof(argv[iarg++]);
   s = atof(argv[iarg++]);
