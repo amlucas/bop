@@ -3,20 +3,25 @@ CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
 CXX=g++
 
 PROGS = bop2vtk bop2txt
-OBJS  = reader.o
+
+LIBS      = -lbop
+LDFLAGS   = -Lbop
+CXXFLAGS += -Ibop
 
 all: $(PROGS)
-%: %.o $(OBJS); $(CXX) $(CXXFLAGS) -o $@ $< $(OBJS) ${LDFLAGS}
+%: %.o; $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
 
-reader.o: reader.cpp reader.h
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
-
-bop2txt.o: bop2txt.cpp reader.h
-bop2vtk.o: bop2vtk.cpp reader.h
+bop2txt.o: bop2txt.cpp libbop
+bop2vtk.o: bop2vtk.cpp libbop
 
 install: all
 	mkdir -p $(BIN)
 	cp $(PROGS) $(BIN)
 
-clean:; rm -f $(PROGS) *.o
-.PHONY: clean install
+libbop:; make -C bop/
+
+clean:
+	rm -f $(PROGS) *.o
+	make -C bop clean
+
+.PHONY: clean install libbop
