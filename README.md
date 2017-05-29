@@ -36,7 +36,7 @@ bop2vtk out.vtk in1.bop in2.bop ... inN.bop
 
 Dump ascii data from bop files `in1.bop`, `in2.bop`, ..., `inN.bop` into `out.txt`:
 ```sh
-bop2vtk in1.bop in2.bop ... inN.bop > out.txt
+bop2txt in1.bop in2.bop ... inN.bop > out.txt
 ```
 
 Testing
