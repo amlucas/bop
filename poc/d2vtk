@@ -66,8 +66,8 @@ function data_header() { printf "POINT_DATA %s\n", np }
 
 function fn(e) {  # force numeric
     return \
-	(e ~ /nan/) ? 0 :
-	(e ~ /inf/) ? 0 :
+	(e ~ /nan/) ? 0 : \
+	(e ~ /inf/) ? 0 : \
 	e
 }
 
