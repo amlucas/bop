@@ -72,4 +72,7 @@ function fn(e) {  # force numeric
 }
 
 # TEST: d2vtk.t0
-# ./d2vtk test_data/distributions.txt > o.out.vtk
+# ./d2vtk test_data/distributions.txt  > o.out.vtk
+#
+# TEST: d2vtk.t1
+# ./d2vtk test_data/distributions2.txt > o.out.vtk
