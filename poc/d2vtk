@@ -64,7 +64,12 @@ function topology() {
 
 function data_header() { printf "POINT_DATA %s\n", np }
 
-function fn(e) { return (e ~ /nan/) ? 0 : e } # force numeric
+function fn(e) {  # force numeric
+    return \
+	(e ~ /nan/) ? 0 :
+	(e ~ /inf/) ? 0 :
+	e
+}
 
 # TEST: d2vtk.t0
 # ./d2vtk test_data/distributions.txt > o.out.vtk
