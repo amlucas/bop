@@ -45,7 +45,7 @@ function read_var(  i, ib) { # fills `buf'
 
 function write_var(var,   i) {
     printf "SCALARS %s double\n", var
-    print  "LOOKUP_TABLE density"
+    print  "LOOKUP_TABLE default"
     for (i = 0; i < np; i++) print buf[i]
 }
 
