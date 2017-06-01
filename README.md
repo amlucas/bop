@@ -22,6 +22,7 @@ Installation
 ------------
 
 The following will install the binaries into `${HOME}/bin`. This folder needs to be in the `PATH` variable.
+Furthermore, it installs the headers and library into `${HOME}/prefix/bop/include` and `${HOME}/prefix/bop/lib`, respectively.
 ```sh
 make && make install
 ```
