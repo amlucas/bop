@@ -2,3 +2,5 @@
 /bop2vtk
 /txt2bop
 *.o
+test.out.txt
+test.out.vtk
