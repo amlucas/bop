@@ -30,9 +30,11 @@ function val(f,  B)
   fclose(f);
 endfunction
 
+function n = numf(S); n = numel(fieldnames(S)); endfunction
+
 D = load(f);
 mkdir(d);
-nt = numfields(D);
+nt = numf(D);
 for i=0:nt-1
   [n, B] = unpack(D, i);
   v0 = sprintf(fmt        , i); # value and bop files
