@@ -1,0 +1,43 @@
+#!/usr/bin/env octave-qf
+
+d = argv(){1}; # output dir
+f = argv(){2}; # h5part file
+fmt = "%04d";
+
+function mkdir(d); c = sprintf("mkdir -p -- '%s'", d); system(c); endfunction
+function [n, B] = unpack(D, f)
+  f = sprintf("Step_%d", f);
+  x  = D.(f).x;   y = D.(f).y;   z = D.(f).z;
+  vx = D.(f).u;  vy = D.(f).v;  vz = D.(f).w;
+  type = D.(f).("type"); type = single(type);
+  
+  n = numel(x);
+  B = vertcat(x, y, z, vx, vy, vz, type);
+endfunction
+
+function bop(f, v, n)
+  f = fopen(f, "w");
+  fprintf(f, "%d\n", n);
+  fprintf(f, "DATA_FILE: %s\n", v);
+  fprintf(f, "DATA_FORMAT: float\n");
+  fprintf(f, "VARIABLES: x y z vx vy vz type\n");
+  fclose(f);
+endfunction
+
+function val(f,  B)
+  f = fopen(f, "w");
+  fwrite(f, B, "single");
+  fclose(f);
+endfunction
+
+D = load(f);
+mkdir(d);
+nt = numfields(D);
+for i=0:nt-1
+  [n, B] = unpack(D, i);
+  v0 = sprintf(fmt        , i); # value and bop files
+  v = sprintf("%s/%s"     , d, v0);
+  b  = sprintf("%s/%s.bop", d, v0);
+  bop(b, v0, n);
+  val(v, B);
+endfor

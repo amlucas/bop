@@ -1,0 +1,31 @@
+#!/bin/bash
+
+usg() {
+    echo 'h5vtk [dir] [h5part]
+converts h5part to a list of vtk files' >&2
+    exit
+}
+
+if test $# -ne 0 -a $1 = -h; then usg; fi
+
+d="$1"; shift
+s="$1"; shift
+
+if test ! -f "$s"; then usg; fi
+if test $# -ne 0 ; then usg; fi
+
+t=/tmp/h5vtk.$$
+
+trap 'rm -rf $t' 0 1 2 3 15
+
+h5bop "$t" "$s"
+mkdir -p "$d"
+
+(cd "$t"
+ for b in *.bop
+ do v=`basename $b .bop`
+    v=$v.vtk
+    bop2vtk $v $b
+ done)
+
+for v in $t/*.vtk; do mv $v "$d"; done
