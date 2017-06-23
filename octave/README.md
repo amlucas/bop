@@ -1,1 +1,7 @@
-# octave package
+# octave package for bop file
+
+
+## Install
+
+	make install
+

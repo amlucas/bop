@@ -1,0 +1,7 @@
+# TEST: t0
+# octave -qf > std.out.txt <<!!!
+# pkg load bop
+# [ma, mi, re] = bop_version();
+# printf("%d.%d.%d", ma, mi, re);
+#!!!
+#
