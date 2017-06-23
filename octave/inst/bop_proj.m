@@ -1,4 +1,4 @@
-# project particles to grid
+# project particles `B' to grid 'G'
 function G = bop_proj(G, B)
   global e_c e_m # error code and message
   X = 1; Y = 2; Z = 3;
@@ -14,8 +14,8 @@ function G = bop_proj(G, B)
   ii = ii & (ix <= n(X)) & (iy <= n(Y)) & (iz <= n(Z));
   
   ix = ix(ii); iy = iy(ii); iz = iz(ii);
-  kk = sub2ind(n, ix, iy, iz);
-  cnt = G.D.cnt;
+  kk = sub2ind(n, ix, iy, iz); # particles inside grid
+  cnt = G.D.cnt;               # counter for particles
   
   l = fieldnames(B); nv = numel(l);
   for f=1:nv; fn = l{f};
