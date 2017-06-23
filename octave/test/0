@@ -1,5 +1,5 @@
 # TEST: t0
-# octave -qf > std.txt <<!!!
+# octave-qf > std.txt <<!!!
 # pkg load bop;
 # [ma, mi, re] = bop_version();
 # printf("%d.%d.%d\n", ma, mi, re);
