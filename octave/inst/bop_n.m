@@ -1,3 +1,4 @@
+## return number of particles
 function n = bop_n(fn)
   global e_c e_m  # error code and message
   f = fopen(fn);
