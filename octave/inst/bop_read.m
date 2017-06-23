@@ -49,7 +49,7 @@ function B = read0(v, n, l, t)
 
   if f == -1; B = -1; e_c = 1; return; endif
   D = fread(f, 'single');
-  nv = numel(l) # number of variables
+  nv = numel(l); # number of variables
   if nv*n != numel(D); B = -1; e_c = 1; return; endif
   D = reshape(D, nv, n);
   B = struct();

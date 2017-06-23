@@ -15,3 +15,14 @@
 #!!!
 # grep . std.txt > std.out.txt
 #
+
+# TEST: t2
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# B = bop_read("test_data/test.bop");
+# i = 42;
+# printf("r: %.3f %.3f %.3f\n",  (B.x)(1),  (B.y)(i),  (B.z)(i));
+# printf("v: %.3f %.3f %.3f\n", (B.vx)(1), (B.vy)(i), (B.vz)(i));
+#!!!
+# grep . std.txt > std.out.txt
+#
