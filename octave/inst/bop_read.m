@@ -16,6 +16,7 @@ endfunction
 
 function B = bop_read0(f)
   global e_c
+  ## n: number of part, v: values file, t: type, l: list of variables
   n = fscn(f, "%d");
   if e_c == 1; B = -1; return; endif
 
