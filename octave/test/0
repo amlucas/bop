@@ -1,7 +1,8 @@
 # TEST: t0
-# octave -qf > std.out.txt <<!!!
-# pkg load bop
+# octave -qf > std.txt <<!!!
+# pkg load bop;
 # [ma, mi, re] = bop_version();
-# printf("%d.%d.%d", ma, mi, re);
+# printf("%d.%d.%d\n", ma, mi, re);
 #!!!
+# grep . std.txt > std.out.txt
 #
