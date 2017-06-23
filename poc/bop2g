@@ -1,0 +1,67 @@
+#!/usr/bin/env octave-qf
+
+pkg load bop
+
+function usg()
+  msg('usage: bop2g o.vtk   ds Lx Ly Lz gd [bop files]..\n')
+  msg('  o.vtk: output; ds: step; L[xyz]: box size; gd: gamma dot\n')
+  msg('  ex: bop2g  o.vtk 0.25   4.0 2.0 4.0   1.0 d/*.bop\n')
+  msg('  projects and averages bops files to grid')
+  exit
+endfunction
+function msg(fmt, varargin); fprintf(stderr(), fmt, [varargin{:}]); endfunction
+function err0(fmt, varargin); msg('h5bop: '); msg(fmt, [varargin{:}]); endfunction
+function err(fmt, varargin); err0(fmt, varargin{:}); exit(2); endfunction
+
+function r = nxt()
+  global iarg
+  narg = numel(argv());
+  if iarg <= narg; r = argv(){iarg++}; else r = []; endif
+endfunction
+
+function r = nxt_num()
+  r = nxt();
+  r = str2num(r);
+endfunction
+
+function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
+
+function G = minus_gd(G, gd)
+  X = 1; Y = 2; Z = 3;
+  n = G.n; s = G.s; o = G.o;
+  
+  iz = 1:n(Z);
+  z  = (iz  - 1) * s(Z) + o(Z);
+  vx = gd * z;
+  for ix=1:n(X); for iy=1:n(Y); for iz=1:n(Z);
+	(G.D.vx)(ix, iy, iz) -= vx(iz);
+  endfor; endfor; endfor
+endfunction
+
+global iarg
+iarg = 1;
+fo = nxt();
+if eq(fo, "-h"); usg(); exit; endif
+
+ds = nxt_num(); # step
+Lx = nxt_num();
+Ly = nxt_num();
+Lz = nxt_num();
+gd = nxt_num();
+
+n =  [ floor(Lx/ds)  1    floor(Lz/ds)]; # n : size, s : step, o : origin
+s =  [           ds  Ly           ds  ];
+o =  [-Lx/2        -Ly/2         -Lz/2];
+l = {"vx", "vy", "vz", "type"};
+G = bop_igrid(l, n, o, s);
+
+while 1
+  b = nxt();
+  if isempty(b); break; endif
+  B = bop_read(b);
+  G = bop_proj(G, B);
+endwhile
+
+if gd != 0; G = minus_gd(G, gd); endif
+
+bop_grid(G.D, G.n, G.o, G.s, fo);

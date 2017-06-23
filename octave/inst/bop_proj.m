@@ -12,8 +12,6 @@ function G = bop_proj(G, B)
 
   ii =      (ix >=    1) & (iy >=    1) & (iz >=    1);
   ii = ii & (ix <= n(X)) & (iy <= n(Y)) & (iz <= n(Z));
-  #ii = ii & (G.D.type == 2);
-  fieldnames(B)
   
   ix = ix(ii); iy = iy(ii); iz = iz(ii);
   kk = sub2ind(n, ix, iy, iz);
