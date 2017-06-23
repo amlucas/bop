@@ -1,3 +1,5 @@
+#!/usr/bin/env octave-qf
+
 pkg load bop
 
 n = [5 10 2];

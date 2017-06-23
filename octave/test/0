@@ -26,3 +26,8 @@
 #!!!
 # grep . std.txt > std.out.txt
 #
+
+# TEST: t3
+# test/r.m
+# : r.out.vtk
+#

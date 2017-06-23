@@ -28,8 +28,8 @@ function grid(D, n, o, s, f)
   l = fieldnames(D);
   nv = numel(l);
   if nv == 0; return; endif
-  data_header(f, n)
 
+  data_header(f, n)
   for i=1:nv; i = l{i}; scalar(f, D.(i), n, i); endfor
 endfunction
 
@@ -42,6 +42,7 @@ function scalar(f, D, n, name)
   fprintf(f, "LOOKUP_TABLE default\n")
 
   skip = 0; arch = "ieee-be";
+  fprintf(f, "\n");
   fwrite(f, D(:), type, skip, arch);
   # dlmwrite(f, D(:), '\n');
 endfunction
@@ -49,7 +50,7 @@ endfunction
 function data_header(f, n)
   X = 1; Y = 2; Z = 3;
   nn = n(X)*n(Y)*n(Z);
-  fprintf(f, "POINT_DATA %ld\n", nn);
+  fprintf(f, "POINT_DATA %ld", nn);
 endfunction
 
 function header(f)
