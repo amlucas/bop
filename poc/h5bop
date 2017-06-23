@@ -1,10 +1,21 @@
 #!/usr/bin/env octave-qf
 
-d = argv(){1}; # output dir
-f = argv(){2}; # h5part file
-fmt = "%04d";
+1;
+function usg()
+  msg('usage: h5bop dirname h5part\n')
+  msg('  converts h5part to bops')
+  exit
+endfunction
+function msg(fmt, varargin); fprintf(stderr(), fmt, [varargin{:}]); endfunction
+function err0(fmt, varargin); msg('h5bop: '); msg(fmt, [varargin{:}]); endfunction
+function err(fmt, varargin); err0(fmt, varargin{:}); exit(2); endfunction
+function rc = cmd(fmt, varargin); rc = system(sprintf(fmt, [varargin{:}])); endfunction
 
-function mkdir(d); c = sprintf("mkdir -p -- '%s'", d); system(c); endfunction
+function mkdir0(d); cmd("mkdir -p -- '%s' 2>/dev/null", d); endfunction
+function r = mkdir(d);  mkdir0(d); r = cmd("test -d '%s'", d); endfunction
+function [rc, D] = load0(f); try D = load(f); rc = 0; catch D = 0; rc = 1; end_try_catch; endfunction
+function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
+
 function [n, B] = unpack(D, f)
   f = sprintf("Step_%d", f);
   x  = D.(f).x;   y = D.(f).y;   z = D.(f).z;
@@ -32,8 +43,24 @@ endfunction
 
 function n = numf(S); n = numel(fieldnames(S)); endfunction
 
-D = load(f);
-mkdir(d);
+fmt = "%04d";
+nargs = numel(argv());
+iargs = 1;
+
+if nargs < 1; err('not enough arguments'); endif
+if eq(argv(){iargs}, '-h'); usg(); endif
+  
+d = argv(){iargs++};
+if nargs < 1; err('not enough arguments'); endif
+f = argv(){iargs++};
+
+rc = mkdir(d);
+if rc != 0; err('cannot create directory %s', d); endif
+
+[rc, D] = load0(f, '-hdf5');
+if rc != 0; err('fail to load %s', f); endif
+if !isstruct(D); err('%s is not h5part', f); endif
+
 nt = numf(D);
 for i=0:nt-1
   [n, B] = unpack(D, i);
