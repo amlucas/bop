@@ -14,7 +14,7 @@ d="$1"; shift
 s="$1"; shift
 
 d0=`dirname "$s"`
-d=$d0/$d"
+d="$d0/$d"
 
 h5vtk "$d" "$s"
 
