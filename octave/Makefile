@@ -4,7 +4,8 @@
 v = 0.1.0
 
 # files in package
-O = COPYING DESCRIPTION inst/bop_version.m
+i = inst
+O = COPYING DESCRIPTION $i/bop_version.m $i/bop_n.m
 n = bop-$v
 p =     $n.tar.gz
 
