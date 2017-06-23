@@ -4,6 +4,4 @@ global e_c e_m
 system("make >/dev/null");
 e_c = 0;
 pkg load bop
-B = bop_read("test_data/1000.bop");
-
-bop_write(B, "./123.bop");
+B = bop_ply("test_data/r.ply");
