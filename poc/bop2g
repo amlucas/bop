@@ -26,6 +26,22 @@ endfunction
 
 function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
 
+function G = minus_rot(G, gd)
+  X = 1; Y = 2; Z = 3;
+  n = G.n; s = G.s; o = G.o;
+
+  iz = 1:n(Z); z  = (iz  - 1) * s(Z) + o(Z);
+  ix = 1:n(X); x  = (ix  - 1) * s(X) + o(X);
+
+  vx =   1/2*gd * z;
+  vz =  -1/2*gd * x;
+
+  for ix=1:n(X); for iy=1:n(Y); for iz=1:n(Z);
+	(G.D.vx)(ix, iy, iz) -= vx(iz);
+	(G.D.vz)(ix, iy, iz) -= vz(ix);
+  endfor; endfor; endfor
+endfunction
+
 function G = minus_gd(G, gd)
   X = 1; Y = 2; Z = 3;
   n = G.n; s = G.s; o = G.o;
@@ -53,19 +69,24 @@ gd = nxt_num();
 n =  [ floor(Lx/ds)  1    floor(Lz/ds)]; # n : size, s : step, o : origin
 s =  [           ds  Ly           ds  ];
 o =  [-Lx/2        -Ly/2         -Lz/2];
-l = {"vx", "vy", "vz", "type"};
+l = {"vx", "vy", "vz", "type", "m"};
 G = bop_igrid(l, n, o, s);
 
 while 1
   b = nxt();
-  if isempty(b); break; endif
-  B = bop_read(b);
-  if e_c != 0; err(e_m); endif
+  if isempty(b) || eq(b, "--"); break; endif
+  B = bop_read(b); B.m =      ones(size(B.x));
   G = bop_proj(G, B);
 endwhile
 
-if gd != 0; G = minus_gd(G, gd); endif
+while 1
+  b = nxt();
+  if isempty(b); break; endif
+  B = bop_ply(b); B.m =   1/2*ones(size(B.x));
+  G = bop_proj(G, B);
+endwhile
 
+#if gd != 0; G = minus_rot(G, gd); endif
 bop_grid(G.D, G.n, G.o, G.s, fo);
 
 # TEST: bop2g.t0

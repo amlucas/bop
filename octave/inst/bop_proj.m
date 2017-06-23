@@ -12,11 +12,13 @@ function G = bop_proj(G, B)
 
   ii =      (ix >=    1) & (iy >=    1) & (iz >=    1);
   ii = ii & (ix <= n(X)) & (iy <= n(Y)) & (iz <= n(Z));
-  
+
   ix = ix(ii); iy = iy(ii); iz = iz(ii);
   kk = sub2ind(n, ix, iy, iz); # particles inside grid
   cnt = G.D.cnt;               # counter for particles
-  
+  den = G.D.den;
+  m = B.m; m = m(ii);
+
   l = fieldnames(B); nv = numel(l);
   for f=1:nv; fn = l{f};
       if !isfield(G.D, fn); continue; endif
@@ -28,6 +30,8 @@ function G = bop_proj(G, B)
       endfor
       G.D.(fn) = gd;
   endfor
+  for k=kk;        cnt(k) += 1;      endfor; G.D.cnt = cnt;
+  
 
-  for k=kk; cnt(k) += 1; endfor; G.D.cnt = cnt;
+  i = 1; for k=kk; den(k) += m(i++); endfor; G.D.den = den;
 endfunction

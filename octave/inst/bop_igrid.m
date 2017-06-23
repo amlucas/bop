@@ -16,7 +16,7 @@ function G = bop_igrid(l, n, o, s)
   D = struct();
   nv = numel(l);
   for i=1:nv; i = l{i}; D.(i) = zeros(n); endfor
-  D.nden = D.cnt = zeros(n); # number density and counter
+  D.den = D.cnt = zeros(n); # number density and counter
   
   G.D = D;
 endfunction
