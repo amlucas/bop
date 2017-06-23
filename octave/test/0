@@ -6,7 +6,6 @@
 #!!!
 # grep . std.txt > std.out.txt
 #
-
 # TEST: t1
 # octave-qf > std.txt <<!!!
 # pkg load bop
