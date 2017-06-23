@@ -26,8 +26,15 @@
 #!!!
 # grep . std.txt > std.out.txt
 #
-
 # TEST: t3
 # test/r.m
 # : r.out.vtk
+#
+# TEST: t4
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# B.x = B.y = B.z = [1, 2, 3];
+# bop_write(B, "b.bop");
+#!!!
+# cp b.bop b.out.bop
 #

@@ -1,0 +1,4 @@
+3
+DATA_FILE: b
+DATA_FORMAT: float
+VARIABLES: z y x
