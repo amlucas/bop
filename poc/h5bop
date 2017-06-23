@@ -70,3 +70,8 @@ for i=0:nt-1
   bop(b, v0, n);
   val(v, B);
 endfor
+
+# TEST: h5bop
+# h5bop d test_data/all.h5part
+# mv d/0000.bop h.out.vtk
+#

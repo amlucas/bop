@@ -5,7 +5,7 @@ CXX=g++
 LINK=$(CXX)
 CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
 
-all: $(P)
+all: $(P) install
 
 bop2grid.o: reader.h grid2vtk.h
 bop2line.o: reader.h grid2vtk.h
@@ -17,9 +17,7 @@ bop2line: bop2line.o reader.o
 
 %: %.o; $(LINK) $^ $(LDLIBS) -o $@
 
-install: all
-	mkdir -p $(BIN)
-	cp $P $(BIN)
+install:; mkdir -p $(BIN) && cp $P $(BIN)
 
 clean:; rm -f $P bop2grid.o bop2line.o grid2vtk.o reader.o
 
