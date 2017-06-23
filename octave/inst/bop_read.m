@@ -36,8 +36,8 @@ function B = read1(f, d)
   v = fullfile(d, v); # full path to values
   B = read0(v, n, l, t);
   if e_c == 1
-    B = -1
-    e_c = 2
+    B = -1;
+    e_c = 2;
     e_m = sprintf("error reading values: %s", v);
   endif
 
