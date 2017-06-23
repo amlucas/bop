@@ -1,8 +1,17 @@
 # TEST: t0
 # octave-qf > std.txt <<!!!
-# pkg load bop;
+# pkg load bop
 # [ma, mi, re] = bop_version();
-# printf("%d.%d.%d\n", ma, mi, re);
+# printf("%d.%d.%d\n", ma, mi, re)
+#!!!
+# grep . std.txt > std.out.txt
+#
+
+# TEST: t1
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# n = bop_n("test_data/test.bop");
+# printf("n = %d\n", n)
 #!!!
 # grep . std.txt > std.out.txt
 #

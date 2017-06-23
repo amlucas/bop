@@ -16,6 +16,6 @@ endfunction
 function varargout = fscn(f, fmt) # simpler fscanf
   global e_c
   l = fgets(f);
-  if l != -1; e_c = 1; [varargout{1:nargout}] = -1; return; endif
+  if l == -1; e_c = 1; [varargout{1:nargout}] = -1; return; endif
   [varargout{1:nargout}] = strread(l, fmt);
 endfunction
