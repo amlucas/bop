@@ -36,9 +36,14 @@ endfunction
 function scalar(f, D, n, name)
   X = 1; Y = 2; Z = 3;
   nn = n(X)*n(Y)*n(Z);
-  fprintf(f, "SCALARS %s double\n", name)
+
+  type = "double";
+  fprintf(f, "SCALARS %s %s\n", name, type)
   fprintf(f, "LOOKUP_TABLE default\n")
-  dlmwrite(f, D, '\n'); # change if BINARY
+
+  skip = 0; arch = "ieee-be";
+  fwrite(f, D(:), type, skip, arch);
+  # dlmwrite(f, D(:), '\n');
 endfunction
 
 function data_header(f, n)
@@ -50,8 +55,8 @@ endfunction
 function header(f)
   fprintf(f, "# vtk DataFile Version 2.0\n")
   fprintf(f, "created with bop_grid\n")
-  fprintf(f, "ASCII\n")
-  #pr("BINARY\n");
+  # fprintf(f, "ASCII\n")
+  fprintf(f, "BINARY\n");
 endfunction
 
 function topology(f, n, o, s)
