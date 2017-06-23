@@ -38,11 +38,11 @@ function scalar(f, D, n, name)
   nn = n(X)*n(Y)*n(Z);
 
   type = "double";
+  fprintf(f, "\n");
   fprintf(f, "SCALARS %s %s\n", name, type)
   fprintf(f, "LOOKUP_TABLE default\n")
 
   skip = 0; arch = "ieee-be";
-  fprintf(f, "\n");
   fwrite(f, D(:), type, skip, arch);
   # dlmwrite(f, D(:), '\n');
 endfunction
