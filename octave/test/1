@@ -1,4 +1,4 @@
-# sTEST: u0
+# TEST: u0
 # octave-qf > std.txt <<!!!
 # pkg load bop
 # eq = @bop_eq
