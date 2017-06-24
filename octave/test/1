@@ -6,3 +6,26 @@
 #!!!
 # grep . std.txt > std.out.txt
 #
+
+# TEST: u1
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# s0 = bop_pop();
+# s1 = bop_pop();
+# s2 = bop_pop();
+# printf("%s\n", s0, s1, s2);
+#!!!
+# grep . std.txt > std.out.txt
+#
+
+# TEST: u2
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# bop_set({"a", "b", "c"});
+# s0 = bop_pop();
+# s1 = bop_pop();
+# s2 = bop_pop();
+# printf("%s\n", s0, s1, s2);
+#!!!
+# grep . std.txt > std.out.txt
+#
