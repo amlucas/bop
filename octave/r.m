@@ -1,46 +1,21 @@
 #!/usr/bin/env octave-qf
 
-1;
-function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
-function r = nxt()
-  global iarg arg
-  narg = numel(arg);
-  if iarg <= narg; r = arg{iarg++}; else r = []; endif
-endfunction
-
-function r = nxt_num()
-  r = nxt();
-  r = str2num(r);
-endfunction
-
-function argp()
-  global iarg arg
-  iarg = 1;
-  arg = argv();
-  if eq(arg{1}, "-i"); arg = arg_default(); endif
-endfunction
-
-function a = arg_default()
-  a = {"/home/lisergey/s/sh_12.0/ply/rbcs-01240.ply", "/home/lisergey/s/sh_12.0/ply/rbcs-01230.ply"};
-endfunction
-
-global e_c e_m
-argp()
-
-system("make >/dev/null");
 pkg load bop
-e_c = 0;
+pop = @bop_pop;
+global e_c e_m # error code and message
+
+function r = pop_num(); r = pop(); r = str2num(r); endfunction
 
 X = 1; Y = 2; Z = 3;
+
 B = struct();
-while !isempty(b = nxt())
+while !isempty(b = pop())
   B0 = bop_ply(b);
-  if e_c != 0; disp(e_m); exit; endif
+  if e_c != 0; error(e_m); endif
   B =  bop_join(B0, B);
 endwhile
 
 [center, radii, R, v, chi2]  = efit([B.x', B.y', B.z']);
-
 ax = radii(X); ay = radii(Y); az = radii(Z);
 
 x = B.x; y = B.y; z = B.z;
@@ -74,6 +49,3 @@ vz0 = f * (-1/ab) * x;
 
 E  = (vx0 - vx).^2 + (vz0 - vz).^2;
 E0 = vx.^2 + vz.^2;
-
-R1 = E
-sum(E/numel(E))
