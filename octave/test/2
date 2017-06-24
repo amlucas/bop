@@ -18,3 +18,25 @@
 #!!!
 # cp b.txt   b.out.txt
 #
+
+# TEST: 2.t1
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# B = bop_read_ply("test_data/r.ply");
+# x = B.x; y = B.y;
+# x = x(1:10)(:); y = y(1:10)(:);
+# dlmwrite("b.txt", horzcat(x, y), ' ');
+#!!!
+# cp b.txt   b.out.txt
+#
+
+# TEST: 2.t2
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# [B, F] = bop_read_ply("test_data/r.ply");
+# nt = numel(F.f1);
+# F.id = 1:nt;
+# bop_write_tri(B, F, "t.vtk");
+#!!!
+# cp t.vtk   t.out.vtk
+#
