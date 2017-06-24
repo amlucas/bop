@@ -82,7 +82,7 @@ endwhile
 while 1
   b = nxt();
   if isempty(b); break; endif
-  B = bop_ply(b); B.m =   1/2*ones(size(B.x));
+  B = bop_read_ply(b); B.m =   1/2*ones(size(B.x));
   G = bop_proj(G, B);
 endwhile
 

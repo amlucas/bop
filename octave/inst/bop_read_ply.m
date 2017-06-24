@@ -1,5 +1,5 @@
 ## reads ply file : output a structure B.x, B.y, ...
-function B = bop_ply(fn)
+function B = bop_read_ply(fn)
   global e_c e_m  # error code and message
   f = fopen(fn);
   if f == -1

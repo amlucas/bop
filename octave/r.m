@@ -6,7 +6,7 @@ X = 1; Y = 2; Z = 3;
 
 function [x, y, z, vx, vy, vz] = read()
   global e_c e_m # error code and message
-  pop = @bop_pop; ply = @bop_ply; join = @bop_join;
+  pop = @bop_pop; ply = @bop_read_ply; join = @bop_join;
   B = struct();
   while !isempty(b = pop())
     B0 = ply(b);
