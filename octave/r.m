@@ -1,25 +1,34 @@
 #!/usr/bin/env octave-qf
 
 pkg load bop
-pop = @bop_pop;
-global e_c e_m # error code and message
-
-function r = pop_num(); r = pop(); r = str2num(r); endfunction
+global e_c e_m; e_c = 0;
 
 X = 1; Y = 2; Z = 3;
 
-B = struct();
-while !isempty(b = pop())
-  B0 = bop_ply(b);
-  if e_c != 0; error(e_m); endif
-  B =  bop_join(B0, B);
-endwhile
+function [x, y, z, vx, vy, vz] = read()
+  global e_c e_m # error code and message
+  pop = @bop_pop; ply = @bop_ply; join = @bop_join;
+  B = struct();
+  while !isempty(b = pop())
+    B0 = ply(b);
+    if e_c != 0; error(e_m); endif
+    B =  join(B0, B);
+  endwhile
+  x = B.x; y = B.y; z = B.z;
+  vx = B.vx; vy = B.vy; vz = B.vz;
+endfunction
 
-[center, radii, R, v, chi2]  = efit([B.x', B.y', B.z']);
+# interactive?
+function r = iact()
+  eq = @bop_eq;
+  r = numel(a = argv()) >= 1 && eq(a{1}, "-i");
+endfunction
+
+if iact(); bop_set(glob("~/s/sh_3.0/ply/rbcs-01*.ply")); endif
+
+[x, y, z, vx, vy, vz] = read();
+[center, radii, R, v, chi2]  = efit([x', y', z']);
 ax = radii(X); ay = radii(Y); az = radii(Z);
-
-x = B.x; y = B.y; z = B.z;
-vx = B.vx; vy = B.vy; vz = B.vz;
 
 n = numel(x);
 for i=1:n
@@ -38,8 +47,7 @@ clear r
 a = radii(X); b = radii(Z); ab = a/b;
 vxz = sum(vx.*z); vzx = sum(vz.*x);
 xx = sum(x.*x);    zz = sum(z.*z);
-ab2 = ab^2;
-ab4 = ab^4;
+ab2 = ab^2; ab4 = ab^4;
 f = (ab*(ab2*vxz-vzx))/(ab4*zz+xx);
 
 printf("%g\n", f);
