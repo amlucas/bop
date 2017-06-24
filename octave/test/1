@@ -41,6 +41,6 @@
 # grep . std.txt > std.out.txt
 #
 
-# cTEST: u4
+# TEST: u4
 # test/r2.m a b c d | grep . > std.out.txt
 #
