@@ -1,0 +1,4 @@
+# TEST: 3.t0
+# test/r.accum.m
+# cp t.vtk b.out.vtk
+#
