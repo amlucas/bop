@@ -45,7 +45,7 @@ function B = read_vert(f, n, nv)
 endfunction
 
 function F = read_tri(f,  nt)
-  F = -1
+  F = -1;
   np = 4; # one line: 3 f1 f2 f3
   D = le_int(f, nt * np);
   D = reshape(D, np, nt);

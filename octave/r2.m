@@ -4,9 +4,7 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-B.x = [1 2 3];
-B.y = [1 2 3];
-B.z = [1 2 3];
-B.vx = [1000, 2000, 3000];
+[B, F] = bop_read_ply("test_data/r.ply");
 
-bop_write_vtk(B, "b.vtk");
+nt = numel(F.f1);
+nt
