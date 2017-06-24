@@ -7,4 +7,7 @@ global e_m e_c
 [B, F] = bop_read_ply("test_data/r.ply");
 
 nt = numel(F.f1);
-nt
+F.id = 1:nt;
+
+bop_write_tri(B, F, "t.vtk");
+e_m
