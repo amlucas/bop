@@ -1,4 +1,4 @@
-function bop_grid(D, n, o, s, fn)
+function bop_write_grid(D, n, o, s, fn)
   ## D: structure with data : ex: D.vx(1:n(X), 1:n(Y), 1:n(Z))
   ## n(1:3): size, o(1:3) : origin, s(1:3) : spacing
   ## fn: file name
@@ -55,7 +55,7 @@ endfunction
 
 function header(f)
   fprintf(f, "# vtk DataFile Version 2.0\n")
-  fprintf(f, "created with bop_grid\n")
+  fprintf(f, "created with bop_write_grid\n")
   # fprintf(f, "ASCII\n")
   fprintf(f, "BINARY\n");
 endfunction

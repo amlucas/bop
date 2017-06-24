@@ -87,7 +87,7 @@ while 1
 endwhile
 
 #if gd != 0; G = minus_rot(G, gd); endif
-bop_grid(G.D, G.n, G.o, G.s, fo);
+bop_write_grid(G.D, G.n, G.o, G.s, fo);
 
 # TEST: bop2g.t0
 # bop2g b.out.vtk 0.25   4.0 2.0 4.0   1.0 test_data/1000.bop

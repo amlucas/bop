@@ -16,4 +16,4 @@ endfor; endfor; endfor
 
 D = struct();
 D.vx = vx;  D.vy = vy;
-bop_grid(D, n, o, s, "r.out.vtk");
+bop_write_grid(D, n, o, s, "r.out.vtk");
