@@ -7,3 +7,14 @@
 #!!!
 # cp b.vtk b.out.vtk
 #
+
+# TEST: 2.t1
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# B = bop_ply("test_data/r.ply");
+# x = B.x; y = B.y;
+# x = x(1:10)(:); y = y(1:10)(:);
+# dlmwrite("b.txt", horzcat(x, y), ' ');
+#!!!
+# cp b.txt   b.out.txt
+#
