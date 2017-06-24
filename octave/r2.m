@@ -10,7 +10,8 @@ B        = bop_read("test_data/1000.bop");
 bop_write_tri(Bs, Fs, "s.vtk");
 bop_write_vtk( B,     "b.vtk");
 
-Bs = bop_p2p_accum(Bs, B, {"vx", "vy", "vz"}); # accumulate
-Bs = bop_p2p_norm (Bs);                        # normalize by "density"
+l  = {"vx", "vy", "vz"};
+Bs = bop_p2p_accum(Bs, B, l); # accumulate
+Bs = bop_p2p_norm (Bs, l);    # normalize by "density"
 
 e_m
