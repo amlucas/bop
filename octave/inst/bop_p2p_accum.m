@@ -27,8 +27,7 @@ endfunction
 function A = ini(A, l) # init fileds in `A'
   nv = numel(l); sz = size(A.x);
   for i=1:nv; i = l{i};
-      if isfield(A, i) continue; endif
-      A.(i) = zeros(sz);
+      if !isfield(A, i) A.(i) = zeros(sz); endif
   endfor
   # density and counter
   if !isfield(A, "den"); A.den = zeros(sz); endif

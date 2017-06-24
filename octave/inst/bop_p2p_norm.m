@@ -1,5 +1,5 @@
 # [p]articles [to] [p]articles interpolation : normalize data
-# collected by bop_p2p_accum
+# collected by bop_p2p_accum by A.den and removes A.den
 function A = bop_p2p_norm(A, l)
   global e_c e_m
   if !isstruct(A) ; e_m = "not a structure"; e_c = 1; return; endif
@@ -12,6 +12,7 @@ function A = bop_p2p_norm(A, l)
   endfor
 
   A = norm(A, l);
+  A = clean(A);
 endfunction
 
 function A = norm(A, l)
@@ -26,3 +27,5 @@ function A = norm0(A, l, den, i)
       A.(f)(i) ./= den;
   endfor
 endfunction
+
+function A = clean(A); A = rmfield(A, "den"); endfunction
