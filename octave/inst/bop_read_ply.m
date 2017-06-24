@@ -1,4 +1,5 @@
-## reads ply file : output a structure B.x, B.y, ...
+## reads ply file : output a structure B.[xyz] (points) and F.f[123]
+## (faces)
 function [B, F] = bop_read_ply(fn)
   global e_c e_m  # error code and message
   F = B = -1;
