@@ -1,0 +1,42 @@
+/* cubic spline kernel */
+
+
+v0: [ 1, b0, c0, d0];
+v1: [a1, b1, c1, d1];
+mo: [1, 'r, 'r^2, 'r^3];
+
+f0: v0 . mo;
+f1: v1 . mo;
+
+df0: diff(f0, 'r);
+df1: diff(f1, 'r);
+
+ddf0: diff(f0, 'r, 2);
+ddf1: diff(f1, 'r, 2);
+
+e(v, f):=subst('r = v, f);
+
+eq: [
+                      e(0,         df0),
+     e(1,        f1), e(1,         df1), e(1,          ddf1),
+     e(1/2, f0 - f1), e(1/2, df0 - df1), e(1/2, ddf0 - ddf1)];
+
+v : append(v0, v1);
+v : listofvars(v);
+so: linsolve(eq, v);
+
+f00: subst(so, f0);
+f10: subst(so, f1);
+
+f00: horner(f00);
+f10: factor(f10);
+
+draw2d(explicit(f00, 'r, 0, 1/2), explicit(f10, 'r, 1/2, 1)) $
+
+i2(e, lo, hi):=integrate(%pi*'r*e, 'r, lo, hi);
+
+I: i2(f00, 0, 1/2) + i2(f10, 1/2, 1);
+A: 1/I;
+A: subst(%pi = PI, A);
+
+(grind('A = A), grind('f0 = f00), grind('f1 = f10));
