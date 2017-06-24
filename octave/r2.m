@@ -4,10 +4,5 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-[B, F] = bop_read_ply("test_data/r.ply");
-
-nt = numel(F.f1);
-F.id = 1:nt;
-
+[B, F] = bop_read_off("test_data/sph.162.off");
 bop_write_tri(B, F, "t.vtk");
-e_m

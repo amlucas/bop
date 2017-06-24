@@ -40,3 +40,14 @@
 #!!!
 # cp t.vtk   t.out.vtk
 #
+
+# TEST: 2.t3
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# [B, F] = bop_read_off("test_data/sph.162.off");
+# nt = numel(F.f1);
+# F.id = 1:nt;
+# bop_write_tri(B, F, "t.vtk");
+#!!!
+# cp t.vtk   t.out.vtk
+#

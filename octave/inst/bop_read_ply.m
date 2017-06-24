@@ -10,7 +10,7 @@ function [B, F] = bop_read_ply(fn)
   endif
   nv = 6; # xyzuvw
   [n, nt] = read_header(f, nv);
-  if  e_c == 1; return; endif
+  if  e_c != 0; return; endif
 
   B = read_vert(f, n, nv);
   F = read_tri(f,  nt);
@@ -18,12 +18,12 @@ function [B, F] = bop_read_ply(fn)
 endfunction
 
 function [n, nt] = read_header(f, nv)
-  global e_c
-  B = -1;
+  global e_c e_m
+  n = nt = -1;
 
   s = fscn(f, "%s"){1};
   if e_c == 1; e_m = "error reading ply file"; return; endif
-  if !eq(s, "ply"); e_c == 1; e_m = "not a ply file"; return; endif
+  if !bop_eq(s, "ply"); e_c = 1; e_m = "not a ply file"; return; endif
 
   skip(f); # format ...
   n = fscn(f, "%s"){3}; n = str2num(n);
@@ -65,8 +65,6 @@ function varargout = fscn(f, fmt) # simpler fscanf
   if l == -1; e_c = 1; [varargout{1:nargout}] = -1; return; endif
   [varargout{1:nargout}] = strread(l, fmt);
 endfunction
-
-function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
 
 function D = le_float(f, n)
   skip = 0; arch = "ieee-le";

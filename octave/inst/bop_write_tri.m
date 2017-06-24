@@ -24,8 +24,7 @@ function write(B, F, f)
   type = "float";
   rm = @rmfield;
   header(f);
-  n = numel(B.x)
-  
+  n = numel(B.x);
   topology_header(f, n, type);
   topology_data(f, B, type);
   cells(f, F);
