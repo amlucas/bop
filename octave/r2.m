@@ -4,22 +4,7 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-[Bs, Fs] = bop_read_off("test_data/sph.162.off");
-B        = bop_read("test_data/1000.bop");
+[B, F] = bop_read_off("test_data/sph.162.off");
 
-bop_write_tri(Bs, Fs, "s.vtk");
-bop_write_vtk( B,     "b.vtk");
-
-ker    = @bop_cubic;
-cutoff = 1.0;
-
-l  = {"vx", "vy", "vz"};
-
-Bs = bop_p2p_accum(Bs, B, l, ker, cutoff); # accumulate
-Bs = bop_p2p_accum(Bs, B, l, ker, cutoff); # accumulate
-Bs = bop_p2p_accum(Bs, B, l, ker, cutoff); # accumulate
-
-Bs = bop_p2p_norm (Bs, l);    # normalize by "den"
-bop_write_tri(Bs, Fs, "t.vtk");
-
-e_m
+B = bop_scale(B, [1 2 3]);
+bop_write_tri(B, F, "t.vtk");
