@@ -7,15 +7,16 @@ function [B, F] = bop_read_ply(fn)
     e_c = 1; e_m = sprintf("cannot open file: %s", fn);
     return
   endif
-
-  B = read(f);
+  nv = 6; # xyzuvw
+  [n, nt] = read_header(f, nv);
   if  e_c == 1; return; endif
 
+  B = read_vert(f, n, nv);
+  F = read_tri(f,  nt);
   fclose(f);
 endfunction
 
-function B = read(f)
-  nv = 6; # xyzuvw
+function [n, nt] = read_header(f, nv)
   global e_c
   B = -1;
 
@@ -25,16 +26,33 @@ function B = read(f)
 
   skip(f); # format ...
   n = fscn(f, "%s"){3}; n = str2num(n);
-  skipn(f, 6 + 1 + 1 + 1); # xyzuvw, ...
+  skipn(f, nv); # xyzuvw
 
-  skip = 0; arch = "ieee-le";
-  D = fread(f, n * nv, "single", skip, arch);
+  # [n] [tri]angles
+  nt = fscn(f, "%s"){3}; nt = str2num(nt);
+  skipn(f, 2); # prop...
+               # end_header
+endfunction
+
+function B = read_vert(f, n, nv)
+  D = le_float(f, n * nv); # little endian
   D = reshape(D, nv, n);
 
   B = struct();
   i = 1;
   B.x  = D(i++, :); B.y  = D(i++, :); B.z  = D(i++, :);
   B.vx = D(i++, :); B.vy = D(i++, :); B.vz = D(i++, :);
+endfunction
+
+function F = read_tri(f,  nt)
+  F = -1
+  np = 4; # one line: 3 f1 f2 f3
+  D = le_int(f, nt * np);
+  D = reshape(D, np, nt);
+  if !all(D(1, :) == 3); e_c = 1; e_m = "not triangles"; return; endif
+
+  F = struct(); i = 2;
+  F.f1 = D(i++, :); F.f2 = D(i++, :); F.f3 = D(i++, :);
 endfunction
 
 function skipn(f, n); while n-- > 0; skip(f); endwhile; endfunction
@@ -48,3 +66,13 @@ function varargout = fscn(f, fmt) # simpler fscanf
 endfunction
 
 function r = eq(a, b); r = (strcmp(a, b) == 1); endfunction
+
+function D = le_float(f, n)
+  skip = 0; arch = "ieee-le";
+  D = fread(f, n, "float", skip, arch);
+endfunction
+
+function D = le_int(f, n)
+  skip = 0; arch = "ieee-le";
+  D = fread(f, n, "int", skip, arch);
+endfunction
