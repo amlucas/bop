@@ -10,7 +10,7 @@ O = COPYING DESCRIPTION \
         $i/bop_pop.m $i/bop_proj.m $i/bop_push.m $i/bop_read.m $i/bop_set.m $i/bop_version.m \
         $i/bop_write_grid.m $i/bop_write_vtk.m $i/bop_write_tri.m $i/bop_write.m $i/efit.m   \
         $i/bop_read_off.m $i/bop_p2p_accum.m $i/bop_p2p_norm.m $i/bop_cubic.m $i/bop_scale.m \
-        $i/bop_rot_mat.m $i/bop_reset.m $i/bop_ellipse_arc.m
+        $i/bop_rot_mat.m $i/bop_reset.m $i/bop_ellipse_arc.m $i/bop_area.m
 
 n = bop-$v
 p =     $n.tar.gz

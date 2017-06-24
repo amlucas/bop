@@ -4,16 +4,7 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-[B, F] = bop_read_off("test_data/sph.162.off");
+[B, F] = bop_read_ply("test_data/r.ply");
 
-p = pi/3;
-cp = cos(p); sp = sin(p);
+a = bop_area(B, F)
 
-B = bop_scale(B, [1 2 3]);
-B = bop_rot_mat(B, [cp sp  0;
-		    sp -cp 0;
-		    0   0  1]);
-
-e_m
-
-bop_write_tri(B, F, "t.vtk");

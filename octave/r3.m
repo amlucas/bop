@@ -47,5 +47,7 @@ S = bop_p2p_norm (S, l);
 [f, e, vx0, vz0] = sk_fit(S.x, S.z, S.vx, S.vz, a(X)/a(Z));
 
 bop_write_tri(S, F, "b.vtk");
+
+c = bop_ellipse_arc(a(X), a(Z));
 	
-printf("%g %g\n", f, a(X)/a(Z));
+printf("%g %g %g\n", f, a(X)/a(Z), c);
