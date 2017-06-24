@@ -1,4 +1,4 @@
-/* cubic spline kernel */
+/* cubic spline kernel in 3D */
 
 v0: [ 1, b0, c0, d0];
 v1: [a1, b1, c1, d1];
@@ -32,9 +32,14 @@ f10: factor(f10);
 
 draw2d(explicit(f00, 'r, 0, 1/2), explicit(f10, 'r, 1/2, 1)) $
 
-i2(e, lo, hi):=integrate(%pi*'r*e, 'r, lo, hi);
+ip(e):=integrate(e, 'p, 0, 2*%pi);
+it(e):=integrate(e, 't, 0,   %pi);
+ir(e, lo, hi):=integrate(e, 'r, lo, hi);
 
-I: i2(f00, 0, 1/2) + i2(f10, 1/2, 1);
+i3(e, lo, hi):=ip(it(ir('r^2*sin('t)*e, lo, hi)));
+
+I: i3(f00, 0, 1/2) + i3(f10, 1/2, 1);
+
 A: 1/I;
 A: subst(%pi = PI, A);
 

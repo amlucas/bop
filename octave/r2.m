@@ -14,4 +14,5 @@ l  = {"vx", "vy", "vz"};
 Bs = bop_p2p_accum(Bs, B, l); # accumulate
 Bs = bop_p2p_norm (Bs, l);    # normalize by "density"
 
+
 e_m
