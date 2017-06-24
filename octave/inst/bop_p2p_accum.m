@@ -18,7 +18,6 @@ function A = bop_p2p_accum(A, B, l, w, c)
   for i=1:nv; i = l{i};
       if !isfield(B, i); e_m = sprintf("%s in not in B", i); e_c = 1; return; endif
   endfor
-
   A = ini(A, l);
 
   ker.w = w; ker.c = c; # pack kernel
@@ -31,8 +30,9 @@ function A = ini(A, l) # init fileds in `A'
       if isfield(A, i) continue; endif
       A.(i) = zeros(sz);
   endfor
-  A.den = zeros(sz); # density and counter
-  A.cnt = zeros(sz); 
+  # density and counter
+  if !isfield(A, "den"); A.den = zeros(sz); endif
+  if !isfield(A, "cnt"); A.cnt = zeros(sz); endif
 endfunction
 
 function A = accum(A, B, l, ker)

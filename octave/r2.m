@@ -14,8 +14,11 @@ ker    = @bop_cubic;
 cutoff = 1.0;
 
 l  = {"vx", "vy", "vz"};
+
 Bs = bop_p2p_accum(Bs, B, l, ker, cutoff); # accumulate
 Bs = bop_p2p_norm (Bs, l);    # normalize by "density"
+
+# Bs.vx
 
 bop_write_tri(Bs, Fs, "t.vtk");
 e_m
