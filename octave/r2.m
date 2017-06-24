@@ -4,7 +4,6 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-X = 1; Y = 2; Z = 3;
 B.x = [1 2 3];
 B.y = [1 2 3];
 B.z = [1 2 3];

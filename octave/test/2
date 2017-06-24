@@ -1,0 +1,9 @@
+# TEST: 2.t0
+# octave-qf > std.txt <<!!!
+# pkg load bop
+# B.x = B.y = B.z = [1 2 3];
+# B.vx = [10, 20, 30];
+# bop_write_vtk(B, "b.vtk");
+#!!!
+# cp b.vtk b.out.vtk
+#
