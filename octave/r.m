@@ -21,7 +21,7 @@ function argp()
 endfunction
 
 function a = arg_default()
-  a = {"/home/lisergey/s/sh_4.0/ply/rbcs-01240.ply", "/home/lisergey/s/sh_4.0/ply/rbcs-01230.ply"};
+  a = {"/home/lisergey/s/sh_12.0/ply/rbcs-01240.ply", "/home/lisergey/s/sh_12.0/ply/rbcs-01230.ply"};
 endfunction
 
 global e_c e_m
@@ -33,13 +33,10 @@ e_c = 0;
 
 X = 1; Y = 2; Z = 3;
 B = struct();
-while 1
-  b = nxt();
-  if isempty(b); break; endif
+while !isempty(b = nxt())
   B0 = bop_ply(b);
   if e_c != 0; disp(e_m); exit; endif
   B =  bop_join(B0, B);
-  break
 endwhile
 
 [center, radii, R, v, chi2]  = efit([B.x', B.y', B.z']);
@@ -68,6 +65,15 @@ vxz = sum(vx.*z); vzx = sum(vz.*x);
 xx = sum(x.*x);    zz = sum(z.*z);
 ab2 = ab^2;
 ab4 = ab^4;
-fr = (ab*(ab2*vxz-vzx))/(ab4*zz+xx);
+f = (ab*(ab2*vxz-vzx))/(ab4*zz+xx);
 
-printf("%g\n", fr);
+printf("%g\n", f);
+
+vx0 = f *     ab  * z;
+vz0 = f * (-1/ab) * x;
+
+E  = (vx0 - vx).^2 + (vz0 - vz).^2;
+E0 = vx.^2 + vz.^2;
+
+R1 = E
+sum(E/numel(E))
