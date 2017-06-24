@@ -1,9 +1,10 @@
 ## reads ply file : output a structure B.x, B.y, ...
-function B = bop_read_ply(fn)
+function [B, F] = bop_read_ply(fn)
   global e_c e_m  # error code and message
+  F = B = -1;
   f = fopen(fn);
   if f == -1
-    e_c = 1; e_m = sprintf("cannot open file: %s", fn); B = -1;
+    e_c = 1; e_m = sprintf("cannot open file: %s", fn);
     return
   endif
 
@@ -22,7 +23,7 @@ function B = read(f)
   if e_c == 1; e_m = "error reading ply file"; return; endif
   if !eq(s, "ply"); e_c == 1; e_m = "not a ply file"; return; endif
 
-  skip(f);
+  skip(f); # format ...
   n = fscn(f, "%s"){3}; n = str2num(n);
   skipn(f, 6 + 1 + 1 + 1); # xyzuvw, ...
 
