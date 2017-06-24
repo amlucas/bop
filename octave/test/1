@@ -1,4 +1,4 @@
-# TEST: u0
+# sTEST: u0
 # octave-qf > std.txt <<!!!
 # pkg load bop
 # eq = @bop_eq
@@ -12,8 +12,7 @@
 # pkg load bop
 # s0 = bop_pop();
 # s1 = bop_pop();
-# s2 = bop_pop();
-# printf("%s\n", s0, s1, s2);
+# printf("%d %d\n", s0, s1);
 #!!!
 # grep . std.txt > std.out.txt
 #
