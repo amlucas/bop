@@ -44,3 +44,7 @@
 # TEST: u4
 # test/r2.m a b c d | grep . > std.out.txt
 #
+
+# TEST: u5
+# test/r.reset.m a b c d | grep . > std.out.txt
+#
