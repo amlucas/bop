@@ -27,8 +27,8 @@ function [x, y, z] = rot(x, y, z, R)
   endfor
 endfunction
 
-function [f, E, vx0, vz0] = sk_fit(x, z, vx, vz, q)
-  # q: ax/az; E: sq. error; v[xz]0: prediction
+function [f, e, vx0, vz0] = sk_fit(x, z, vx, vz, q)
+  # q: ax/az; e: sq. error (vector); v[xz]0: prediction
   vxz = sum(vx.*z); vzx = sum(vz.*x);
   xx  = sum(x.*x);   zz = sum(z.*z);
   q2 = q^2; q4 = q^4;
@@ -36,7 +36,7 @@ function [f, E, vx0, vz0] = sk_fit(x, z, vx, vz, q)
 
   vx0 = f *     q  * z;
   vz0 = f * (-1/q) * x;
-  E  = (vx0 - vx).^2 + (vz0 - vz).^2;
+  e  = (vx0 - vx).^2 + (vz0 - vz).^2;
 endfunction
 
 ## fake command line arguments for interactive session
@@ -46,6 +46,12 @@ bop_iset(glob("~/s/sh_3.0/ply/rbcs-01*.ply"))
 [center, a, R, v, chi2]  = efit([x', y', z']);
 [ x,  y,  z] = rot( x,  y,  z, R);
 [vx, vy, vz] = rot(vx, vy, vz, R);
-[f, E] = sk_fit(x, z, vx, vz, a(X)/a(Z));
+
+[f, e, vx0, vz0] = sk_fit(x, z, vx, vz, a(X)/a(Z));
+B = struct();
+B.x = x; B.y = y; B.z = z; B.e = e;
+B.vx = vx - vx0;  B.vy = vy; B.vz = vz - vz0;
+
+bop_write_vtk(B, "b.vtk");
 	
 printf("%g\n", f);
