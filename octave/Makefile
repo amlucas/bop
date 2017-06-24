@@ -7,7 +7,8 @@ v = 0.1.0
 i = inst
 O = COPYING DESCRIPTION $i/bop_version.m $i/bop_n.m \
     $i/bop_read.m $i/bop_grid.m $i/bop_igrid.m $i/bop_proj.m \
-    $i/bop_write.m $i/bop_ply.m $i/efit.m $i/bop_join.m $i/bop_eq.m
+    $i/bop_write.m $i/bop_ply.m $i/efit.m $i/bop_join.m $i/bop_eq.m \
+    $i/bop_pop.m   $i/bop_push.m
 
 n = bop-$v
 p =     $n.tar.gz
