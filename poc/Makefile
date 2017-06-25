@@ -1,5 +1,5 @@
 BIN = $(HOME)/bin # where to install
-P = octave-qf bop2grid bop2line h5bop h5vtk r.h5bop r.h5vtk bop2g bop.avel # what to install
+P = octave-qf bop2grid bop2line h5bop h5vtk r.h5bop r.h5vtk r.ply2vtk bop2g bop.avel # what to install
 
 CXX=g++
 LINK=$(CXX)

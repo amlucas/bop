@@ -67,8 +67,8 @@ Lz = nxt_num();
 gd = nxt_num();
 
 n =  [ floor(Lx/ds)  1    floor(Lz/ds)]; # n : size, s : step, o : origin
-s =  [   ds    Ly/2   ds ];
-o =  [-Lx/2     0   -Lz/2];
+s =  [   ds      Ly    ds ];
+o =  [-Lx/2      0   -Lz/2];
 l = {"vx", "vy", "vz", "type", "m"};
 G = bop_igrid(l, n, o, s);
 

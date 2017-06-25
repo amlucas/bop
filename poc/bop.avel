@@ -7,7 +7,8 @@
 1;
 function usg()
   msg('usage: bop.avel o.vkt [ply files]...\n')
-  msg('  outputs average ellipsoid')
+  msg('  outputs average ellipsoid\n')
+  msg('  -s : shuffle yz')
   exit
 endfunction
 function msg(fmt, varargin); fprintf(stderr(), fmt, [varargin{:}]); endfunction
@@ -17,6 +18,9 @@ global e_c e_m; e_c = 0;
 X = 1; Y = 2; Z = 3;
 
 if bop_eq(bop_pop(), "-h"); usg(); else bop_push(); endif
+
+Shuffle=false;
+if bop_eq(bop_pop(), "-s"); Shuffle=true; else bop_push(); endif
 
 function B = read()
   global e_c e_m # error code and message
@@ -49,5 +53,5 @@ B = read();
 S = bop_scale(S, a);
 S = bop_rot_mat(S, R^(-1));
 
-t = S.y; S.y = S.z; S.z = t;
+if Shuffle; t = S.y; S.y = S.z; S.z = t; endif
 bop_write_tri(S, F, o);
