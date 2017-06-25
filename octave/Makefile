@@ -3,6 +3,10 @@
  # version
 v = 0.1.0
 
+# config dir and files
+c = $(HOME)/.bop
+C = data/sph.162.off
+
 # files in package
 i = inst
 O = COPYING DESCRIPTION \
@@ -15,7 +19,9 @@ O = COPYING DESCRIPTION \
 n = bop-$v
 p =     $n.tar.gz
 
-install: pkg; octave --no-window-system --quiet --norc --eval "pkg install $p"
+install: pkg oct conf
+oct:; octave --no-window-system --quiet --norc --eval "pkg install $p"
+conf:; mkdir -p $c; cp $C $c
 
 pkg: $p
 $p: $O
@@ -26,4 +32,4 @@ $p: $O
 
 clean:; rm -f $p
 
-.PHONY: clean pkg install
+.PHONY: clean pkg install oct conf

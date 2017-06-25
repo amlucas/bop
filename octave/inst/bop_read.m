@@ -3,14 +3,14 @@ function B = bop_read(fn)
   global e_c e_m  # error code and message
   f = fopen(fn);
   if f == -1
-    e_c = 1; e_m = sprintf("cannot open file: %s", fn);
+    e_c = 1; e_m = sprintf("cannot open file: %s", fn);  B = -1;
     return
   endif
   
   d = fileparts(fn); # dirname
   B = read1(f, d);
   
-  if     e_c == 1; e_m = sprintf("error reading file: %s", fn); return;
+  if     e_c == 1; e_m = sprintf("error reading file: %s", fn); B = -1; return;
   elseif e_c == 2; return; endif
   
   fclose(f);
