@@ -67,8 +67,8 @@ Lz = nxt_num();
 gd = nxt_num();
 
 n =  [ floor(Lx/ds)  1    floor(Lz/ds)]; # n : size, s : step, o : origin
-s =  [           ds  Ly           ds  ];
-o =  [-Lx/2        -Ly/2         -Lz/2];
+s =  [   ds    Ly     ds ];
+o =  [-Lx/2     0   -Lz/2];
 l = {"vx", "vy", "vz", "type", "m"};
 G = bop_igrid(l, n, o, s);
 
@@ -86,7 +86,7 @@ while 1
   G = bop_proj(G, B);
 endwhile
 
-#if gd != 0; G = minus_rot(G, gd); endif
+if gd != 0; G = minus_rot(G, gd); endif
 bop_write_grid(G.D, G.n, G.o, G.s, fo);
 
 # TEST: bop2g.t0

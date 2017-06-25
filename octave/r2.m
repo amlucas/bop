@@ -4,7 +4,11 @@ system("make > /dev/null");
 pkg load bop
 global e_m e_c
 
-[B, F] = bop_read_ply("test_data/r.ply");
+[B, F] = bop_read_ply("~/s/sh_12.0/ply/rbcs-01220.ply");
+## [B, F] = bop_read_off("test_data/sph.162.off");
 
-a = bop_area(B, F)
+[a, A] = bop_area(B, F);
+F.A = A;
 
+bop_write_tri(B, F, "t.vtk");
+e_m
