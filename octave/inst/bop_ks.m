@@ -1,5 +1,6 @@
 ## Keller-Skalak fit of the velocities
-## q: ax/az; e: sq. error (vector); v[xz]0: prediction
+## q: ax/az;  v[xz]0: prediction
+## f: frequency, e: sq. error (vector)
 function [f, e, vx0, vz0] = bop_ks(x, z, vx, vz, q)
   vxz = sum(vx.*z); vzx = sum(vz.*x);
   xx  = sum(x.*x);   zz = sum(z.*z);
