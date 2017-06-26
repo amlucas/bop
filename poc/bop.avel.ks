@@ -33,18 +33,6 @@ function B = read()
   endwhile
 endfunction
 
-function [f, e, vx0, vz0] = sk_fit(x, z, vx, vz, q)
-  # q: ax/az; e: sq. error (vector); v[xz]0: prediction
-  vxz = sum(vx.*z); vzx = sum(vz.*x);
-  xx  = sum(x.*x);   zz = sum(z.*z);
-  q2 = q^2; q4 = q^4;
-  f = (q*(q2*vxz-vzx))/(q4*zz+xx);
-
-  vx0 = f *     q  * z;
-  vz0 = f * (-1/q) * x;
-  e  = (vx0 - vx).^2 + (vz0 - vz).^2;
-endfunction
-
 o = bop_pop(); # output file
 [S, F] = bop_read_off("~/.bop/sph.162.off");
 B = read();

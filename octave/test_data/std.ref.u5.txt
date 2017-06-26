@@ -1,0 +1,6 @@
+s = a
+s = b
+s = c
+s = a
+s = b
+s = c
