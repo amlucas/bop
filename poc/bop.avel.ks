@@ -1,0 +1,65 @@
+#!/usr/bin/env octave-qf
+
+1;
+function usg()
+  msg('usage: bop.avel.acc o.vkt [ply files]...\n')
+  msg('  outputs average ellipsoid with KS-fit of the velocities\n')
+  msg('  -s : shuffle yz\n')
+  msg('  -r : rotate  yz\n')
+  msg('  -a : absolute vx')
+  exit
+endfunction
+function msg(fmt, varargin); fprintf(stderr(), fmt, [varargin{:}]); endfunction
+
+pkg load bop
+global e_c e_m; e_c = 0;
+X = 1; Y = 2; Z = 3;
+
+if bop_eq(bop_pop(), "-h"); usg(); else bop_push(); endif
+
+Shuffle=false; Rot=false; Abs=false;
+if bop_eq(bop_pop(), "-s"); Shuffle=true; else bop_push(); endif
+if bop_eq(bop_pop(), "-r"); Rot=true; else bop_push(); endif
+if bop_eq(bop_pop(), "-a"); Abs=true; else bop_push(); endif
+
+function B = read()
+  global e_c e_m # error code and message
+  pop = @bop_pop; ply = @bop_read_ply; join = @bop_join;
+  B = struct();
+  while !isempty(b = pop())
+    B0 = ply(b);
+    if e_c != 0; error(e_m); endif
+    B =  join(B0, B);
+  endwhile
+endfunction
+
+function [f, e, vx0, vz0] = sk_fit(x, z, vx, vz, q)
+  # q: ax/az; e: sq. error (vector); v[xz]0: prediction
+  vxz = sum(vx.*z); vzx = sum(vz.*x);
+  xx  = sum(x.*x);   zz = sum(z.*z);
+  q2 = q^2; q4 = q^4;
+  f = (q*(q2*vxz-vzx))/(q4*zz+xx);
+
+  vx0 = f *     q  * z;
+  vz0 = f * (-1/q) * x;
+  e  = (vx0 - vx).^2 + (vz0 - vz).^2;
+endfunction
+
+o = bop_pop(); # output file
+[S, F] = bop_read_off("~/.bop/sph.162.off");
+B = read();
+
+[center, a, R, v, chi2]  = efit([B.x', B.y', B.z']);
+S = bop_scale(S, a); S = bop_rot_mat(S, R^(-1));
+
+ker    = @bop_cubic;
+cutoff = 1.0;
+l  = {"vx", "vy", "vz"};
+S = bop_p2p_accum(S, B, l, ker, cutoff); # accumulate
+S = bop_p2p_norm (S, l);    # normalize by "den"
+
+if !Rot; S = bop_rot_mat(S, R); endif
+if  Abs; S.vx = abs(S.vx); endif
+
+if Shuffle; t = S.y; S.y = S.z; S.z = t; endif
+bop_write_tri(S, F, o);
