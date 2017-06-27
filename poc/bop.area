@@ -18,7 +18,7 @@ o = bop_pop(); # output file
 i = bop_pop(); # input file
 [S, F] = bop_read_ply(i);
 
-[~, A] = bop_area(S, F);
+[a, A] = bop_area(S, F);
 
 F.a = A / mean(A);
 
