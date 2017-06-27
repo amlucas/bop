@@ -14,7 +14,7 @@ X = 1; Y = 2; Z = 3;
 
 if bop_eq(bop_pop(), "-h"); usg(); else bop_push(); endif
 
-1o = bop_pop(); # output file
+o = bop_pop(); # output file
 i = bop_pop(); # input file
 [S, F] = bop_read_ply(i);
 
