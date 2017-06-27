@@ -14,33 +14,14 @@ X = 1; Y = 2; Z = 3;
 
 if bop_eq(bop_pop(), "-h"); usg(); else bop_push(); endif
 
-function B = read()
-  global e_c e_m # error code and message
-  pop = @bop_pop; ply = @bop_read_ply; join = @bop_join;
-  B = struct();
-  while !isempty(b = pop())
-    B0 = ply(b);
-    if e_c != 0; error(e_m); endif
-    B =  join(B0, B);
-  endwhile
-endfunction
-
 o = bop_pop(); # output file
 i = bop_pop(); # input file
-B = bop_read_ply(i);
+[S, F] = bop_read_ply(i);
 
-[center, a, R, v, chi2]  = efit([B.x', B.y', B.z']);
-S = bop_scale(S, a);
-B = bop_rot_mat(B, R);
+[~, A] = bop_area(S, F);
 
-ker    = @bop_cubic;
-cutoff = 1.0;
-l  = {"vx", "vy", "vz"};
-S = bop_p2p_accum(S, B, l, ker, cutoff); # accumulate
-S = bop_p2p_norm (S, l);    # normalize by "den"
+F.a = A / mean(A);
 
-[S, f] = ks(S, a);
-printf("%g %g %g\n", f, a(X), a(Z));
-
+F.s = 1:numel(F.f1);
 bop_write_tri(S, F, o);
 

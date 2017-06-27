@@ -58,7 +58,7 @@ S = bop_p2p_accum(S, B, l, ker, cutoff); # accumulate
 S = bop_p2p_norm (S, l);    # normalize by "den"
 
 [S, f] = ks(S, a);
-printf("%g %g %g\n", f, a(X), a(Z));
+printf("%g %g %g %g\n", f, a(X), a(Z), a(Y));
 
 bop_write_tri(S, F, o);
 
