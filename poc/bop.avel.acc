@@ -38,7 +38,7 @@ function B = read()
 endfunction
 
 o = bop_pop(); # output file
-[S, F] = bop_read_off("~/.bop/sph.162.off");
+[S, F] = bop_read_off("~/.bop/sph.642.off");
 B = read();
 
 [center, a, R, v, chi2]  = efit([B.x', B.y', B.z']);
