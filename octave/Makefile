@@ -5,7 +5,7 @@ v = 0.1.0
 
 # config dir and files
 c = $(HOME)/.bop
-C = data/sph.162.off
+C = data/sph.162.off data/sph.642.off
 
 # files in package
 i = inst
