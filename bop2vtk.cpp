@@ -18,7 +18,7 @@ float FloatSwap(float f) {
 }
 
 namespace vtk {
-float *vv, *ff;
+float *rr, *ff;
     
 template <typename T>
 void init(const long n, const int nvars, const T *data) {
@@ -29,26 +29,26 @@ void init(const long n, const int nvars, const T *data) {
 
     const int nf = nvars - 3;
 
-    ff = vv = NULL;
+    ff = rr = NULL;
         
     if (nf > 0)
     ff = new float[nf * n];
-    vv = new float[3  * n];
+    rr = new float[3  * n];
         
     for (long i = 0; i < n; ++i) {
         for (int d = 0; d < 3; ++d)
-        vv[3*i + d] = (float) data[nvars*i + d];
+        rr[3*i + d] = (float) data[nvars*i + d];
 
         for (int d = 0; d < nf; ++d)
         ff[n*d + i] = (float) data[nvars*i + 3 + d];
     }
 
-    for (long i = 0; i < 3  * n; ++i) vv[i] = FloatSwap(vv[i]);
+    for (long i = 0; i < 3  * n; ++i) rr[i] = FloatSwap(rr[i]);
     for (long i = 0; i < nf * n; ++i) ff[i] = FloatSwap(ff[i]);
 }
 
 void finalize() {
-    if (vv) delete[] vv;
+    if (rr) delete[] rr;
     if (ff) delete[] ff;
 }
     
@@ -61,7 +61,7 @@ void header(FILE *f, const long n) {
 void vertices(FILE *f, const long n) {
     fprintf(f, "DATASET POLYDATA\n");
     fprintf(f, "POINTS %ld float\n", n);
-    fwrite(vv, 3*n, sizeof(float), f);
+    fwrite(rr, 3*n, sizeof(float), f);
     fprintf(f, "\n");
 }
 
