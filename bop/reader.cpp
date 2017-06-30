@@ -80,7 +80,7 @@ int readword(const char *in, char *word) {
 }
     
 void read(const char *fnbop, ReadData *d) {
-    char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};;
+    char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};
         
     FILE *fh = fopen(fnbop, "r");
 
