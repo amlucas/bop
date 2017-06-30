@@ -7,7 +7,7 @@ Introduction
 
 	 <N>
 	 DATA_FILE: <file.values>
-	 DATA_FORMAT: <float|double|ascii>
+	 DATA_FORMAT: <float|double|int|ascii>
 	 VARIABLES: <x> <y> <z> <vx> <vy> <vz> <id> ...
 
 `file.values` format:
