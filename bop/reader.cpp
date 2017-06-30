@@ -113,7 +113,7 @@ void read(const char *fnbop, ReadData *d) {
         else if (strcmp(cbuf, "double") == 0) d->type = DOUBLE;
         else if (strcmp(cbuf,    "int") == 0) d->type = INT;
         else if (strcmp(cbuf,  "ascii") == 0) d->type = ASCII;
-        else     ERR("wrong DATA_FORMAT\n");
+        else     ERR("unknown DATA_FORMAT\n");
     }
         
     // read datafile
