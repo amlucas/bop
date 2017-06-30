@@ -94,6 +94,16 @@ void fields(FILE *f, const long n, const int nvars, const Cbuf *vars) {
         fwrite(ff + (i-3)*n, n, sizeof(float), f);
     }
 }
+
+void ifields(FILE *f, const long n, const int nvars, const Cbuf *vars) {
+    if (nvars <= 0) return;
+
+    for (int i = 0; i < nvars; ++i) {
+        fprintf(f, "SCALARS %s int\n", vars[i].c);
+        fprintf(f, "LOOKUP_TABLE default\n");
+        fwrite(ii + i * n, n, sizeof(int), f);
+    }
+}
 }
 
 int main(int argc, char **argv) {
