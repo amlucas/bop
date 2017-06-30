@@ -3,9 +3,11 @@
 
 #include "reader.h"
 
-float FloatSwap(float f) {
+template <typename T>
+T EndSwap(T f) {
+    static_assert(sizeof(T) == 4 * sizeof(unsigned char), "wrong size type");
     union {
-        float f;
+        T f;
         unsigned char b[4];
     } dat1, dat2;
 
@@ -18,7 +20,8 @@ float FloatSwap(float f) {
 }
 
 namespace vtk {
-float *rr, *ff;
+float *rr, *ff; /* positions, fields */
+int *ii;        /* integer fields */
     
 template <typename T>
 void init(const long n, const int nvars, const T *data) {
@@ -30,6 +33,7 @@ void init(const long n, const int nvars, const T *data) {
     const int nf = nvars - 3;
 
     ff = rr = NULL;
+    ii = NULL;
         
     if (nf > 0)
     ff = new float[nf * n];
@@ -43,13 +47,14 @@ void init(const long n, const int nvars, const T *data) {
         ff[n*d + i] = (float) data[nvars*i + 3 + d];
     }
 
-    for (long i = 0; i < 3  * n; ++i) rr[i] = FloatSwap(rr[i]);
-    for (long i = 0; i < nf * n; ++i) ff[i] = FloatSwap(ff[i]);
+    for (long i = 0; i < 3  * n; ++i) rr[i] = EndSwap(rr[i]);
+    for (long i = 0; i < nf * n; ++i) ff[i] = EndSwap(ff[i]);
 }
 
 void finalize() {
     if (rr) delete[] rr;
     if (ff) delete[] ff;
+    if (ii) delete[] ii;
 }
     
 void header(FILE *f, const long n) {
