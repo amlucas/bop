@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 
 #include "reader.h"
 
@@ -85,22 +86,37 @@ void fields(FILE *f, const long n, const int nvars, const Cbuf *vars) {
 
 int main(int argc, char **argv) {
     if (argc < 3) {
-        fprintf(stderr, "usage: %s <out.vtk> <in1.bop> <in2.bop> ...\n", argv[0]);
+        fprintf(stderr, "usage: %s <out.vtk> <in1.bop> <in2.bop> ... -- <in1.int.bop> <in2.int.bop> ...\n", argv[0]);
         exit(1);
     }
-    const int nd = argc-2;
-    ReadData *dd = new ReadData[nd];
+    int i_int = -1;
+    for (int i = 2; i < argc; ++i) if (strcmp(argv[i], "--") == 0) i_int = i + 1; 
+
+    const bool read_int = i_int != -1;
+    
+    const int ninput = argc-2;
+    const int nd = read_int ? (ninput - 1) / 2 : ninput;
+    
+    ReadData *fdd = new ReadData[nd];
+    ReadData *idd = new ReadData[nd];
 
     for (int i = 0; i < nd; ++i) {
-        init(dd + i);
-        read(argv[2+i], dd + i);
+        init(fdd + i);
+        read(argv[2+i], fdd + i);
+
+        if (read_int) {
+            init(idd + i);
+            read(argv[i_int+i], idd + i);
+        }
     }
 
-    ReadData d;
-    init(&d);
-    concatenate(nd, dd, /**/ &d);
+    ReadData d, id;
+    init(&d); init(&id);
+    concatenate(nd, fdd, /**/ &d);
+    if (read_int) concatenate(nd, idd, /**/ &id);
 
-    // summary(&d);
+    summary(&d);
+    if (read_int) summary(&id);
         
     FILE *f = fopen(argv[1], "w");
     
@@ -112,7 +128,11 @@ int main(int argc, char **argv) {
     case DOUBLE:
         vtk::init(d.n, d.nvars, d.ddata);
         break;
+    case INT:
+        break;
     };
+
+    //if (read_int) vtk::init_i(di.n, di.nvars, di.idata);
 
     vtk::header  (f, d.n);
     vtk::vertices(f, d.n);
@@ -121,11 +141,15 @@ int main(int argc, char **argv) {
 
     fclose(f);
 
-    for (int i = 0; i < nd; ++i)
-    finalize(dd + i);
+    for (int i = 0; i < nd; ++i) {
+        finalize(fdd + i);
+        if (read_int) finalize(idd + i);
+    }
     finalize(&d);
+    finalize(&id);
 
-    delete[] dd;
+    delete[] fdd;
+    delete[] idd;
     
     return 0;
 }
