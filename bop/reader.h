@@ -6,8 +6,7 @@
 struct Cbuf {char c[CBUFSIZE];};
 enum Type {FLOAT, DOUBLE, ASCII};
 
-struct ReadData
-{
+struct ReadData {
     long n;
 
     int nvars;

@@ -12,8 +12,7 @@
         exit(1);                                    \
     } while(0)
 
-void init(ReadData *d)
-{
+void init(ReadData *d) {
     d->n = -1;
     d->nvars = 6;
     d->vars = NULL;
@@ -21,15 +20,13 @@ void init(ReadData *d)
     d->ddata = NULL;
 }
 
-void finalize(ReadData *d)
-{
+void finalize(ReadData *d) {
     if (d->vars)  delete[] d->vars;
     if (d->fdata) delete[] d->fdata;
     if (d->ddata) delete[] d->ddata;
 }
 
-void get_path(const char *full, char *path)
-{
+void get_path(const char *full, char *path) {
 #define SEP '/'
     int i = strlen(full);
     while (--i >= 0 && full[i] != SEP);
@@ -38,8 +35,7 @@ void get_path(const char *full, char *path)
 }
 
 template<typename real>
-long nvals(FILE* fd)  /* return the number of real in the file */
-{
+long nvals(FILE* fd) {  /* return the number of real in the file */
     long end, curr;
     curr = ftell(fd);
     fseek(fd, 0, SEEK_END); end = ftell(fd);
@@ -48,8 +44,7 @@ long nvals(FILE* fd)  /* return the number of real in the file */
 }
 
 template<typename real>
-long read_values(const char *fn, real **data)
-{
+long read_values(const char *fn, real **data) {
     FILE *f = fopen(fn, "r");
 
     if (f == NULL)
@@ -65,21 +60,18 @@ long read_values(const char *fn, real **data)
 
 void reinitc(char *buf) {memset(buf, 0, CBUFSIZE * sizeof(char));}
     
-void readline(FILE *f, char *buf) // read full line unless it excess CBUFSIZE chars 
-{
+void readline(FILE *f, char *buf) { // read full line unless it excess CBUFSIZE chars 
     reinitc(buf);
     if (fscanf(f, " %[^\n]" xstr(CBUFSIZE) "c", buf) != 1)
     ERR("line too long\n");
 }
 
-int nspaces(const char *buf)
-{
+int nspaces(const char *buf) {
     int i = 0; while (buf[i] == ' ') {++i;}
     return i;
 }
     
-int readword(const char *in, char *word)
-{
+int readword(const char *in, char *word) {
     reinitc(word);
     if (sscanf(in, " %" xstr(CBUFSIZE) "[^ ]c", word) != 1)
     ERR("could not read variable (wrong number of fields?)\n");
@@ -87,8 +79,7 @@ int readword(const char *in, char *word)
     return strlen(word) + nspaces(in);
 }
     
-void read(const char *fnbop, ReadData *d)
-{
+void read(const char *fnbop, ReadData *d) {
     char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};;
         
     FILE *fh = fopen(fnbop, "r");
@@ -123,8 +114,7 @@ void read(const char *fnbop, ReadData *d)
     }
         
     // read datafile
-    switch (d->type)
-    {
+    switch (d->type) {
     case FLOAT:  d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
     case ASCII: ERR("Not implemented\n");
@@ -145,11 +135,9 @@ void read(const char *fnbop, ReadData *d)
     fclose(fh);
 }
 
-void summary(const ReadData *d)
-{
+void summary(const ReadData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d fields\n", d->n, d->nvars);
-    switch(d->type)
-    {
+    switch(d->type) {
     case FLOAT:  fprintf(stderr, "\tformat: float \n"); break;
     case DOUBLE: fprintf(stderr, "\tformat: double\n"); break;
     case ASCII:  fprintf(stderr, "\tformat: ascii \n"); break;
@@ -160,14 +148,12 @@ void summary(const ReadData *d)
     fprintf(stderr, "\n");
 }
 
-void concatenate(const int nd, const ReadData *dd, ReadData *dall)
-{
+void concatenate(const int nd, const ReadData *dd, ReadData *dall) {
     long n          = dd[0].n;
     const Type type = dd[0].type;
     const int nvars = dd[0].nvars;
     
-    for (int i = 1; i < nd; ++i)
-    {
+    for (int i = 1; i < nd; ++i) {
         n += dd[i].n;
         if (type != dd[i].type || nvars != dd[i].nvars)
         ERR("concatenate: All files must have the same format\n"); 
@@ -177,8 +163,7 @@ void concatenate(const int nd, const ReadData *dd, ReadData *dall)
     for (int i = 0; i < nvars; ++i)
     memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
     
-    switch (type)
-    {
+    switch (type) {
     case ASCII:
     case FLOAT:
         dall->fdata = new float[n*nvars];
@@ -194,18 +179,15 @@ void concatenate(const int nd, const ReadData *dd, ReadData *dall)
     
     long start = 0;
     
-    for (int i = 0; i < nd; ++i)
-    {
+    for (int i = 0; i < nd; ++i) {
         const long ni = dd[i].n;
         
-        if (type == DOUBLE)
-        {
+        if (type == DOUBLE) {
             const double *src = dd[i].ddata;
             double *dst = dall->ddata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
         }
-        else // float
-        {
+        else { // float
             const float *src = dd[i].fdata;
             float *dst = dall->fdata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
