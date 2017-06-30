@@ -132,13 +132,13 @@ int main(int argc, char **argv) {
         }
     }
 
-    ReadData d, id;
-    init(&d); init(&id);
+    ReadData d, di;
+    init(&d); init(&di);
     concatenate(nd, fdd, /**/ &d);
-    if (read_int) concatenate(nd, idd, /**/ &id);
+    if (read_int) concatenate(nd, idd, /**/ &di);
 
     summary(&d);
-    if (read_int) summary(&id);
+    if (read_int) summary(&di);
         
     FILE *f = fopen(argv[1], "w");
     
@@ -154,11 +154,12 @@ int main(int argc, char **argv) {
         break;
     };
 
-    //if (read_int) vtk::init_i(di.n, di.nvars, di.idata);
-
+    if (read_int) vtk::init_i(di.n, di.nvars, di.idata);
+    
     vtk::header  (f, d.n);
     vtk::vertices(f, d.n);
     vtk::fields  (f, d.n, d.nvars, d.vars);
+    if (read_int) vtk::ifields(f, di.n, di.nvars, di.vars);
     vtk::finalize();
 
     fclose(f);
@@ -168,7 +169,7 @@ int main(int argc, char **argv) {
         if (read_int) finalize(idd + i);
     }
     finalize(&d);
-    finalize(&id);
+    finalize(&di);
 
     delete[] fdd;
     delete[] idd;
