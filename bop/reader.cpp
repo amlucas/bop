@@ -111,15 +111,17 @@ void read(const char *fnbop, ReadData *d) {
 
         if      (strcmp(cbuf,  "float") == 0) d->type = FLOAT;
         else if (strcmp(cbuf, "double") == 0) d->type = DOUBLE;
+        else if (strcmp(cbuf,    "int") == 0) d->type = INT;
         else if (strcmp(cbuf,  "ascii") == 0) d->type = ASCII;
         else     ERR("wrong DATA_FORMAT\n");
     }
         
     // read datafile
     switch (d->type) {
-    case FLOAT:  d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
+    case  FLOAT: d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
-    case ASCII: ERR("ASCII: not implemented\n");
+    case    INT: d->nvars = read_values<int>   (fnval, &(d->idata)) / d->n; break;
+    case  ASCII: ERR("ASCII: not implemented\n");
     };
 
     d->vars = new Cbuf[d->nvars];
@@ -140,9 +142,10 @@ void read(const char *fnbop, ReadData *d) {
 void summary(const ReadData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d fields\n", d->n, d->nvars);
     switch(d->type) {
-    case FLOAT:  fprintf(stderr, "\tformat: float \n"); break;
+    case  FLOAT: fprintf(stderr, "\tformat: float\n" ); break;
     case DOUBLE: fprintf(stderr, "\tformat: double\n"); break;
-    case ASCII:  fprintf(stderr, "\tformat: ascii \n"); break;
+    case    INT: fprintf(stderr, "\tformat: int\n"   ); break;
+    case  ASCII: fprintf(stderr, "\tformat: ascii\n" ); break;
     };
     fprintf(stderr, "\tvars:");
     for (int i = 0; i < d->nvars; ++i)
@@ -167,11 +170,16 @@ void concatenate(const int nd, const ReadData *dd, ReadData *dall) {
     
     switch (type) {
     case ASCII:
+        ERR("ASCII: not implemented\n");
+        break;
     case FLOAT:
         dall->fdata = new float[n*nvars];
         break;
     case DOUBLE:
         dall->ddata = new double[n*nvars];
+        break;
+    case INT:
+        dall->idata = new int[n*nvars];
         break;
     };
 
@@ -189,12 +197,17 @@ void concatenate(const int nd, const ReadData *dd, ReadData *dall) {
             double *dst = dall->ddata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
         }
-        else { // float
+        else if (type == FLOAT) {
             const float *src = dd[i].fdata;
             float *dst = dall->fdata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
         }
-
+        else if (type == INT) {
+            const int *src = dd[i].idata;
+            int *dst = dall->idata + start;
+            memcpy(dst, src, ni * nvars * sizeof(int));
+        }
+        
         start += ni * nvars;
     }
 }
