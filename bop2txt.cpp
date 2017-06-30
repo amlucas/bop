@@ -4,10 +4,18 @@
 #include "reader.h"
 
 template <typename real>
-void print(const real *data, const long n, const int nvars) {
+void float_print(const real *data, const long n, const int nvars) {
     for (long i = 0; i < n; ++i) {
         for (int j = 0; j < nvars; ++j)
         printf("%.6e ", data[nvars*i + j]);
+        printf("\n");
+    }
+}
+
+void int_print(const int *data, const long n, const int nvars) {
+    for (long i = 0; i < n; ++i) {
+        for (int j = 0; j < nvars; ++j)
+        printf("%d ", data[nvars*i + j]);
         printf("\n");
     }
 }
@@ -28,10 +36,13 @@ int main(int argc, char **argv) {
         switch (d.type) {
         case FLOAT:
         case ASCII:
-            print(d.fdata, d.n, d.nvars);
+            float_print(d.fdata, d.n, d.nvars);
             break;
         case DOUBLE:
-            print(d.ddata, d.n, d.nvars);
+            float_print(d.ddata, d.n, d.nvars);
+            break;
+        case INT:
+            int_print(d.idata, d.n, d.nvars);
             break;
         };
         finalize(&d);
