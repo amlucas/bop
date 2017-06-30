@@ -117,7 +117,7 @@ void read(const char *fnbop, ReadData *d) {
     switch (d->type) {
     case FLOAT:  d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
-    case ASCII: ERR("Not implemented\n");
+    case ASCII: ERR("ASCII: not implemented\n");
     };
 
     d->vars = new Cbuf[d->nvars];
