@@ -34,7 +34,6 @@ void init(const long n, const int nvars, const T *data) {
     const int nf = nvars - 3;
 
     ff = rr = NULL;
-    ii = NULL;
         
     if (nf > 0)
     ff = new float[nf * n];
@@ -50,6 +49,19 @@ void init(const long n, const int nvars, const T *data) {
 
     for (long i = 0; i < 3  * n; ++i) rr[i] = EndSwap(rr[i]);
     for (long i = 0; i < nf * n; ++i) ff[i] = EndSwap(ff[i]);
+}
+
+void init_i(const long n, const int nvars, const int *data) {
+    ii = NULL;
+        
+    if (nvars > 0)
+    ii = new int[nvars * n];
+        
+    for (long i = 0; i < n; ++i)
+    for (int d = 0; d < nvars; ++d)
+    rr[nvars*d + i] = data[nvars*i + d];
+
+    for (long i = 0; i < nvars * n; ++i) ii[i] = EndSwap(ii[i]);
 }
 
 void finalize() {
