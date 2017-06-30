@@ -59,7 +59,7 @@ void init_i(const long n, const int nvars, const int *data) {
         
     for (long i = 0; i < n; ++i)
     for (int d = 0; d < nvars; ++d)
-    rr[nvars*d + i] = data[nvars*i + d];
+    ii[nvars*d + i] = data[nvars*i + d];
 
     for (long i = 0; i < nvars * n; ++i) ii[i] = EndSwap(ii[i]);
 }
