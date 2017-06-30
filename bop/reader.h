@@ -4,7 +4,7 @@
 #define CBUFSIZE 256
 
 struct Cbuf {char c[CBUFSIZE];};
-enum Type {FLOAT, DOUBLE, ASCII};
+enum Type {FLOAT, DOUBLE, INT, ASCII};
 
 struct ReadData {
     long n;
@@ -13,8 +13,9 @@ struct ReadData {
     Cbuf *vars;
     Type type;
     
-    float *fdata;
+    float  *fdata;
     double *ddata;
+    int    *idata;
 };
 
 void init(ReadData *d);

@@ -18,12 +18,14 @@ void init(ReadData *d) {
     d->vars = NULL;
     d->fdata = NULL;
     d->ddata = NULL;
+    d->idata = NULL;
 }
 
 void finalize(ReadData *d) {
     if (d->vars)  delete[] d->vars;
     if (d->fdata) delete[] d->fdata;
     if (d->ddata) delete[] d->ddata;
+    if (d->idata) delete[] d->idata;
 }
 
 void get_path(const char *full, char *path) {
