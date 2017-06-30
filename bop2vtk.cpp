@@ -5,7 +5,7 @@
 
 template <typename T>
 T EndSwap(T f) {
-    static_assert(sizeof(T) == 4 * sizeof(unsigned char), "wrong size type");
+    static_assert(sizeof(T) == 4 * sizeof(unsigned char), "wrong type: must have 4 bytes");
     union {
         T f;
         unsigned char b[4];
