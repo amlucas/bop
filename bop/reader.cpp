@@ -140,7 +140,7 @@ void read(const char *fnbop, ReadData *d) {
 }
 
 void summary(const ReadData *d) {
-    fprintf(stderr, "(reader) found %ld entries, %d fields\n", d->n, d->nvars);
+    fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
     switch(d->type) {
     case  FLOAT: fprintf(stderr, "\tformat: float\n" ); break;
     case DOUBLE: fprintf(stderr, "\tformat: double\n"); break;
