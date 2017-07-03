@@ -4,3 +4,4 @@
 *.o
 test.out.txt
 test.out.vtk
+/seq2bop
