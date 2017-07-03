@@ -12,7 +12,7 @@
         exit(1);                                    \
     } while(0)
 
-void init(ReadData *d) {
+void init(BopData *d) {
     d->n = -1;
     d->nvars = 6;
     d->vars = NULL;
@@ -21,7 +21,7 @@ void init(ReadData *d) {
     d->idata = NULL;
 }
 
-void finalize(ReadData *d) {
+void finalize(BopData *d) {
     if (d->vars)  delete[] d->vars;
     if (d->fdata) delete[] d->fdata;
     if (d->ddata) delete[] d->ddata;
@@ -81,7 +81,7 @@ int readword(const char *in, char *word) {
     return strlen(word) + nspaces(in);
 }
     
-void read(const char *fnbop, ReadData *d) {
+void read(const char *fnbop, BopData *d) {
     char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};
         
     FILE *fh = fopen(fnbop, "r");
@@ -139,7 +139,7 @@ void read(const char *fnbop, ReadData *d) {
     fclose(fh);
 }
 
-void summary(const ReadData *d) {
+void summary(const BopData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
     switch(d->type) {
     case  FLOAT: fprintf(stderr, "\tformat: float\n" ); break;
@@ -153,7 +153,7 @@ void summary(const ReadData *d) {
     fprintf(stderr, "\n");
 }
 
-void concatenate(const int nd, const ReadData *dd, ReadData *dall) {
+void concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
     const Type type = dd[0].type;
     const int nvars = dd[0].nvars;

@@ -6,7 +6,7 @@
 struct Cbuf {char c[CBUFSIZE];};
 enum Type {FLOAT, DOUBLE, INT, ASCII};
 
-struct ReadData {
+struct BopData {
     long n;
 
     int nvars;
@@ -18,10 +18,10 @@ struct ReadData {
     int    *idata;
 };
 
-void init(ReadData *d);
-void finalize(ReadData *d);
-void read(const char *fnbop, ReadData *d);
-void summary(const ReadData *d);
-void concatenate(const int nd, const ReadData *dd, ReadData *dall);
+void init(BopData *d);
+void finalize(BopData *d);
+void read(const char *fnbop, BopData *d);
+void summary(const BopData *d);
+void concatenate(const int nd, const BopData *dd, BopData *dall);
 
 #endif // BOP_READER_H
