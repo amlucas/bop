@@ -5,6 +5,7 @@
 #include "bop_writer.h"
 #include "bop_macros.h"
 
+namespace {
 #define SEP '/'
 void get_path(const char *full, char *path) {
     int i = strlen(full);
@@ -72,6 +73,7 @@ void data(const char *fnval, BopData d) {
     }
     fclose(fd);    
 }
+} // anonymous namespace
 
 void write(const char *fnbop, const BopData d) {
     char fnval[CBUFSIZE] = {0}, fnval0[CBUFSIZE] = {0};

@@ -5,6 +5,7 @@
 #include "bop_reader.h"
 #include "bop_macros.h"
 
+namespace {
 void get_path(const char *full, char *path) {
 #define SEP '/'
     int i = strlen(full);
@@ -57,7 +58,8 @@ int readword(const char *in, char *word) {
         
     return strlen(word) + nspaces(in);
 }
-    
+} // anonymous namespace
+
 void read(const char *fnbop, BopData *d) {
     char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};
         
