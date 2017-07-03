@@ -60,6 +60,8 @@ void write(const char *fnbop, const BopData d) {
     strcat(fnval, fnval0);
 
     printf("%s\n", fnval);
+
+    header(fnbop, fnval, d);
 }
 
 
