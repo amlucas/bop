@@ -8,7 +8,7 @@
 #define SEP '/'
 void get_path(const char *full, char *path) {
     int i = strlen(full);
-    while (--i > 0 && full[i] != SEP);
+    while (--i >= 0 && full[i] != SEP);
 
     if (i) memcpy(path, full, (i+1)*sizeof(char));
 }
@@ -16,8 +16,9 @@ void get_path(const char *full, char *path) {
 void get_fnval0(const char *fnbop, char *fnval0) {
     int i = strlen(fnbop);
     const int n = i;
-    while (--i > 0 && fnbop[i] != SEP);
-    memcpy(fnval0, fnbop + i + 1, (n-1)*sizeof(char));
+    while (--i >= 0 && fnbop[i] != SEP);
+
+    memcpy(fnval0, fnbop + i + 1, (n-i)*sizeof(char));
 
     i = strlen(fnval0);
     strncpy(fnval0 + i - 4, ".values", 8);

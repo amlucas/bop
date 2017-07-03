@@ -4,18 +4,20 @@ INST_LIB = $(HOME)/prefix/bop
 CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
 CXX=g++
 
-PROGS = bop2vtk bop2txt
+TESTS = seq2bop
+PROGS = bop2vtk bop2txt 
 
 LIBS      = -lbop
 LDFLAGS   = -Lbop
 CXXFLAGS += -Ibop
 
-all: $(PROGS) libbop
+all: $(PROGS) $(TESTS) libbop
 %: %.o libbop
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
 
 bop2txt.o: bop2txt.cpp
 bop2vtk.o: bop2vtk.cpp
+seq2bop.o: seq2bop.cpp
 
 install: all
 	mkdir -p $(INST_BIN)
