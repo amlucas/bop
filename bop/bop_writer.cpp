@@ -52,6 +52,27 @@ void header(const char *fnbop, const char *fnval, const BopData d) {
     fclose(fh);    
 }
 
+void data(const char *fnval, BopData d) {
+    FILE *fd = fopen(fnval, "w");
+    if (fd == NULL) ERR("could not open <%s>\n", fnval);
+
+    const int N = d.n * d.nvars;
+    
+    switch(d.type) {
+    case FLOAT:
+    case ASCII:
+        fwrite(d.fdata, sizeof(float), N, fd);
+        break;
+    case DOUBLE:
+        fwrite(d.ddata, sizeof(double), N, fd);
+        break;        
+    case INT:
+        fwrite(d.idata, sizeof(int), N, fd);
+        break;
+    }
+    fclose(fd);    
+}
+
 void write(const char *fnbop, const BopData d) {
     char fnval[CBUFSIZE] = {0}, fnval0[CBUFSIZE] = {0};
 
@@ -59,9 +80,8 @@ void write(const char *fnbop, const BopData d) {
     get_fnval0(fnbop, fnval0);
     strcat(fnval, fnval0);
 
-    printf("%s\n", fnval);
-
-    header(fnbop, fnval, d);
+    header(fnbop, fnval0, d);
+    data(fnval, d);
 }
 
 
