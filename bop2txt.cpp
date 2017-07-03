@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     }
 
     for (int i = 1; i < argc; ++i) {
-        ReadData d;
+        BopData d;
     
         init(&d);
         read(argv[i], &d);

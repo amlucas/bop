@@ -119,8 +119,8 @@ int main(int argc, char **argv) {
     const int ninput = argc-2;
     const int nd = read_int ? (ninput - 1) / 2 : ninput;
     
-    ReadData *fdd = new ReadData[nd];
-    ReadData *idd = new ReadData[nd];
+    BopData *fdd = new BopData[nd];
+    BopData *idd = new BopData[nd];
 
     for (int i = 0; i < nd; ++i) {
         init(fdd + i);
@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    ReadData d, di;
+    BopData d, di;
     init(&d); init(&di);
     concatenate(nd, fdd, /**/ &d);
     if (read_int) concatenate(nd, idd, /**/ &di);
