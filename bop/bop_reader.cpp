@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "reader.h"
+#include "bop_reader.h"
 
 #define xstr(s) str(s)
 #define str(s) #s

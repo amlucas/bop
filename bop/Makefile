@@ -1,10 +1,10 @@
 CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
 CXX=g++
 
-libbop.a: reader.o
+libbop.a: bop_reader.o
 	ar rcs $@ $^
 
-reader.o: reader.cpp reader.h
+bop_reader.o: bop_reader.cpp bop_reader.h
 
 %.o: %.cpp; $(CXX) $(CCXXFLAGS) $(OPT) $< -c -o $@
 

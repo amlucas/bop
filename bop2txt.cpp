@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include "reader.h"
+#include "bop_reader.h"
 
 template <typename real>
 void float_print(const real *data, const long n, const int nvars) {

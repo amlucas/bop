@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "reader.h"
+#include "bop_reader.h"
 
 template <typename T>
 T EndSwap(T f) {
