@@ -77,7 +77,7 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
         if (type == DOUBLE) {
             const double *src = dd[i].ddata;
             double *dst = dall->ddata + start;
-            memcpy(dst, src, ni * nvars * sizeof(float));
+            memcpy(dst, src, ni * nvars * sizeof(double));
         }
         else if (type == FLOAT || type == FASCII) {
             const float *src = dd[i].fdata;
