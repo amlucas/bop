@@ -136,7 +136,7 @@ void read(const char *fnbop, BopData *d) {
         if      (strcmp(cbuf,  "float") == 0) d->type = FLOAT;
         else if (strcmp(cbuf, "double") == 0) d->type = DOUBLE;
         else if (strcmp(cbuf,    "int") == 0) d->type = INT;
-        else if (strcmp(cbuf,  "ascii") == 0) d->type = ASCII;
+        else if (strcmp(cbuf,  "ascii") == 0) d->type = FASCII;
         else     ERR("unknown DATA_FORMAT\n");
     }
         
@@ -145,7 +145,7 @@ void read(const char *fnbop, BopData *d) {
     case  FLOAT: d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
     case    INT: d->nvars = read_values<int>   (fnval, &(d->idata)) / d->n; break;
-    case  ASCII: d->nvars = read_ascii_values  (fnval, &(d->fdata)) / d->n; break;
+    case FASCII: d->nvars = read_ascii_values  (fnval, &(d->fdata)) / d->n; break;
     };
 
     d->vars = new Cbuf[d->nvars];

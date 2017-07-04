@@ -30,7 +30,7 @@ void type2str(const Type type, /**/ char *str) {
 #define assign(arg) strncpy(str, arg, CBUFSIZE)
     switch(type) {
     case FLOAT:  assign("float");  break;
-    case ASCII:  assign("ascii");  break;
+    case FASCII: assign("ascii");  break;
     case DOUBLE: assign("double"); break;
     case INT:    assign("int");    break;
     }
@@ -72,7 +72,7 @@ void data(const char *fnval, BopData d) {
     case FLOAT:
         fwrite(d.fdata, sizeof(float), N, fd);
         break;
-    case ASCII:
+    case FASCII:
         write_ascii(d.fdata, d.n, d.nvars, fd);
         break;
     case DOUBLE:

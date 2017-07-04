@@ -4,7 +4,7 @@
 #define CBUFSIZE 256
 
 struct Cbuf {char c[CBUFSIZE];};
-enum Type {FLOAT, DOUBLE, INT, ASCII};
+enum Type {FLOAT, DOUBLE, INT, FASCII};
 
 struct BopData {
     long n;

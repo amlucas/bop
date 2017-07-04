@@ -27,7 +27,7 @@ void summary(const BopData *d) {
     case  FLOAT: fprintf(stderr, "\tformat: float\n" ); break;
     case DOUBLE: fprintf(stderr, "\tformat: double\n"); break;
     case    INT: fprintf(stderr, "\tformat: int\n"   ); break;
-    case  ASCII: fprintf(stderr, "\tformat: ascii\n" ); break;
+    case FASCII: fprintf(stderr, "\tformat: ascii\n" ); break;
     };
     fprintf(stderr, "\tvars:");
     for (int i = 0; i < d->nvars; ++i)
@@ -51,8 +51,8 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
     memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
     
     switch (type) {
-    case ASCII:
-        ERR("ASCII: not implemented\n");
+    case FASCII:
+        dall->fdata = new float[n*nvars];
         break;
     case FLOAT:
         dall->fdata = new float[n*nvars];
@@ -79,7 +79,7 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
             double *dst = dall->ddata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
         }
-        else if (type == FLOAT) {
+        else if (type == FLOAT || type == FASCII) {
             const float *src = dd[i].fdata;
             float *dst = dall->fdata + start;
             memcpy(dst, src, ni * nvars * sizeof(float));
