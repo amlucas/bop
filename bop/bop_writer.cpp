@@ -33,6 +33,7 @@ void type2str(const Type type, /**/ char *str) {
     case FASCII: assign("ascii");  break;
     case DOUBLE: assign("double"); break;
     case INT:    assign("int");    break;
+    case IASCII: assign("iascii"); break;
     }
 #undef assign
 }
@@ -53,11 +54,12 @@ void header(const char *fnbop, const char *fnval, const BopData d) {
     fclose(fh);    
 }
 
-void write_ascii(const float *data, const long n, const long nvars, FILE *f) {
+template <typename T>
+void write_ascii(const char pattern[], const T *data, const long n, const long nvars, FILE *f) {
     long j = 0;
     for (long i = 0; i < n; ++i) {
         for (long k = 0; k < nvars; ++k)
-        fprintf(f, "%.6e ", data[j++]);
+        fprintf(f, pattern, data[j++]);
         fprintf(f, "\n");
     }
 }
@@ -73,13 +75,16 @@ void data(const char *fnval, BopData d) {
         fwrite(d.fdata, sizeof(float), N, fd);
         break;
     case FASCII:
-        write_ascii(d.fdata, d.n, d.nvars, fd);
+        write_ascii("%.6e ", d.fdata, d.n, d.nvars, fd);
         break;
     case DOUBLE:
         fwrite(d.ddata, sizeof(double), N, fd);
         break;        
     case INT:
         fwrite(d.idata, sizeof(int), N, fd);
+        break;
+    case IASCII:
+        write_ascii("%d ", d.idata, d.n, d.nvars, fd);
         break;
     }
     fclose(fd);    
