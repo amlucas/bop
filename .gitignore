@@ -1,8 +1,7 @@
-/bop2txt
-/bop2vtk
-/txt2bop
 *.o
 test.out.txt
 test.out.vtk
 /seq2bop
-/readascii
+/rwascii
+/bop2txt
+/bop2vtk
