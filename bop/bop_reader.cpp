@@ -38,6 +38,51 @@ long read_values(const char *fn, real **data) {
     return nreals;
 }
 
+#define MAXC 2048
+long nfloats_ascii(FILE *fd) {
+    fseek(fd, 0, SEEK_SET);
+    long i = 0;
+    char buf[MAXC] = {0};
+    char *str;
+    while (fscanf(fd, " %[^\n]" xstr(MAXC) "c", buf) == 1) {
+        float dummy; long j = 0;
+        str = buf;
+        while (sscanf(str, " %f%n", &dummy, &j) == 1) {++i; str += j;}
+        memset(buf, 0,  sizeof(buf));
+    }
+    fseek(fd, 0, SEEK_SET); /* go back */
+    return i;
+}
+
+long read_ascii_values(const char *fn, float **data) {
+    FILE *f = fopen(fn, "r");
+
+    if (f == NULL)
+    ERR("could not open <%s>\n", fn);
+
+    const long n = nfloats_ascii(f);
+    
+    *data = new float[n];
+
+    printf("n = %ld\n", n);
+    
+    char buf[MAXC] = {0}, *str;
+    long i = 0, j;
+    while (fscanf(f, " %[^\n]" xstr(MAXC) "c", buf) == 1) {
+        float a;
+        str = buf;
+        j = 0;
+        while (sscanf(str, " %f%n", &a, &j) == 1) {
+            str += j;
+            (*data)[i++] = a;
+        }
+        memset(buf, 0,  sizeof(buf));
+    }
+    
+    fclose(f);
+    return n;
+}
+
 void reinitc(char *buf) {memset(buf, 0, CBUFSIZE * sizeof(char));}
     
 void readline(FILE *f, char *buf) { // read full line unless it excess CBUFSIZE chars 
@@ -100,7 +145,7 @@ void read(const char *fnbop, BopData *d) {
     case  FLOAT: d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
     case    INT: d->nvars = read_values<int>   (fnval, &(d->idata)) / d->n; break;
-    case  ASCII: ERR("ASCII: not implemented\n");
+    case  ASCII: d->nvars = read_ascii_values  (fnval, &(d->fdata)) / d->n; break;
     };
 
     d->vars = new Cbuf[d->nvars];
