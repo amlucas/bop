@@ -115,7 +115,7 @@ void read(const char *fnbop, BopData *d) {
 
     // parse n
     if (fscanf(fh, " %ld\n", &(d->n)) != 1)
-    ERR("wrong format\n");
+    ERR("wrong format in <%s>\n", fnbop);
 
     // parse datafile name
     readline(fh, line);
