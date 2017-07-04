@@ -53,6 +53,15 @@ void header(const char *fnbop, const char *fnval, const BopData d) {
     fclose(fh);    
 }
 
+void write_ascii(const float *data, const long n, const long nvars, FILE *f) {
+    long j = 0;
+    for (long i = 0; i < n; ++i) {
+        for (long k = 0; k < nvars; ++k)
+        fprintf(f, "%.6e ", data[j++]);
+        fprintf(f, "\n");
+    }
+}
+
 void data(const char *fnval, BopData d) {
     FILE *fd = fopen(fnval, "w");
     if (fd == NULL) ERR("could not open <%s>\n", fnval);
@@ -61,8 +70,10 @@ void data(const char *fnval, BopData d) {
     
     switch(d.type) {
     case FLOAT:
-    case ASCII:
         fwrite(d.fdata, sizeof(float), N, fd);
+        break;
+    case ASCII:
+        write_ascii(d.fdata, d.n, d.nvars, fd);
         break;
     case DOUBLE:
         fwrite(d.ddata, sizeof(double), N, fd);
