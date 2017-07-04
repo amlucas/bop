@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     d.n = N;
     d.idata = new int[N];
     for (int i = 0; i < N; ++i) d.idata[i] = i;
-    d.type = INT;
+    d.type = IASCII;
     d.nvars = 1;
     d.vars = new Cbuf[d.nvars];
     strncpy(d.vars[0].c, "seq", 4);
