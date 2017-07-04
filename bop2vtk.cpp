@@ -144,13 +144,14 @@ int main(int argc, char **argv) {
     
     switch (d.type) {
     case FLOAT:
-    case ASCII:
+    case FASCII:
         vtk::init(d.n, d.nvars, d.fdata);
         break;
     case DOUBLE:
         vtk::init(d.n, d.nvars, d.ddata);
         break;
     case INT:
+    case IASCII:
         break;
     };
 
