@@ -14,7 +14,7 @@ void get_path(const char *full, char *path) {
     if (i) memcpy(path, full, (i+1)*sizeof(char));
 }
 
-template<typename real>
+template <typename real>
 long nvals(FILE* fd) {  /* return the number of real in the file */
     long end, curr;
     curr = ftell(fd);
@@ -23,7 +23,7 @@ long nvals(FILE* fd) {  /* return the number of real in the file */
     return (end - curr) / sizeof(real);
 }
 
-template<typename real>
+template <typename real>
 long read_values(const char *fn, real **data) {
     FILE *f = fopen(fn, "r");
 
@@ -39,40 +39,40 @@ long read_values(const char *fn, real **data) {
 }
 
 #define MAXC 2048
-long nfloats_ascii(FILE *fd) {
+template <typename real>
+long nreal_ascii(const char pattern[], FILE *fd) {
     fseek(fd, 0, SEEK_SET);
     long i = 0;
     char buf[MAXC] = {0};
     char *str;
     while (fscanf(fd, " %[^\n]" xstr(MAXC) "c", buf) == 1) {
-        float dummy; long j = 0;
+        real dummy; long j = 0;
         str = buf;
-        while (sscanf(str, " %f%n", &dummy, &j) == 1) {++i; str += j;}
+        while (sscanf(str, pattern, &dummy, &j) == 1) {++i; str += j;}
         memset(buf, 0,  sizeof(buf));
     }
     fseek(fd, 0, SEEK_SET); /* go back */
     return i;
 }
 
-long read_ascii_values(const char *fn, float **data) {
+template <typename real>
+long read_ascii_values(const char pattern[], const char *fn, real **data) {
     FILE *f = fopen(fn, "r");
 
     if (f == NULL)
     ERR("could not open <%s>\n", fn);
 
-    const long n = nfloats_ascii(f);
+    const long n = nreal_ascii<real> (pattern, f);
     
-    *data = new float[n];
-
-    printf("n = %ld\n", n);
+    *data = new real[n];
     
     char buf[MAXC] = {0}, *str;
     long i = 0, j;
     while (fscanf(f, " %[^\n]" xstr(MAXC) "c", buf) == 1) {
-        float a;
+        real a;
         str = buf;
         j = 0;
-        while (sscanf(str, " %f%n", &a, &j) == 1) {
+        while (sscanf(str, pattern, &a, &j) == 1) {
             str += j;
             (*data)[i++] = a;
         }
@@ -137,6 +137,7 @@ void read(const char *fnbop, BopData *d) {
         else if (strcmp(cbuf, "double") == 0) d->type = DOUBLE;
         else if (strcmp(cbuf,    "int") == 0) d->type = INT;
         else if (strcmp(cbuf,  "ascii") == 0) d->type = FASCII;
+        else if (strcmp(cbuf, "iascii") == 0) d->type = IASCII;
         else     ERR("unknown DATA_FORMAT\n");
     }
         
@@ -145,7 +146,8 @@ void read(const char *fnbop, BopData *d) {
     case  FLOAT: d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
     case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
     case    INT: d->nvars = read_values<int>   (fnval, &(d->idata)) / d->n; break;
-    case FASCII: d->nvars = read_ascii_values  (fnval, &(d->fdata)) / d->n; break;
+    case FASCII: d->nvars = read_ascii_values  (" %f%n", fnval, &(d->fdata)) / d->n; break;
+    case IASCII: d->nvars = read_ascii_values  (" %d%n", fnval, &(d->idata)) / d->n; break;
     };
 
     d->vars = new Cbuf[d->nvars];
