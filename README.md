@@ -18,6 +18,8 @@ Introduction
 
 	x[N-1] y[N-1] ...
 
+the ascii format is assumed to be single precision floating points data.
+
 Installation
 ------------
 
