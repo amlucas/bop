@@ -32,4 +32,5 @@ int main(int argc, char **argv) {
   # make -j 
   # ./rwascii data/iascii.bop test.bop
   # mv test.values test.out.txt
+
 */

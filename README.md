@@ -7,7 +7,7 @@ Introduction
 
 	 <N>
 	 DATA_FILE: <file.values>
-	 DATA_FORMAT: <float|double|int|ascii>
+	 DATA_FORMAT: <float|ascii|double|int|iascii>
 	 VARIABLES: <x> <y> <z> <vx> <vy> <vz> <id> ...
 
 `file.values` format:
@@ -18,7 +18,8 @@ Introduction
 
 	x[N-1] y[N-1] ...
 
-the ascii format is assumed to be single precision floating points data.
+The `ascii` format is assumed to be single precision floating points data.  
+Th `iascii` format is the ascii version of integer data.
 
 Installation
 ------------
