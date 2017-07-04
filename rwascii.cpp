@@ -27,4 +27,9 @@ int main(int argc, char **argv) {
   # make -j 
   # ./rwascii data/ascii.bop test.bop
   # mv test.values test.out.txt
+
+  # nTEST: ascii2ascii.t1
+  # make -j 
+  # ./rwascii data/iascii.bop test.bop
+  # mv test.values test.out.txt
 */
