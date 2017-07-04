@@ -15,9 +15,16 @@ int main(int argc, char **argv) {
     init(&d);
     read(argv[1], &d);
     summary(&d);
-    write("data/ascii_back.bop", d);    
+    write(argv[2], d);    
     finalize(&d);
     
     return 0;
 }
 
+/*
+
+  # nTEST: ascii2ascii.t0
+  # make -j 
+  # ./rwascii data/ascii.bop test.bop
+  # mv test.values test.out.txt
+*/
