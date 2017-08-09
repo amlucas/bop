@@ -10,8 +10,9 @@ for d; do
 
     files=`ls $d/bop/*.bop`
     
-    for ff in $files; do
-        b=`basename $ff`
-        bop2vtk ${o}/${b}.vtk ${ff}
+    # Loop over bop files in each sim. dir.
+    for f in $files; do
+        b=`basename $f`
+        bop2vtk ${o}/${b}.vtk ${f}
     done
 done
