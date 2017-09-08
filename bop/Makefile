@@ -1,5 +1,6 @@
 M=../make
 include $M/common.mk
+include $M/rules.mk
 
 libbop.a: bop_reader.o bop_writer.o bop_common.o
 	ar rcs $@ $^
@@ -7,8 +8,6 @@ libbop.a: bop_reader.o bop_writer.o bop_common.o
 bop_reader.o: bop_reader.cpp bop_reader.h bop_macros.h bop_common.h
 bop_writer.o: bop_writer.cpp bop_writer.h bop_macros.h bop_common.h
 bop_common.o: bop_common.cpp bop_common.h bop_macros.h
-
-%.o: %.cpp; $(CXX) $(CXXFLAGS) $(OPT) $< -c -o $@
 
 
 .PHONY: clean install

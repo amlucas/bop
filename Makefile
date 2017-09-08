@@ -5,7 +5,7 @@ install: converters libbop
 	make -C bop install
 	make -C converters install
 
-libbop:     ;  make -C bop/
+libbop: ; make -C bop/
 
 utils:      libbop ;  make -C utils/
 converters: libbop ;  make -C converters/

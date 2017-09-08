@@ -2,6 +2,7 @@ M=../make
 BOP=../bop
 
 include $M/common.mk
+include $M/rules.mk
 
 LIBS      = -lbop
 LDFLAGS   = -L$(BOP)
@@ -10,12 +11,6 @@ CXXFLAGS += -I$(BOP)
 PROGS = bop2vtk bop2txt
 
 all: $(PROGS)
-
-%: %.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 bop2vtk.o: bop2vtk.cpp
 bop2txt.o: bop2txt.cpp
