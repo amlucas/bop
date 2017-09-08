@@ -6,8 +6,9 @@ install: converters libbop
 	make -C converters install
 
 libbop:     ;  make -C bop/
-utils:      ;  make -C utils/
-converters: ;  make -C converters/
+
+utils:      libbop ;  make -C utils/
+converters: libbop ;  make -C converters/
 
 clean:
 	make -C bop clean
