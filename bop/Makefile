@@ -1,5 +1,5 @@
-CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
-CXX=g++
+M=../make
+include $M/common.mk
 
 libbop.a: bop_reader.o bop_writer.o bop_common.o
 	ar rcs $@ $^
@@ -10,6 +10,14 @@ bop_common.o: bop_common.cpp bop_common.h bop_macros.h
 
 %.o: %.cpp; $(CXX) $(CXXFLAGS) $(OPT) $< -c -o $@
 
-.PHONY: clean
+
+.PHONY: clean install
 clean:; rm -rf *.o *.a
+
+install:
+	mkdir -p $(INST_BIN)
+	mkdir -p $(INST_LIB)/include
+	mkdir -p $(INST_LIB)/lib
+	cp *.h $(INST_LIB)/include/
+	cp *.a $(INST_LIB)/lib/
 

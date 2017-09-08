@@ -1,38 +1,17 @@
-INST_BIN = $(HOME)/bin # where to install tools
-INST_LIB = $(HOME)/prefix/bop
 
-CXXFLAGS = -std=c++11 -Wpedantic -Wall -O3
-CXX=g++
+all: converters utils libbop
 
-TESTS = seq2bop rwascii
-PROGS = bop2vtk bop2txt 
+install: converters libbop
+	make -C bop install
+	make -C converters install
 
-LIBS      = -lbop
-LDFLAGS   = -Lbop
-CXXFLAGS += -Ibop
-
-all: $(PROGS) $(TESTS) libbop
-%: %.o libbop
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
-
-bop2txt.o: bop2txt.cpp
-bop2vtk.o: bop2vtk.cpp
-seq2bop.o: seq2bop.cpp
-rwascii.o: rwascii.cpp
-
-install: all
-	mkdir -p $(INST_BIN)
-	cp $(PROGS) $(INST_BIN)
-	mkdir -p $(INST_LIB)/include
-	mkdir -p $(INST_LIB)/lib
-	cp bop/*.h $(INST_LIB)/include/
-	cp bop/*.a $(INST_LIB)/lib/
-
-libbop:
-	make -C bop/
+libbop:     ;  make -C bop/
+utils:      ;  make -C utils/
+converters: ;  make -C converters/
 
 clean:
-	rm -f $(PROGS) *.o
 	make -C bop clean
+	make -C utils clean
+	make -C converters clean
 
-.PHONY: clean install libbop
+.PHONY: clean install libbop utils converters
