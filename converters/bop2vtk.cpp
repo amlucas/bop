@@ -111,18 +111,21 @@ int main(int argc, char **argv) {
         fprintf(stderr, "usage: %s <out.vtk> <in1.bop> <in2.bop> ... -- <in1.int.bop> <in2.int.bop> ...\n", argv[0]);
         exit(1);
     }
-    int i_int = -1;
-    for (int i = 2; i < argc; ++i) if (strcmp(argv[i], "--") == 0) i_int = i + 1; 
+    int i_int, i, ninput, nd;
+    BopData *fdd, *idd, d, di;
+    
+    i_int = -1;
+    for (i = 2; i < argc; ++i) if (strcmp(argv[i], "--") == 0) i_int = i + 1; 
 
     const bool read_int = i_int != -1;
     
-    const int ninput = argc-2;
-    const int nd = read_int ? (ninput - 1) / 2 : ninput;
+    ninput = argc-2;
+    nd = read_int ? (ninput - 1) / 2 : ninput;
     
-    BopData *fdd = new BopData[nd];
-    BopData *idd = new BopData[nd];
+    fdd = new BopData[nd];
+    idd = new BopData[nd];
 
-    for (int i = 0; i < nd; ++i) {
+    for (i = 0; i < nd; ++i) {
         init(fdd + i);
         read(argv[2+i], fdd + i);
 
@@ -132,7 +135,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    BopData d, di;
     init(&d); init(&di);
     concatenate(nd, fdd, /**/ &d);
     if (read_int) concatenate(nd, idd, /**/ &di);
@@ -165,7 +167,7 @@ int main(int argc, char **argv) {
 
     fclose(f);
 
-    for (int i = 0; i < nd; ++i) {
+    for (i = 0; i < nd; ++i) {
         finalize(fdd + i);
         if (read_int) finalize(idd + i);
     }
