@@ -6,16 +6,15 @@
 #include "bop_writer.h"
 #include "bop_macros.h"
 
-namespace {
 #define SEP '/'
-void get_path(const char *full, char *path) {
+static void get_path(const char *full, char *path) {
     int i = strlen(full);
     while (--i >= 0 && full[i] != SEP);
 
     if (i) memcpy(path, full, (i+1)*sizeof(char));
 }
 
-void get_fnval0(const char *fnbop, char *fnval0) {
+static void get_fnval0(const char *fnbop, char *fnval0) {
     int i = strlen(fnbop);
     const int n = i;
     while (--i >= 0 && fnbop[i] != SEP);
@@ -27,7 +26,7 @@ void get_fnval0(const char *fnbop, char *fnval0) {
 }
 #undef SEP
 
-void type2str(const Type type, /**/ char *str) {
+static void type2str(const Type type, /**/ char *str) {
 #define assign(arg) strncpy(str, arg, CBUFSIZE)
     switch(type) {
     case FLOAT:  assign("float");  break;
@@ -39,7 +38,7 @@ void type2str(const Type type, /**/ char *str) {
 #undef assign
 }
 
-void header(const char *fnbop, const char *fnval, const BopData d) {
+static void header(const char *fnbop, const char *fnval, const BopData d) {
     FILE *fh = fopen(fnbop, "w");
     if (fh == NULL) ERR("could not open <%s>\n", fnbop);    
 
@@ -56,7 +55,7 @@ void header(const char *fnbop, const char *fnval, const BopData d) {
 }
 
 template <typename T>
-void write_ascii(const char pattern[], const T *data, const long n, const long nvars, FILE *f) {
+static void write_ascii(const char pattern[], const T *data, const long n, const long nvars, FILE *f) {
     long j = 0;
     for (long i = 0; i < n; ++i) {
         for (long k = 0; k < nvars; ++k)
@@ -65,7 +64,7 @@ void write_ascii(const char pattern[], const T *data, const long n, const long n
     }
 }
 
-void data(const char *fnval, BopData d) {
+static void data(const char *fnval, BopData d) {
     FILE *fd = fopen(fnval, "w");
     if (fd == NULL) ERR("could not open <%s>\n", fnval);
 
@@ -90,7 +89,6 @@ void data(const char *fnval, BopData d) {
     }
     fclose(fd);    
 }
-} // anonymous namespace
 
 void write(const char *fnbop, const BopData d) {
     char fnval[CBUFSIZE] = {0}, fnval0[CBUFSIZE] = {0};
