@@ -12,6 +12,9 @@ PROGS = bop2vtk bop2txt
 
 all: $(PROGS)
 
+test: all
+	atest *.cpp
+
 bop2vtk.o: bop2vtk.cpp
 bop2txt.o: bop2txt.cpp
 
@@ -22,4 +25,4 @@ install:
 clean:
 	rm -f $(PROGS) *.o
 
-.PHONY: clean install
+.PHONY: test clean install

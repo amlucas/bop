@@ -12,6 +12,9 @@ PROGS = seq2bop rwascii
 
 all: $(PROGS)
 
+test: all
+	atest rwascii.cpp
+
 seq2bop.o: seq2bop.cpp
 rwascii.o: rwascii.cpp
 
@@ -21,4 +24,4 @@ install:
 
 clean: ; rm -f $(PROGS) *.o
 
-.PHONY: clean
+.PHONY: clean test
