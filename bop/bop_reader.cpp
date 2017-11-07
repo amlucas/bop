@@ -6,8 +6,7 @@
 #include "bop_reader.h"
 #include "bop_macros.h"
 
-namespace {
-void get_path(const char *full, char *path) {
+static void get_path(const char *full, char *path) {
 #define SEP '/'
     int i = strlen(full);
     while (--i >= 0 && full[i] != SEP);
@@ -16,7 +15,7 @@ void get_path(const char *full, char *path) {
 }
 
 template <typename real>
-long nvals(FILE* fd) {  /* return the number of real in the file */
+static long nvals(FILE* fd) {  /* return the number of real in the file */
     long end, curr;
     curr = ftell(fd);
     fseek(fd, 0, SEEK_END); end = ftell(fd);
@@ -25,7 +24,7 @@ long nvals(FILE* fd) {  /* return the number of real in the file */
 }
 
 template <typename real>
-long read_values(const char *fn, real **data) {
+static long read_values(const char *fn, real **data) {
     FILE *f = fopen(fn, "r");
 
     if (f == NULL)
@@ -41,7 +40,7 @@ long read_values(const char *fn, real **data) {
 
 #define MAXC 2048
 template <typename real>
-long nreal_ascii(const char pattern[], FILE *fd) {
+static long nreal_ascii(const char pattern[], FILE *fd) {
     fseek(fd, 0, SEEK_SET);
     long i = 0;
     char buf[MAXC] = {0};
@@ -57,7 +56,7 @@ long nreal_ascii(const char pattern[], FILE *fd) {
 }
 
 template <typename real>
-long read_ascii_values(const char pattern[], const char *fn, real **data) {
+static long read_ascii_values(const char pattern[], const char *fn, real **data) {
     FILE *f = fopen(fn, "r");
 
     if (f == NULL)
@@ -84,27 +83,26 @@ long read_ascii_values(const char pattern[], const char *fn, real **data) {
     return n;
 }
 
-void reinitc(char *buf) {memset(buf, 0, CBUFSIZE * sizeof(char));}
+static void reinitc(char *buf) {memset(buf, 0, CBUFSIZE * sizeof(char));}
     
-void readline(FILE *f, char *buf) { // read full line unless it excess CBUFSIZE chars 
+static void readline(FILE *f, char *buf) { // read full line unless it excess CBUFSIZE chars 
     reinitc(buf);
     if (fscanf(f, " %[^\n]" xstr(CBUFSIZE) "c", buf) != 1)
     ERR("line too long\n");
 }
 
-int nspaces(const char *buf) {
+static int nspaces(const char *buf) {
     int i = 0; while (buf[i] == ' ') {++i;}
     return i;
 }
     
-int readword(const char *in, char *word) {
+static int readword(const char *in, char *word) {
     reinitc(word);
     if (sscanf(in, " %" xstr(CBUFSIZE) "[^ ]c", word) != 1)
     ERR("could not read variable (wrong number of fields?)\n");
         
     return strlen(word) + nspaces(in);
 }
-} // anonymous namespace
 
 void read(const char *fnbop, BopData *d) {
     char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};
