@@ -48,6 +48,5 @@ Testing
 Uses `atest` framework (https://gitlab.ethz.ch/mavt-cse/atest)
 
 ```sh
-atest bop2txt.cpp
-atest bop2vtk.cpp
+make test
 ```
