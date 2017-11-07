@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "bop_common.h"
 #include "bop_writer.h"
 #include "bop_macros.h"
 

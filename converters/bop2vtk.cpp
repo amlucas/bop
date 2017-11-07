@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "bop_common.h"
 #include "bop_reader.h"
 
 template <typename T>

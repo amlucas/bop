@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include "bop_common.h"
 #include "bop_reader.h"
 
 template <typename real>
