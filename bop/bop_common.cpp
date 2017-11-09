@@ -15,7 +15,7 @@ void init(BopData *d) {
 
 void finalize(BopData *d) {
     if (d->vars) free(d->vars);
-    if (d->data) free(d->fdata);
+    if (d->data) free(d->data);
 }
 
 void summary(const BopData *d) {
@@ -37,56 +37,36 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
     const Type type = dd[0].type;
     const int nvars = dd[0].nvars;
+    size_t bsize;
+    int i;
+    long ni, start;
+    const void *src;
+    char *dst;
     
-    for (int i = 1; i < nd; ++i) {
+    for (i = 1; i < nd; ++i) {
         n += dd[i].n;
         if (type != dd[i].type || nvars != dd[i].nvars)
         ERR("concatenate: All files must have the same format\n"); 
     }
 
     dall->vars = new Cbuf[nvars];
-    for (int i = 0; i < nvars; ++i)
+    for (i = 0; i < nvars; ++i)
         memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
 
-    
-    switch (type) {
-    case FLOAT:
-    case FASCII:
-        dall->fdata = new float[n*nvars];
-        break;
-    case DOUBLE:
-        dall->ddata = new double[n*nvars];
-        break;
-    case INT:
-    case IASCII:
-        dall->idata = new int[n*nvars];
-        break;
-    };
+    bsize = get_bsize(type);
+    dall->data = malloc(n * nvars * bsize);
 
     dall->n = n;
     dall->nvars = nvars;
     dall->type = type;
     
-    long start = 0;
+    start = 0;
     
-    for (int i = 0; i < nd; ++i) {
-        const long ni = dd[i].n;
-        
-        if (type == DOUBLE) {
-            const double *src = dd[i].ddata;
-            double *dst = dall->ddata + start;
-            memcpy(dst, src, ni * nvars * sizeof(double));
-        }
-        else if (type == FLOAT || type == FASCII) {
-            const float *src = dd[i].fdata;
-            float *dst = dall->fdata + start;
-            memcpy(dst, src, ni * nvars * sizeof(float));
-        }
-        else if (type == INT || type == IASCII) {
-            const int *src = dd[i].idata;
-            int *dst = dall->idata + start;
-            memcpy(dst, src, ni * nvars * sizeof(int));
-        }
+    for (i = 0; i < nd; ++i) {
+        ni = dd[i].n;
+        src = dd[i].data;
+        dst = (char *) dall->data + bsize * start;
+        memcpy(dst, src, ni * nvars * bsize);
         
         start += ni * nvars;
     }

@@ -11,15 +11,18 @@ int main(int argc, char **argv) {
         fprintf(stderr, "usage: ./seq2bop <N> <out.bop>\n");
         exit(1);
     }
-
+    
+    int *data, i;
     BopData d;
     init(&d);
 
     const int N = atoi(argv[1]);
 
     d.n = N;
-    d.idata = new int[N];
-    for (int i = 0; i < N; ++i) d.idata[i] = i;
+    d.data = malloc(N * sizeof(int));
+    data = (int *) d.data;
+    
+    for (i = 0; i < N; ++i) data[i] = i;
     d.type = IASCII;
     d.nvars = 1;
     d.vars = new Cbuf[d.nvars];

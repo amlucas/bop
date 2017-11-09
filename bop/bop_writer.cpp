@@ -5,6 +5,7 @@
 #include "bop_common.h"
 #include "bop_writer.h"
 #include "bop_macros.h"
+#include "bop_utils.h"
 
 #define SEP '/'
 static void get_path(const char *full, char *path) {
@@ -56,35 +57,35 @@ static void header(const char *fnbop, const char *fnval, const BopData d) {
 
 template <typename T>
 static void write_ascii(const char pattern[], const T *data, const long n, const long nvars, FILE *f) {
-    long j = 0;
-    for (long i = 0; i < n; ++i) {
-        for (long k = 0; k < nvars; ++k)
-        fprintf(f, pattern, data[j++]);
+    long i, k, j = 0;
+    for (i = 0; i < n; ++i) {
+        for (k = 0; k < nvars; ++k)
+            fprintf(f, pattern, data[j++]);
         fprintf(f, "\n");
     }
 }
 
-static void data(const char *fnval, BopData d) {
+static void data(const char *fnval, const BopData d) {
     FILE *fd = fopen(fnval, "w");
-    if (fd == NULL) ERR("could not open <%s>\n", fnval);
+    size_t bsize;
+    if (fd == NULL)
+        ERR("could not open <%s>\n", fnval);
+
+    bsize = get_bsize(d.type);
 
     const int N = d.n * d.nvars;
     
     switch(d.type) {
     case FLOAT:
-        fwrite(d.fdata, sizeof(float), N, fd);
+    case DOUBLE:
+    case INT:
+        fwrite(d.data, bsize, N, fd);
         break;
     case FASCII:
-        write_ascii("%.6e ", d.fdata, d.n, d.nvars, fd);
-        break;
-    case DOUBLE:
-        fwrite(d.ddata, sizeof(double), N, fd);
-        break;        
-    case INT:
-        fwrite(d.idata, sizeof(int), N, fd);
+        write_ascii("%.6e ", (const float*) d.data, d.n, d.nvars, fd);
         break;
     case IASCII:
-        write_ascii("%d ", d.idata, d.n, d.nvars, fd);
+        write_ascii("%d ", (const int*) d.data, d.n, d.nvars, fd);
         break;
     }
     fclose(fd);    

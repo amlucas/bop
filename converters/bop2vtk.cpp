@@ -148,17 +148,17 @@ int main(int argc, char **argv) {
     switch (d.type) {
     case FLOAT:
     case FASCII:
-        vtk::init(d.n, d.nvars, d.fdata);
+        vtk::init(d.n, d.nvars, (const float*) d.data);
         break;
     case DOUBLE:
-        vtk::init(d.n, d.nvars, d.ddata);
+        vtk::init(d.n, d.nvars, (const double *) d.data);
         break;
     case INT:
     case IASCII:
         break;
     };
 
-    if (read_int) vtk::init_i(di.n, di.nvars, di.idata);
+    if (read_int) vtk::init_i(di.n, di.nvars, (const int *) di.data);
     
     vtk::header  (f, d.n);
     vtk::vertices(f, d.n);
