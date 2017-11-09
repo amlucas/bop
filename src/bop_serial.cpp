@@ -20,7 +20,7 @@ void bop_write_header(const char *name, const BopData *d) {
     get_fname_values(fnhead, fnval0);
     strcat(fnval, fnval0);
 
-    bop_write_header(name, fnval0, d);
+    write_header(name, fnval0, d);
 }
 
 template <typename T>
@@ -33,27 +33,27 @@ static void write_ascii(const char pattern[], const T *data, const long n, const
     }
 }
 
-static void write_data(const char *fnval, const BopData d) {
+static void write_data(const char *fnval, const BopData *d) {
     FILE *fd = fopen(fnval, "w");
     size_t bsize;
     if (fd == NULL)
         ERR("could not open <%s>\n", fnval);
 
-    bsize = get_bsize(d.type);
+    bsize = get_bsize(d->type);
 
-    const int N = d.n * d.nvars;
+    const int N = d->n * d->nvars;
     
-    switch(d.type) {
+    switch(d->type) {
     case FLOAT:
     case DOUBLE:
     case INT:
-        fwrite(d.data, bsize, N, fd);
+        fwrite(d->data, bsize, N, fd);
         break;
     case FASCII:
-        write_ascii("%.6e ", (const float*) d.data, d.n, d.nvars, fd);
+        write_ascii("%.6e ", (const float*) d->data, d->n, d->nvars, fd);
         break;
     case IASCII:
-        write_ascii("%d ", (const int*) d.data, d.n, d.nvars, fd);
+        write_ascii("%d ", (const int*) d->data, d->n, d->nvars, fd);
         break;
     }
     fclose(fd);    
@@ -61,8 +61,8 @@ static void write_data(const char *fnval, const BopData d) {
 
 
 void bop_write_data(const char *name, const BopData *d) {
-    char dname[CBUFSIZE];
-    sprintf(dname, "%s.values", name);
+    char dfname[CBUFSIZE];
+    sprintf(dfname, "%s.values", name);
     write_data(dfname, d);
 }
 
@@ -83,7 +83,7 @@ static void read_values(const char *fn, long n, int nvars, size_t bsize, void *d
 
 template <typename real>
 static void read_ascii_values(const char pattern[], const char *fn, void *data) {
-    char buf[MAXC] = {0}, *str;
+    char buf[CBUFSIZE] = {0}, *str;
     long i = 0, j;
     FILE *f;
     real *d, a;
@@ -119,10 +119,10 @@ void bop_read_data(const char *dfname, BopData *d) {
         read_values(dfname, d->n, d->nvars, bsize, d->data);
         break;
     case FASCII:
-        d->nvars = read_ascii_values<float>  (" %f%n", fnval, &d->data) / d->n;
+        read_ascii_values<float>(" %f%n", dfname, &d->data);
         break;
     case IASCII:
-        d->nvars = read_ascii_values<int>    (" %d%n", fnval, &d->data) / d->n;
+        read_ascii_values<int>  (" %d%n", dfname, &d->data);
         break;
     };
 }
