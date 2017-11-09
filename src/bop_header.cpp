@@ -69,7 +69,7 @@ static int count_vars(const char *var) {
     return i;
 }
 
-void bop_read_header(const char *fname, /**/ char *dfname, BopData *d) {
+void read_header(const char *fname, /**/ char *dfname, BopData *d) {
     FILE *f;
     char line[CBUFSIZE];
     int l = 0;
@@ -89,7 +89,7 @@ void bop_read_header(const char *fname, /**/ char *dfname, BopData *d) {
 
 
 
-void bop_write_header(const char *fhname, const char *fdname, const BopData *d) {
+void write_header(const char *fhname, const char *fdname, const BopData *d) {
     FILE *f = fopen(fhname, "w");
     
     fprintf(f, "%ld\n", d->n);
