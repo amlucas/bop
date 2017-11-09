@@ -31,13 +31,7 @@ void bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
 
 void summary(const BopData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
-    switch(d->type) {
-    case  FLOAT: fprintf(stderr, "\tformat: float\n"        ); break;
-    case DOUBLE: fprintf(stderr, "\tformat: double\n"       ); break;
-    case    INT: fprintf(stderr, "\tformat: int\n"          ); break;
-    case FASCII: fprintf(stderr, "\tformat: ascii (float)\n"); break;
-    case IASCII: fprintf(stderr, "\tformat: ascii (int)\n"  ); break;
-    };
+    fprintf(stderr, "\tformat: %s\n", type2str(d->type));
     fprintf(stderr, "\tvars: %s\n", d->vars);
 }
 

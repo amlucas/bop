@@ -4,6 +4,9 @@
 #include "bop_common.h"
 #include "bop_utils.h"
 
+static const char *typestr[] = {
+    "float", "double", "int", "fascii", "iascii", ""};
+
 size_t get_bsize(Type t) {
     switch(t) {
     case FLOAT:
@@ -38,3 +41,14 @@ void get_fname_values(const char *fnbop, char *fnval) {
 }
 
 #undef SEP
+
+const char * type2str(Type t) {
+    switch(t) {
+    case  FLOAT: return typestr[0];
+    case DOUBLE: return typestr[1];
+    case    INT: return typestr[2];
+    case FASCII: return typestr[3];
+    case IASCII: return typestr[4];
+    };
+    return typestr[5];
+}
