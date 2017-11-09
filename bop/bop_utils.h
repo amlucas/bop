@@ -4,3 +4,4 @@ void get_path(const char *full, char *path);
 void get_fname_values(const char *fnbop, char *fnval);
 
 const char * type2str(Type t);
+Type str2type(const char *str);

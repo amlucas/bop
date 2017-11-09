@@ -42,6 +42,16 @@ void get_fname_values(const char *fnbop, char *fnval) {
 
 #undef SEP
 
+Type str2type(const char *str) {
+    if      (strcmp(str,  "float") == 0) return FLOAT;
+    else if (strcmp(str, "double") == 0) return DOUBLE;
+    else if (strcmp(str,    "int") == 0) return INT;
+    else if (strcmp(str,  "ascii") == 0) return FASCII;
+    else if (strcmp(str, "iascii") == 0) return IASCII;
+    // default is float
+    return FLOAT;
+}
+
 const char * type2str(Type t) {
     switch(t) {
     case  FLOAT: return typestr[0];
