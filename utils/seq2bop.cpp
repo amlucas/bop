@@ -3,7 +3,7 @@
 #include <cstring>
 
 #include "bop_common.h"
-#include "bop_writer.h"
+#include "bop_serial.h"
 
 int main(int argc, char **argv) {
 
@@ -28,7 +28,8 @@ int main(int argc, char **argv) {
 
     strcpy(d.vars, "seq");
 
-    write(argv[2], d);
+    bop_write_header(argv[2], &d);
+    bop_write_values(argv[2], &d);
     
     bop_free(&d);
     return 0;
