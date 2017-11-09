@@ -45,7 +45,7 @@ bop2txt in1.bop in2.bop ... inN.bop > out.txt
 
 Testing
 -------
-Uses `atest` framework (https://gitlab.ethz.ch/mavt-cse/atest)
+Uses `atest` framework, see [gitlab page](https://gitlab.ethz.ch/mavt-cse/atest)
 
 ```sh
 make test
