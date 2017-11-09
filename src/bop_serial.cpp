@@ -60,14 +60,18 @@ static void write_data(const char *fnval, const BopData *d) {
 }
 
 
-void bop_write_data(const char *name, const BopData *d) {
+void bop_write_values(const char *name, const BopData *d) {
     char dfname[CBUFSIZE];
     sprintf(dfname, "%s.values", name);
     write_data(dfname, d);
 }
 
 void bop_read_header(const char *hfname, BopData *d, char *dfname) {
-    read_header(hfname, /**/ dfname, d);
+    char dfname0[CBUFSIZE];
+    read_header(hfname, /**/ dfname0, d);
+
+    get_path(hfname, dfname);
+    strcat(dfname, dfname0);
 }
 
 static void read_values(const char *fn, long n, int nvars, size_t bsize, void *data) {
@@ -108,7 +112,7 @@ static void read_ascii_values(const char pattern[], const char *fn, void *data) 
 }
 
 
-void bop_read_data(const char *dfname, BopData *d) {
+void bop_read_values(const char *dfname, BopData *d) {
     size_t bsize;
     bsize = get_bsize(d->type);
 
