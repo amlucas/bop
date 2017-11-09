@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "bop_common.h"
 #include "bop_utils.h"
 
@@ -12,4 +14,5 @@ size_t get_bsize(Type t) {
     case IASCII:
         return sizeof(int);
     };
+    return 0;
 }
