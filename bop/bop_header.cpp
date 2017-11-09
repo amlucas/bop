@@ -95,8 +95,7 @@ void bop_write_header(const char *fhname, const char *fdname, const BopData *d) 
     fprintf(f, "%ld\n", d->n);
     fprintf(f, "DATA_FILE: %s\n", fdname);
     fprintf(f, "DATA_FORMAT: %s\n", type2str(d->type));
-    fprintf(f, "VARIABLES %s", d->vars);
-    fprintf(f, "\n");
+    fprintf(f, "VARIABLES %s\n", d->vars);
     
     fclose(f);
 }
