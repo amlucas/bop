@@ -16,5 +16,5 @@ void bop_free(BopData *d);
 
 void bop_extract_vars(const BopData *d, /**/ Cbuf *vars);
 
-void summary(const BopData *d);
-void concatenate(const int nd, const BopData *dd, BopData *dall);
+void bop_summary(const BopData *d);
+void bop_concatenate(const int nd, const BopData *dd, BopData *dall);

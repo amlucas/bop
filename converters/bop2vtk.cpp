@@ -143,11 +143,11 @@ int main(int argc, char **argv) {
         }
     }
 
-    concatenate(nd, fdd, /**/ &d);
-    if (read_int) concatenate(nd, idd, /**/ &di);
+    bop_concatenate(nd, fdd, /**/ &d);
+    if (read_int) bop_concatenate(nd, idd, /**/ &di);
 
-    summary(&d);
-    if (read_int) summary(&di);
+    bop_summary(&d);
+    if (read_int) bop_summary(&di);
         
     FILE *f = fopen(argv[1], "w");
     

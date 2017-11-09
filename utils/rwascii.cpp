@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     bop_alloc(&d);
     bop_read_values(dfname, /**/ &d);
 
-    summary(&d);
+    bop_summary(&d);
 
     bop_write_header(argv[2], &d);
     bop_write_values(argv[2], &d);

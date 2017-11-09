@@ -31,14 +31,14 @@ void bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
     }
 }
 
-void summary(const BopData *d) {
+void bop_summary(const BopData *d) {
     using namespace bop_utils;
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
     fprintf(stderr, "\tformat: %s\n", type2str(d->type));
     fprintf(stderr, "\tvars: %s\n", d->vars);
 }
 
-void concatenate(const int nd, const BopData *dd, BopData *dall) {
+void bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
     using namespace bop_utils;
     
     long n          = dd[0].n;
