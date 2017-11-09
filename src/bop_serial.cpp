@@ -9,7 +9,7 @@
 
 #include "bop_serial.h"
 
-void write_header(const char *name, const BopData *d) {
+void bop_write_header(const char *name, const BopData *d) {
     char fnval[CBUFSIZE] = {0},
         fnval0[CBUFSIZE] = {0},
         fnhead[CBUFSIZE] = {0};
@@ -60,11 +60,69 @@ static void write_data(const char *fnval, const BopData d) {
 }
 
 
-void write_data(const char *name, const BopData *d) {
+void bop_write_data(const char *name, const BopData *d) {
     char dname[CBUFSIZE];
     sprintf(dname, "%s.values", name);
     write_data(dfname, d);
 }
 
-void read_header(const char *hfname, BopData *d, char *dfname);
-void read_data(const char *dfname, BopData *d);
+void bop_read_header(const char *hfname, BopData *d, char *dfname) {
+    read_header(hfname, /**/ dfname, d);
+}
+
+static void read_values(const char *fn, long n, int nvars, size_t bsize, void *data) {
+    FILE *f = fopen(fn, "r");
+
+    if (f == NULL)
+        ERR("could not open <%s>\n", fn);
+
+    fread(data, bsize, n * nvars, f); 
+
+    fclose(f);
+}
+
+template <typename real>
+static void read_ascii_values(const char pattern[], const char *fn, void *data) {
+    char buf[MAXC] = {0}, *str;
+    long i = 0, j;
+    FILE *f;
+    real *d, a;
+
+    f = fopen(fn, "r");
+    if (f == NULL)
+        ERR("could not open <%s>\n", fn);
+    
+    d = (real*) data;        
+    
+    while (fscanf(f, " %[^\n]" xstr(MAXC) "c", buf) == 1) {
+        str = buf;
+        j = 0;
+        while (sscanf(str, pattern, &a, &j) == 1) {
+            str += j;
+            d[i++] = a;
+        }
+        memset(buf, 0,  sizeof(buf));
+    }
+    
+    fclose(f);
+}
+
+
+void bop_read_data(const char *dfname, BopData *d) {
+    size_t bsize;
+    bsize = get_bsize(d->type);
+
+    switch (d->type) {
+    case  FLOAT: 
+    case DOUBLE: 
+    case    INT:
+        read_values(dfname, d->n, d->nvars, bsize, d->data);
+        break;
+    case FASCII:
+        d->nvars = read_ascii_values<float>  (" %f%n", fnval, &d->data) / d->n;
+        break;
+    case IASCII:
+        d->nvars = read_ascii_values<int>    (" %d%n", fnval, &d->data) / d->n;
+        break;
+    };
+}
