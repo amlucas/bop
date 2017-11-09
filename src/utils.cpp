@@ -1,11 +1,19 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "bop_common.h"
 #include "utils.h"
+#include "macros.h"
 
 static const char *typestr[] = {
     "float", "double", "int", "fascii", "iascii", ""};
+
+void safe_open(const char *name, const char *mode, FILE **f) {
+    *f = fopen(name, mode);
+    if (*f == NULL)
+        ERR("Could not open %s with mode %s\n", name, mode);
+}
 
 size_t get_bsize(Type t) {
     switch(t) {

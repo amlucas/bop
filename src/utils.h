@@ -1,3 +1,5 @@
+void safe_open(const char *name, const char *mode, FILE **f);
+
 size_t get_bsize(Type t);
 
 void get_path(const char *full, char *path);
