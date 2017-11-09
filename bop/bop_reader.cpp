@@ -5,14 +5,8 @@
 #include "bop_common.h"
 #include "bop_reader.h"
 #include "bop_macros.h"
+#include "bop_utils.h"
 
-static void get_path(const char *full, char *path) {
-#define SEP '/'
-    int i = strlen(full);
-    while (--i >= 0 && full[i] != SEP);
-
-    if (i) memcpy(path, full, (i+1)*sizeof(char));
-}
 
 template <typename real>
 static long nvals(FILE* fd) {  /* return the number of real in the file */
