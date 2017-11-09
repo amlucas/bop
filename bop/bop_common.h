@@ -5,14 +5,10 @@ enum Type {FLOAT, DOUBLE, INT, FASCII, IASCII};
 
 struct BopData {
     long n;
-
     int nvars;
     Cbuf *vars;
-    Type type;
-    
-    float  *fdata;
-    double *ddata;
-    int    *idata;
+    Type type;    
+    void *data;
 };
 
 void init(BopData *d);
