@@ -2,4 +2,3 @@
 DATA_FILE: test.values
 DATA_FORMAT: float
 VARIABLES: x y z vx vy vz
-t = 1.000000e-01
