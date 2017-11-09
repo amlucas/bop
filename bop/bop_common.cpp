@@ -4,21 +4,18 @@
 
 #include "bop_common.h"
 #include "bop_macros.h"
+#include "bop_utils.h"
 
 void init(BopData *d) {
     d->n = -1;
     d->nvars = 6;
     d->vars = NULL;
-    d->fdata = NULL;
-    d->ddata = NULL;
-    d->idata = NULL;
+    d->data = NULL;
 }
 
 void finalize(BopData *d) {
-    if (d->vars)  delete[] d->vars;
-    if (d->fdata) delete[] d->fdata;
-    if (d->ddata) delete[] d->ddata;
-    if (d->idata) delete[] d->idata;
+    if (d->vars) free(d->vars);
+    if (d->data) free(d->fdata);
 }
 
 void summary(const BopData *d) {
@@ -49,7 +46,8 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
 
     dall->vars = new Cbuf[nvars];
     for (int i = 0; i < nvars; ++i)
-    memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
+        memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
+
     
     switch (type) {
     case FLOAT:

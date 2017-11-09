@@ -24,14 +24,14 @@ static long nvals(FILE* fd) {  /* return the number of real in the file */
 }
 
 template <typename real>
-static long read_values(const char *fn, real **data) {
+static long read_values(const char *fn, void **data) {
     FILE *f = fopen(fn, "r");
 
     if (f == NULL)
-    ERR("could not open <%s>\n", fn);
+        ERR("could not open <%s>\n", fn);
 
     const long nreals = nvals<real>(f);
-    *data = new real[nreals];
+    *data = malloc(nreals * sizeof(real));
     fread(*data, sizeof(real), nreals, f); 
 
     fclose(f);
@@ -56,15 +56,16 @@ static long nreal_ascii(const char pattern[], FILE *fd) {
 }
 
 template <typename real>
-static long read_ascii_values(const char pattern[], const char *fn, real **data) {
+static long read_ascii_values(const char pattern[], const char *fn, void **data) {
     FILE *f = fopen(fn, "r");
-
+    real *d;
     if (f == NULL)
     ERR("could not open <%s>\n", fn);
 
     const long n = nreal_ascii<real> (pattern, f);
     
-    *data = new real[n];
+    *data = malloc(n * sizeof(real));
+    d = (real*) (*data);                   
     
     char buf[MAXC] = {0}, *str;
     long i = 0, j;
@@ -74,7 +75,7 @@ static long read_ascii_values(const char pattern[], const char *fn, real **data)
         j = 0;
         while (sscanf(str, pattern, &a, &j) == 1) {
             str += j;
-            (*data)[i++] = a;
+            d[i++] = a;
         }
         memset(buf, 0,  sizeof(buf));
     }
@@ -142,11 +143,11 @@ void read(const char *fnbop, BopData *d) {
         
     // read datafile
     switch (d->type) {
-    case  FLOAT: d->nvars = read_values<float> (fnval, &(d->fdata)) / d->n; break;
-    case DOUBLE: d->nvars = read_values<double>(fnval, &(d->ddata)) / d->n; break;
-    case    INT: d->nvars = read_values<int>   (fnval, &(d->idata)) / d->n; break;
-    case FASCII: d->nvars = read_ascii_values  (" %f%n", fnval, &(d->fdata)) / d->n; break;
-    case IASCII: d->nvars = read_ascii_values  (" %d%n", fnval, &(d->idata)) / d->n; break;
+    case  FLOAT: d->nvars = read_values<float> (fnval, &d->data) / d->n; break;
+    case DOUBLE: d->nvars = read_values<double>(fnval, &d->data) / d->n; break;
+    case    INT: d->nvars = read_values<int>   (fnval, &d->data) / d->n; break;
+    case FASCII: d->nvars = read_ascii_values<float>  (" %f%n", fnval, &d->data) / d->n; break;
+    case IASCII: d->nvars = read_ascii_values<int>    (" %d%n", fnval, &d->data) / d->n; break;
     };
 
     d->vars = new Cbuf[d->nvars];
