@@ -7,26 +7,6 @@
 #include "bop_macros.h"
 #include "bop_utils.h"
 
-#define SEP '/'
-static void get_path(const char *full, char *path) {
-    int i = strlen(full);
-    while (--i >= 0 && full[i] != SEP);
-
-    if (i) memcpy(path, full, (i+1)*sizeof(char));
-}
-
-static void get_fnval0(const char *fnbop, char *fnval0) {
-    int i = strlen(fnbop);
-    const int n = i;
-    while (--i >= 0 && fnbop[i] != SEP);
-
-    memcpy(fnval0, fnbop + i + 1, (n-i)*sizeof(char));
-
-    i = strlen(fnval0);
-    strncpy(fnval0 + i - 4, ".values", 8);
-}
-#undef SEP
-
 static void type2str(const Type type, /**/ char *str) {
 #define assign(arg) strncpy(str, arg, CBUFSIZE)
     switch(type) {
@@ -95,7 +75,7 @@ void write(const char *fnbop, const BopData d) {
     char fnval[CBUFSIZE] = {0}, fnval0[CBUFSIZE] = {0};
 
     get_path(fnbop, fnval);
-    get_fnval0(fnbop, fnval0);
+    get_fname_values(fnbop, fnval0);
     strcat(fnval, fnval0);
 
     header(fnbop, fnval0, d);
