@@ -2,6 +2,9 @@ M=../make
 include $M/common.mk
 include $M/rules.mk
 
+inc=bop_common.h bop_reader.h bop_writer.h
+lib=libbop.a
+
 libbop.a: bop_reader.o bop_writer.o bop_common.o bop_utils.o
 	ar rcs $@ $^
 
@@ -17,6 +20,6 @@ install:
 	mkdir -p $(INST_BIN)
 	mkdir -p $(INST_LIB)/include
 	mkdir -p $(INST_LIB)/lib
-	cp *.h $(INST_LIB)/include/
-	cp *.a $(INST_LIB)/lib/
+	cp $(inc) $(INST_LIB)/include/
+	cp $(lib) $(INST_LIB)/lib/
 
