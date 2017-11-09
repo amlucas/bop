@@ -7,6 +7,9 @@
 
 #include "header.h"
 
+namespace bop_header {
+using namespace bop_utils;
+
 static int is_desc(const char *s, const char *d) {
     if (strcmp(s, d) == 0)
         return 1;
@@ -101,3 +104,5 @@ void write_header(const char *fhname, const char *fdname, const BopData *d) {
     
     fclose(f);
 }
+
+} // bop_header

@@ -6,6 +6,8 @@
 #include "utils.h"
 #include "macros.h"
 
+namespace bop_utils {
+
 static const char *typestr[] = {
     "float", "double", "int", "fascii", "iascii", ""};
 
@@ -70,3 +72,5 @@ const char * type2str(Type t) {
     };
     return typestr[5];
 }
+
+} // bop_header

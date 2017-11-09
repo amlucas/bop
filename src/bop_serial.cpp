@@ -10,6 +10,9 @@
 #include "bop_serial.h"
 
 void bop_write_header(const char *name, const BopData *d) {
+    using namespace bop_header;
+    using namespace bop_utils;
+    
     char fnval[CBUFSIZE] = {0},
         fnval0[CBUFSIZE] = {0},
         fnhead[CBUFSIZE] = {0};
@@ -34,6 +37,7 @@ static void write_ascii(const char pattern[], const T *data, const long n, const
 }
 
 static void write_data(const char *fnval, const BopData *d) {
+    using namespace bop_utils;
     FILE *fd;
     size_t bsize;
 
@@ -64,6 +68,9 @@ void bop_write_values(const char *name, const BopData *d) {
 }
 
 void bop_read_header(const char *hfname, BopData *d, char *dfname) {
+    using namespace bop_header;
+    using namespace bop_utils;
+    
     char dfname0[CBUFSIZE] = {0}, locdfname[CBUFSIZE] = {0};
     read_header(hfname, /**/ dfname0, d);
 
@@ -85,6 +92,8 @@ static void read_values(const char *fn, long n, int nvars, size_t bsize, void *d
 
 template <typename real>
 static void read_ascii_values(const char pattern[], const char *fn, void *data) {
+    using namespace bop_utils;
+    
     char buf[CBUFSIZE] = {0}, *str;
     long i = 0, j;
     FILE *f;
@@ -109,6 +118,8 @@ static void read_ascii_values(const char pattern[], const char *fn, void *data) 
 
 
 void bop_read_values(const char *dfname, BopData *d) {
+    using namespace bop_utils;
+    
     size_t bsize;
     bsize = get_bsize(d->type);
 
