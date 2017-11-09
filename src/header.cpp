@@ -48,7 +48,7 @@ static void parse_line(const char *l, /**/ char *dfname, BopData *d) {
     else if (is_desc(desc, "VARIABLES"))
         read_variables(data, /**/ d);
     else
-        printf("unprocessed desc: <%s>, data: <%s>\n", desc, data);
+        fprintf(stderr, "unprocessed desc: <%s>, data: <%s>\n", desc, data);
 }
 
 static void read_n_data(const char *data, /**/ BopData *d) {
@@ -75,7 +75,7 @@ void read_header(const char *fname, /**/ char *dfname, BopData *d) {
     char line[CBUFSIZE];
     int l = 0;
 
-    f = fopen(fname, "r");
+    safe_open(fname, "r", &f);
     
     while (EOF != fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", line)) {
         if (l == 0) read_n_data(line, /**/ d);
