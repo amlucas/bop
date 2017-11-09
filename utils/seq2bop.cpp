@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
     data = (int *) d.data;
     
     for (i = 0; i < N; ++i) data[i] = i;
-    d.vars = new Cbuf[d.nvars];
-    strncpy(d.vars[0].c, "seq", 4);
+
+    strcpy(d.vars, "seq");
 
     write(argv[2], d);
     

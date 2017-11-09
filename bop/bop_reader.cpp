@@ -85,19 +85,6 @@ static void readline(FILE *f, char *buf) { // read full line unless it excess CB
     ERR("line too long\n");
 }
 
-static int nspaces(const char *buf) {
-    int i = 0; while (buf[i] == ' ') {++i;}
-    return i;
-}
-    
-static int readword(const char *in, char *word) {
-    reinitc(word);
-    if (sscanf(in, " %" xstr(CBUFSIZE) "[^ ]c", word) != 1)
-    ERR("could not read variable (wrong number of fields?)\n");
-        
-    return strlen(word) + nspaces(in);
-}
-
 void read(const char *fnbop, BopData *d) {
     char cbuf[CBUFSIZE] = {0}, line[CBUFSIZE] = {0}, fnval[CBUFSIZE] = {0};
         
@@ -143,17 +130,13 @@ void read(const char *fnbop, BopData *d) {
     case IASCII: d->nvars = read_ascii_values<int>    (" %d%n", fnval, &d->data) / d->n; break;
     };
 
-    d->vars = (Cbuf*) malloc(d->nvars * sizeof(Cbuf));
-
     // read variables
     reinitc(cbuf);
     readline(fh, line);
         
     if (sscanf(line, "VARIABLES: %[^\\0]c", cbuf) != 1)
-    ERR("could not read variables entry\n");
-
-    for (int i = 0, start = 0; i < d->nvars; ++i)
-    start += readword(cbuf + start, d->vars[i].c);
+        ERR("could not read variables entry\n");
+    strcpy(d->vars, cbuf);
         
     fclose(fh);
 }

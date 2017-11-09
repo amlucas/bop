@@ -7,18 +7,26 @@
 #include "bop_utils.h"
 
 void bop_alloc(BopData *d) {
-    size_t szd, szv, bsize;
+    size_t sz, bsize;
     bsize = get_bsize(d->type);
-    szd = d->n * d->nvars * bsize;
-    szv = d->nvars * sizeof(Cbuf);
-    
-    d->vars = (Cbuf*) malloc(szv);
-    d->data = malloc(szd);
+    sz = d->n * d->nvars * bsize;    
+
+    d->data = malloc(sz);
 }
 
 void bop_free(BopData *d) {
-    if (d->vars) free(d->vars);
     if (d->data) free(d->data);
+}
+
+void bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
+    int i, n;
+    const char *v = d->vars;
+    n = d->nvars;
+    for (i = 0; i < n; ++i) {
+        sscanf(v, "%s", vars[i].c);
+        v = strstr(v, vars[i].c);
+        v += strlen(vars[i].c);
+    }
 }
 
 void summary(const BopData *d) {
@@ -30,11 +38,9 @@ void summary(const BopData *d) {
     case FASCII: fprintf(stderr, "\tformat: ascii (float)\n"); break;
     case IASCII: fprintf(stderr, "\tformat: ascii (int)\n"  ); break;
     };
-    fprintf(stderr, "\tvars:");
-    for (int i = 0; i < d->nvars; ++i)
-    fprintf(stderr, " %s", d->vars[i].c);
-    fprintf(stderr, "\n");
+    fprintf(stderr, "\tvars: %s\n", d->vars);
 }
+
 
 void concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
@@ -58,9 +64,7 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
     dall->type = type;
     bop_alloc(dall);
 
-    for (i = 0; i < nvars; ++i)
-        memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
-
+    strcpy(dall->vars, dd[0].vars);
     
     start = 0;
     

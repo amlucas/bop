@@ -29,8 +29,7 @@ static void header(const char *fnbop, const char *fnval, const BopData d) {
     fprintf(fh, "%ld\n", d.n);
     fprintf(fh, "DATA_FILE: %s\n", fnval);
     fprintf(fh, "DATA_FORMAT: %s\n", format);
-    fprintf(fh, "VARIABLES:");
-    for (int i = 0; i < d.nvars; ++i) fprintf(fh, " %s", d.vars[i].c);
+    fprintf(fh, "VARIABLES %s", d.vars);
     fprintf(fh, "\n");                
     fclose(fh);    
 }

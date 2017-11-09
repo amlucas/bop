@@ -159,11 +159,22 @@ int main(int argc, char **argv) {
     };
 
     if (read_int) vtk::init_i(di.n, di.nvars, (const int *) di.data);
+
+    Cbuf *vars, *ivars;
+    vars = ivars = NULL;
+    
+    vars = new Cbuf[d.nvars];
+    bop_extract_vars(&d, /**/ vars);
+
+    if (read_int) {
+        ivars = new Cbuf[di.nvars];
+        bop_extract_vars(&di, /**/ ivars);
+    }
     
     vtk::header  (f, d.n);
     vtk::vertices(f, d.n);
-    vtk::fields  (f, d.n, d.nvars, d.vars);
-    if (read_int) vtk::ifields(f, di.n, di.nvars, di.vars);
+    vtk::fields  (f, d.n, d.nvars, vars);
+    if (read_int) vtk::ifields(f, di.n, di.nvars, ivars);
     vtk::finalize();
 
     fclose(f);
@@ -174,8 +185,13 @@ int main(int argc, char **argv) {
             bop_free(idd + i);
     }
     bop_free(&d);
-    if (read_int) bop_free(&di);
+    delete[] vars;
 
+    if (read_int) {
+        bop_free(&di);
+        delete[] ivars;
+    }
+    
     delete[] fdd;
     delete[] idd;
     
