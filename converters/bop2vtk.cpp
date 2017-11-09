@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "bop_common.h"
-#include "bop_reader.h"
+#include "bop_serial.h"
 
 template <typename T>
 T EndSwap(T f) {
@@ -118,6 +118,7 @@ int main(int argc, char **argv) {
     }
     int i_int, i, ninput, nd;
     BopData *fdd, *idd, d, di;
+    char dfname[CBUFSIZE];
     
     i_int = -1;
     for (i = 2; i < argc; ++i) if (strcmp(argv[i], "--") == 0) i_int = i + 1; 
@@ -131,10 +132,15 @@ int main(int argc, char **argv) {
     idd = new BopData[nd];
 
     for (i = 0; i < nd; ++i) {
-        read(argv[2+i], fdd + i);
+        bop_read_header(argv[2+i], /**/ fdd + i, dfname);
+        bop_alloc(fdd + i);
+        bop_read_values(dfname, /**/ fdd + i);
         
-        if (read_int) 
-            read(argv[i_int+i], idd + i);
+        if (read_int) {
+            bop_read_header(argv[i_int+i], /**/ idd + i, dfname);
+            bop_alloc(idd + i);
+            bop_read_values(dfname, /**/ idd + i);
+        }
     }
 
     concatenate(nd, fdd, /**/ &d);

@@ -3,8 +3,7 @@
 #include <cstring>
 
 #include "bop_common.h"
-#include "bop_reader.h"
-#include "bop_writer.h"
+#include "bop_serial.h"
 
 int main(int argc, char **argv) {
     if (argc != 3) {
@@ -13,9 +12,17 @@ int main(int argc, char **argv) {
     }
 
     BopData d;
-    read(argv[1], &d);
+    char dfname[CBUFSIZE];
+
+    bop_read_header(argv[1], /**/ &d, dfname);
+    bop_alloc(&d);
+    bop_read_values(dfname, /**/ &d);
+
     summary(&d);
-    write(argv[2], d);    
+
+    bop_write_header(argv[2], &d);
+    bop_write_values(argv[2], &d);
+    
     bop_free(&d);
     
     return 0;
@@ -25,12 +32,12 @@ int main(int argc, char **argv) {
 
   # nTEST: ascii2ascii.t0
   # make -j 
-  # ./rwascii data/ascii.bop test.bop
+  # ./rwascii data/ascii.bop test
   # mv test.values test.out.txt
 
   # nTEST: ascii2ascii.t1
   # make -j 
-  # ./rwascii data/iascii.bop test.bop
+  # ./rwascii data/iascii.bop test
   # mv test.values test.out.txt
 
 */

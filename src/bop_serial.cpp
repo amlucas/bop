@@ -34,20 +34,17 @@ static void write_ascii(const char pattern[], const T *data, const long n, const
 }
 
 static void write_data(const char *fnval, const BopData *d) {
-    FILE *fd = fopen(fnval, "w");
+    FILE *fd;
     size_t bsize;
-    if (fd == NULL)
-        ERR("could not open <%s>\n", fnval);
 
+    safe_open(fnval, "w", &fd);
     bsize = get_bsize(d->type);
 
-    const int N = d->n * d->nvars;
-    
     switch(d->type) {
     case FLOAT:
     case DOUBLE:
     case INT:
-        fwrite(d->data, bsize, N, fd);
+        fwrite(d->data, bsize, d->n * d->nvars, fd);
         break;
     case FASCII:
         write_ascii("%.6e ", (const float*) d->data, d->n, d->nvars, fd);
@@ -61,17 +58,18 @@ static void write_data(const char *fnval, const BopData *d) {
 
 
 void bop_write_values(const char *name, const BopData *d) {
-    char dfname[CBUFSIZE];
+    char dfname[CBUFSIZE] = {0};
     sprintf(dfname, "%s.values", name);
     write_data(dfname, d);
 }
 
 void bop_read_header(const char *hfname, BopData *d, char *dfname) {
-    char dfname0[CBUFSIZE];
+    char dfname0[CBUFSIZE] = {0}, locdfname[CBUFSIZE] = {0};
     read_header(hfname, /**/ dfname0, d);
 
-    get_path(hfname, dfname);
-    strcat(dfname, dfname0);
+    get_path(hfname, locdfname);
+    strcat(locdfname, dfname0);
+    strcpy(dfname, locdfname);
 }
 
 static void read_values(const char *fn, long n, int nvars, size_t bsize, void *data) {
@@ -92,9 +90,7 @@ static void read_ascii_values(const char pattern[], const char *fn, void *data) 
     FILE *f;
     real *d, a;
 
-    f = fopen(fn, "r");
-    if (f == NULL)
-        ERR("could not open <%s>\n", fn);
+    safe_open(fn, "r", &f);
     
     d = (real*) data;        
     
@@ -123,10 +119,10 @@ void bop_read_values(const char *dfname, BopData *d) {
         read_values(dfname, d->n, d->nvars, bsize, d->data);
         break;
     case FASCII:
-        read_ascii_values<float>(" %f%n", dfname, &d->data);
+        read_ascii_values<float>(" %f%n", dfname, d->data);
         break;
     case IASCII:
-        read_ascii_values<int>  (" %d%n", dfname, &d->data);
+        read_ascii_values<int>  (" %d%n", dfname, d->data);
         break;
     };
 }
