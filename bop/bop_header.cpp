@@ -87,4 +87,16 @@ void bop_read_header(const char *fname, /**/ char *dfname, BopData *d) {
     fclose(f);
 }
 
-void bop_write_header(const char *fhname, const char *fdname, const BopData *d);
+
+
+void bop_write_header(const char *fhname, const char *fdname, const BopData *d) {
+    FILE *f = fopen(fhname, "w");
+    
+    fprintf(f, "%ld\n", d->n);
+    fprintf(f, "DATA_FILE: %s\n", fdname);
+    fprintf(f, "DATA_FORMAT: %s\n", type2str(d->type));
+    fprintf(f, "VARIABLES %s", d->vars);
+    fprintf(f, "\n");
+    
+    fclose(f);
+}
