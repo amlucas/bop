@@ -7,7 +7,6 @@
 #include "bop_macros.h"
 #include "bop_utils.h"
 
-
 template <typename real>
 static long nvals(FILE* fd) {  /* return the number of real in the file */
     long end, curr;
