@@ -35,7 +35,7 @@ static void extract_desc_data(const char *l, /**/ char *desc, char *data) {
     strcpy(data, c);
 }
 
-static void parse_line(const char *l, /**/ char *dfname, char *var, BopData *d) {
+static void parse_line(const char *l, /**/ char *dfname, BopData *d) {
     char desc[NC] = {0}, data[NC] = {0};
     extract_desc_data(l, /**/ desc, data);
     
@@ -55,19 +55,32 @@ static void read_n_data(const char *data, /**/ BopData *d) {
     d->n = n;
 }
 
+static int count_vars(const char *var) {
+    int i;
+    char buf[NC];
+
+    while (1 == sscanf(var, "%s", buf)) {
+        var = strstr(var, buf);
+        var += strlen(buf);
+        ++i;
+    }
+    return i;
+}
 
 void bop_read_header(const char *fname, /**/ char *dfname, BopData *d) {
     FILE *f;
-    char line[NC], var[NC];
+    char line[NC];
     int l = 0;
 
     f = fopen(fname, "r");
     
     while (EOF != fscanf(f, " %" xstr(NC) "[^\n]c", line)) {
         if (l == 0) read_n_data(line, /**/ d);
-        else        parse_line(line, /**/ dfname, var, d);
+        else        parse_line(line, /**/ dfname, d);
         ++l;
     }    
+
+    d->nvars = count_vars(d->vars);
     
     fclose(f);
 }

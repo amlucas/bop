@@ -35,7 +35,6 @@ void summary(const BopData *d) {
     fprintf(stderr, "\tvars: %s\n", d->vars);
 }
 
-
 void concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
     const Type type = dd[0].type;
