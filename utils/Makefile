@@ -2,7 +2,7 @@ M=../make
 include $M/common.mk
 include $M/rules.mk
 
-BOP=../bop
+BOP=../src
 
 LIBS      = -lbop
 LDFLAGS   = -L$(BOP)

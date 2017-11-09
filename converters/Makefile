@@ -1,5 +1,5 @@
 M=../make
-BOP=../bop
+BOP=../src
 
 include $M/common.mk
 include $M/rules.mk
