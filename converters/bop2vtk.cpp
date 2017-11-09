@@ -132,10 +132,9 @@ int main(int argc, char **argv) {
 
     for (i = 0; i < nd; ++i) {
         read(argv[2+i], fdd + i);
-
-        if (read_int) {
+        
+        if (read_int) 
             read(argv[i_int+i], idd + i);
-        }
     }
 
     concatenate(nd, fdd, /**/ &d);
@@ -175,7 +174,7 @@ int main(int argc, char **argv) {
             bop_free(idd + i);
     }
     bop_free(&d);
-    bop_free(&di);
+    if (read_int) bop_free(&di);
 
     delete[] fdd;
     delete[] idd;
