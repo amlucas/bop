@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "bop_common.h"
-#include "bop_macros.h"
-#include "bop_utils.h"
+#include "macros.h"
+#include "utils.h"
 
 void bop_alloc(BopData *d) {
     size_t sz, bsize;

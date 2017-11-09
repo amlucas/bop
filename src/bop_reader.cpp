@@ -3,9 +3,10 @@
 #include <string.h>
 
 #include "bop_common.h"
+#include "macros.h"
+#include "utils.h"
+
 #include "bop_reader.h"
-#include "bop_macros.h"
-#include "bop_utils.h"
 
 template <typename real>
 static long nvals(FILE* fd) {  /* return the number of real in the file */

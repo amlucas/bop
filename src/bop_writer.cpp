@@ -3,9 +3,10 @@
 #include <string.h>
 
 #include "bop_common.h"
+#include "macros.h"
+#include "utils.h"
+
 #include "bop_writer.h"
-#include "bop_macros.h"
-#include "bop_utils.h"
 
 static void type2str(const Type type, /**/ char *str) {
 #define assign(arg) strncpy(str, arg, CBUFSIZE)

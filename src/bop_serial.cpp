@@ -3,9 +3,9 @@
 #include <string.h>
 
 #include "bop_common.h"
-#include "bop_header.h"
-#include "bop_macros.h"
-#include "bop_utils.h"
+#include "header.h"
+#include "macros.h"
+#include "utils.h"
 
 #include "bop_serial.h"
 

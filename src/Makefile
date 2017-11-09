@@ -5,15 +5,17 @@ include $M/rules.mk
 inc=bop_common.h bop_reader.h bop_writer.h
 lib=libbop.a
 
-libbop.a: bop_reader.o bop_writer.o bop_common.o bop_utils.o bop_header.o bop_serial.o
+libbop.a: bop_common.o bop_reader.o bop_writer.o utils.o header.o bop_serial.o
 	ar rcs $@ $^
 
-bop_reader.o: bop_reader.cpp bop_reader.h bop_macros.h bop_common.h bop_utils.h
-bop_writer.o: bop_writer.cpp bop_writer.h bop_macros.h bop_common.h bop_utils.h
-bop_common.o: bop_common.cpp bop_common.h bop_macros.h bop_utils.h
-bop_utils.o: bop_utils.cpp bop_utils.h bop_common.h
-bop_header.o: bop_header.cpp bop_header.h
-bop_serial.o: bop_serial.cpp bop_serial.h
+bop_reader.o: bop_reader.cpp bop_reader.h macros.h bop_common.h utils.h
+bop_writer.o: bop_writer.cpp bop_writer.h macros.h bop_common.h utils.h
+
+bop_common.o: bop_common.cpp bop_common.h macros.h utils.h
+bop_serial.o: bop_serial.cpp bop_serial.h macros.h utils.h header.h 
+
+utils.o:  utils.cpp utils.h bop_common.h
+header.o: header.cpp header.h bop_common.h utils.h macros.h
 
 .PHONY: clean install
 clean:; rm -rf *.o *.a

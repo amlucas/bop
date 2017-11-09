@@ -2,9 +2,10 @@
 #include <string.h>
 
 #include "bop_common.h"
-#include "bop_utils.h"
-#include "bop_macros.h"
-#include "bop_header.h"
+#include "utils.h"
+#include "macros.h"
+
+#include "header.h"
 
 static int is_desc(const char *s, const char *d) {
     if (strcmp(s, d) == 0)

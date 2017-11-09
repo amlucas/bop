@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "bop_common.h"
-#include "bop_utils.h"
+#include "utils.h"
 
 static const char *typestr[] = {
     "float", "double", "int", "fascii", "iascii", ""};
