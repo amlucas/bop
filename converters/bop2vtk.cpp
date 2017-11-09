@@ -27,12 +27,14 @@ int *ii;        /* integer fields */
     
 template <typename T>
 void init(const long n, const int nvars, const T *data) {
+    long i;
+    int d, nf;
     if (nvars < 3) {
         fprintf(stderr, "Need at least 3 coordinates x y z\n");
         exit(1);
     }
 
-    const int nf = nvars - 3;
+    nf = nvars - 3;
 
     ff = rr = NULL;
         
@@ -40,29 +42,31 @@ void init(const long n, const int nvars, const T *data) {
     ff = new float[nf * n];
     rr = new float[3  * n];
         
-    for (long i = 0; i < n; ++i) {
-        for (int d = 0; d < 3; ++d)
+    for (i = 0; i < n; ++i) {
+        for (d = 0; d < 3; ++d)
         rr[3*i + d] = (float) data[nvars*i + d];
 
-        for (int d = 0; d < nf; ++d)
+        for (d = 0; d < nf; ++d)
         ff[n*d + i] = (float) data[nvars*i + 3 + d];
     }
 
-    for (long i = 0; i < 3  * n; ++i) rr[i] = EndSwap(rr[i]);
-    for (long i = 0; i < nf * n; ++i) ff[i] = EndSwap(ff[i]);
+    for (i = 0; i < 3  * n; ++i) rr[i] = EndSwap(rr[i]);
+    for (i = 0; i < nf * n; ++i) ff[i] = EndSwap(ff[i]);
 }
 
 void init_i(const long n, const int nvars, const int *data) {
+    long i;
+    int d;
     ii = NULL;
         
     if (nvars > 0)
     ii = new int[nvars * n];
         
-    for (long i = 0; i < n; ++i)
-    for (int d = 0; d < nvars; ++d)
-    ii[nvars*d + i] = data[nvars*i + d];
+    for (i = 0; i < n; ++i)
+        for (d = 0; d < nvars; ++d)
+            ii[nvars*d + i] = data[nvars*i + d];
 
-    for (long i = 0; i < nvars * n; ++i) ii[i] = EndSwap(ii[i]);
+    for (i = 0; i < nvars * n; ++i) ii[i] = EndSwap(ii[i]);
 }
 
 void finalize() {
@@ -105,7 +109,7 @@ void ifields(FILE *f, const long n, const int nvars, const Cbuf *vars) {
         fwrite(ii + i * n, n, sizeof(int), f);
     }
 }
-}
+} // vtk
 
 int main(int argc, char **argv) {
     if (argc < 3) {
