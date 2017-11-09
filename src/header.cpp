@@ -91,7 +91,8 @@ void read_header(const char *fname, /**/ char *dfname, BopData *d) {
 
 
 void write_header(const char *fhname, const char *fdname, const BopData *d) {
-    FILE *f = fopen(fhname, "w");
+    FILE *f;
+    safe_open(fhname, "w", &f);
     
     fprintf(f, "%ld\n", d->n);
     fprintf(f, "DATA_FILE: %s\n", fdname);

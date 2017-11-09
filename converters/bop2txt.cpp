@@ -2,7 +2,7 @@
 #include <cstdio>
 
 #include "bop_common.h"
-#include "bop_reader.h"
+#include "bop_serial.h"
 
 template <typename real>
 void float_print(const real *data, const long n, const int nvars) {
@@ -22,6 +22,7 @@ void int_print(const int *data, const long n, const int nvars) {
 }
 
 int main(int argc, char **argv) {
+    char dfname[CBUFSIZE];
     if (argc < 2) {
         fprintf(stderr, "usage: %s <in1.bop> <in2.bop> ...\n", argv[0]);
         exit(1);
@@ -29,8 +30,10 @@ int main(int argc, char **argv) {
 
     for (int i = 1; i < argc; ++i) {
         BopData d;
-    
-        read(argv[i], &d);
+
+        bop_read_header(argv[i], /**/ &d, dfname);
+        bop_alloc(&d);
+        bop_read_values(dfname, /**/ &d);
         // summary(&d);
     
         switch (d.type) {
