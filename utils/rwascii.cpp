@@ -13,11 +13,10 @@ int main(int argc, char **argv) {
     }
 
     BopData d;
-    init(&d);
     read(argv[1], &d);
     summary(&d);
     write(argv[2], d);    
-    finalize(&d);
+    bop_free(&d);
     
     return 0;
 }

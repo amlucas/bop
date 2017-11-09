@@ -1,13 +1,15 @@
 all: converters utils libbop
 
-install: converters libbop
+install: libbop
 	make -C bop install
+
+installtools: converters
 	make -C converters install
 
 libbop: ; make -C bop/
 
-utils:      libbop ;  make -C utils/
-converters: libbop ;  make -C converters/
+utils:      libbop install ;  make -C utils/
+converters: libbop install ;  make -C converters/
 
 test: all
 	make -C utils/ test

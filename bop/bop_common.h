@@ -11,7 +11,8 @@ struct BopData {
     void *data;
 };
 
-void init(BopData *d);
-void finalize(BopData *d);
+void bop_alloc(BopData *d);
+void bop_free(BopData *d);
+
 void summary(const BopData *d);
 void concatenate(const int nd, const BopData *dd, BopData *dall);

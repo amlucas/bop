@@ -127,21 +127,18 @@ int main(int argc, char **argv) {
     idd = new BopData[nd];
 
     for (i = 0; i < nd; ++i) {
-        init(fdd + i);
         read(argv[2+i], fdd + i);
 
         if (read_int) {
-            init(idd + i);
             read(argv[i_int+i], idd + i);
         }
     }
 
-    init(&d); init(&di);
     concatenate(nd, fdd, /**/ &d);
     if (read_int) concatenate(nd, idd, /**/ &di);
 
-    // summary(&d);
-    // if (read_int) summary(&di);
+    summary(&d);
+    if (read_int) summary(&di);
         
     FILE *f = fopen(argv[1], "w");
     
@@ -169,11 +166,12 @@ int main(int argc, char **argv) {
     fclose(f);
 
     for (i = 0; i < nd; ++i) {
-        finalize(fdd + i);
-        if (read_int) finalize(idd + i);
+        bop_free(fdd + i);
+        if (read_int)
+            bop_free(idd + i);
     }
-    finalize(&d);
-    finalize(&di);
+    bop_free(&d);
+    bop_free(&di);
 
     delete[] fdd;
     delete[] idd;

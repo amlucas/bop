@@ -6,14 +6,17 @@
 #include "bop_macros.h"
 #include "bop_utils.h"
 
-void init(BopData *d) {
-    d->n = -1;
-    d->nvars = 6;
-    d->vars = NULL;
-    d->data = NULL;
+void bop_alloc(BopData *d) {
+    size_t szd, szv, bsize;
+    bsize = get_bsize(d->type);
+    szd = d->n * d->nvars * bsize;
+    szv = d->nvars * sizeof(Cbuf);
+    
+    d->vars = (Cbuf*) malloc(szv);
+    d->data = malloc(szd);
 }
 
-void finalize(BopData *d) {
+void bop_free(BopData *d) {
     if (d->vars) free(d->vars);
     if (d->data) free(d->data);
 }
@@ -48,17 +51,16 @@ void concatenate(const int nd, const BopData *dd, BopData *dall) {
         if (type != dd[i].type || nvars != dd[i].nvars)
         ERR("concatenate: All files must have the same format\n"); 
     }
-
-    dall->vars = new Cbuf[nvars];
-    for (i = 0; i < nvars; ++i)
-        memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
-
     bsize = get_bsize(type);
-    dall->data = malloc(n * nvars * bsize);
 
     dall->n = n;
     dall->nvars = nvars;
     dall->type = type;
+    bop_alloc(dall);
+
+    for (i = 0; i < nvars; ++i)
+        memcpy(dall->vars[i].c, dd[0].vars[i].c, CBUFSIZE * sizeof(char));
+
     
     start = 0;
     

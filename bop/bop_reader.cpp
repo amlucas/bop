@@ -150,7 +150,7 @@ void read(const char *fnbop, BopData *d) {
     case IASCII: d->nvars = read_ascii_values<int>    (" %d%n", fnval, &d->data) / d->n; break;
     };
 
-    d->vars = new Cbuf[d->nvars];
+    d->vars = (Cbuf*) malloc(d->nvars * sizeof(Cbuf));
 
     // read variables
     reinitc(cbuf);

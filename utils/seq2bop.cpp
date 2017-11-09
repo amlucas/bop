@@ -14,22 +14,22 @@ int main(int argc, char **argv) {
     
     int *data, i;
     BopData d;
-    init(&d);
 
     const int N = atoi(argv[1]);
 
     d.n = N;
-    d.data = malloc(N * sizeof(int));
+    d.type = IASCII;
+    d.nvars = 1;
+
+    bop_alloc(&d);
     data = (int *) d.data;
     
     for (i = 0; i < N; ++i) data[i] = i;
-    d.type = IASCII;
-    d.nvars = 1;
     d.vars = new Cbuf[d.nvars];
     strncpy(d.vars[0].c, "seq", 4);
 
     write(argv[2], d);
     
-    finalize(&d);
+    bop_free(&d);
     return 0;
 }
