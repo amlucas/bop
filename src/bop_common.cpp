@@ -6,9 +6,9 @@
 #include "macros.h"
 #include "utils.h"
 
+using namespace bop_utils;
+
 void bop_alloc(BopData *d) {
-    using namespace bop_utils;
-    
     size_t sz, bsize;
     bsize = get_bsize(d->type);
     sz = d->n * d->nvars * bsize;    
@@ -32,15 +32,12 @@ void bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
 }
 
 void bop_summary(const BopData *d) {
-    using namespace bop_utils;
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
     fprintf(stderr, "\tformat: %s\n", type2str(d->type));
     fprintf(stderr, "\tvars: %s\n", d->vars);
 }
 
 void bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
-    using namespace bop_utils;
-    
     long n          = dd[0].n;
     const Type type = dd[0].type;
     const int nvars = dd[0].nvars;
