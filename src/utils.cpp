@@ -11,10 +11,27 @@ namespace bop_utils {
 static const char *typestr[] = {
     "float", "double", "int", "fascii", "iascii", ""};
 
-void safe_open(const char *name, const char *mode, FILE **f) {
-    *f = fopen(name, mode);
-    if (*f == NULL)
-        ERR("Could not open %s with mode %s\n", name, mode);
+BopStatus safe_malloc(size_t sz, void **data) {
+    *data = malloc(sz);
+    
+    if (*data == NULL) {
+        sprintf(bop_error_msg,
+                ":%s:%d: could not allocate array of %ld bytes\n",
+                __FILE__, __LINE__, sz);
+        return BOP_BADALLOC;
+    }
+    return BOP_SUCCESS;
+}
+
+BopStatus safe_open(const char *fname, const char *mode, FILE **f) {
+    *f = fopen(fname, mode);
+    if (*f == NULL) {
+        sprintf(bop_error_msg,
+                ":%s:%d: could not open <%s>\n",
+                __FILE__, __LINE__, fname);
+        return BOP_BADFILE;
+    }
+    return BOP_SUCCESS;
 }
 
 size_t get_bsize(Type t) {

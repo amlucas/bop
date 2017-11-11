@@ -8,16 +8,25 @@
 
 using namespace bop_utils;
 
-void bop_alloc(BopData *d) {
+char bop_error_msg[1024] = {0};
+static const char * err_desc[_BOP_NERR] = {
+    "success",
+    "bad allocation",
+    "bad file descriptor"
+};
+
+
+BopStatus bop_alloc(BopData *d) {
     size_t sz, bsize;
     bsize = get_bsize(d->type);
     sz = d->n * d->nvars * bsize;    
 
-    d->data = malloc(sz);
+    return safe_malloc(sz, &d->data);
 }
 
-void bop_free(BopData *d) {
+BopStatus bop_free(BopData *d) {
     if (d->data) free(d->data);
+    return BOP_SUCCESS;
 }
 
 void bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {

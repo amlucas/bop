@@ -1,6 +1,7 @@
 namespace bop_utils {
 
-void safe_open(const char *name, const char *mode, FILE **f);
+BopStatus safe_malloc(size_t sz, void **data);
+BopStatus safe_open(const char *fname, const char *mode, FILE **f);
 
 size_t get_bsize(Type t);
 
