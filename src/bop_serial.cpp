@@ -12,7 +12,7 @@
 using namespace bop_header;
 using namespace bop_utils;
 
-void bop_write_header(const char *name, const BopData *d) {    
+BopStatus bop_write_header(const char *name, const BopData *d) {    
     char fnval[CBUFSIZE] = {0},
         fnval0[CBUFSIZE] = {0},
         fnhead[CBUFSIZE] = {0};
@@ -23,7 +23,7 @@ void bop_write_header(const char *name, const BopData *d) {
     get_fname_values(fnhead, fnval0);
     strcat(fnval, fnval0);
 
-    write_header(name, fnval0, d);
+    return write_header(name, fnval0, d);
 }
 
 template <typename T>
@@ -36,12 +36,15 @@ static void write_ascii(const char pattern[], const T *data, const long n, const
     }
 }
 
-static void write_data(const char *fnval, const BopData *d) {
+static BopStatus write_data(const char *fnval, const BopData *d) {
     FILE *fd;
     size_t bsize;
+    BopStatus s;
 
-    safe_open(fnval, "w", &fd);
+    s = safe_open(fnval, "w", &fd);
     bsize = get_bsize(d->type);
+
+    if (s != BOP_SUCCESS) return s;
 
     switch(d->type) {
     case FLOAT:
@@ -56,46 +59,54 @@ static void write_data(const char *fnval, const BopData *d) {
         write_ascii("%d ", (const int*) d->data, d->n, d->nvars, fd);
         break;
     }
-    fclose(fd);    
+    fclose(fd);
+
+    return s;
 }
 
 
-void bop_write_values(const char *name, const BopData *d) {
+BopStatus bop_write_values(const char *name, const BopData *d) {
     char dfname[CBUFSIZE] = {0};
     sprintf(dfname, "%s.values", name);
-    write_data(dfname, d);
+    return write_data(dfname, d);
 }
 
-void bop_read_header(const char *hfname, BopData *d, char *dfname) {
+BopStatus bop_read_header(const char *hfname, BopData *d, char *dfname) {
     using namespace bop_header;
     using namespace bop_utils;
-    
+    BopStatus s;
     char dfname0[CBUFSIZE] = {0}, locdfname[CBUFSIZE] = {0};
-    read_header(hfname, /**/ dfname0, d);
+    s = read_header(hfname, /**/ dfname0, d);
 
     get_path(hfname, locdfname);
     strcat(locdfname, dfname0);
     strcpy(dfname, locdfname);
+
+    return s;
 }
 
-static void read_values(const char *fn, long n, int nvars, size_t bsize, void *data) {
+static BopStatus read_values(const char *fn, long n, int nvars, size_t bsize, void *data) {
     FILE *f;
-    safe_open(fn, "r", &f);
-
+    BopStatus s;
+    s = safe_open(fn, "r", &f);
+    if (s != BOP_SUCCESS) return s;
 
     fread(data, bsize, n * nvars, f); 
 
     fclose(f);
+    return s;
 }
 
 template <typename real>
-static void read_ascii_values(const char pattern[], const char *fn, void *data) {
+static BopStatus read_ascii_values(const char pattern[], const char *fn, void *data) {
     char buf[CBUFSIZE] = {0}, *str;
     long i = 0, j;
     FILE *f;
+    BopStatus s;
     real *d, a;
 
-    safe_open(fn, "r", &f);
+    s = safe_open(fn, "r", &f);
+    if (s != BOP_SUCCESS) return s;
     
     d = (real*) data;        
     
@@ -110,10 +121,11 @@ static void read_ascii_values(const char pattern[], const char *fn, void *data) 
     }
     
     fclose(f);
+    return s;
 }
 
 
-void bop_read_values(const char *dfname, BopData *d) {
+BopStatus bop_read_values(const char *dfname, BopData *d) {
     size_t bsize;
     bsize = get_bsize(d->type);
 
@@ -121,13 +133,10 @@ void bop_read_values(const char *dfname, BopData *d) {
     case  FLOAT: 
     case DOUBLE: 
     case    INT:
-        read_values(dfname, d->n, d->nvars, bsize, d->data);
-        break;
+        return read_values(dfname, d->n, d->nvars, bsize, d->data);
     case FASCII:
-        read_ascii_values<float>(" %f%n", dfname, d->data);
-        break;
+        return read_ascii_values<float>(" %f%n", dfname, d->data);
     case IASCII:
-        read_ascii_values<int>  (" %d%n", dfname, d->data);
-        break;
+        return read_ascii_values<int>  (" %d%n", dfname, d->data);
     };
 }
