@@ -17,6 +17,7 @@ enum {
     BOP_BADFILE,
     BOP_WRONGVAR,
     BOP_MISMATCH,
+    BOP_WFORMAT,
     _BOP_NERR
 };
 typedef int BopStatus;

@@ -16,6 +16,7 @@ static const char * err_desc[_BOP_NERR] = {
     "bad file descriptor",
     "wrong number of variables",
     "file types mismatch"
+    "wrong format"
 };
 
 

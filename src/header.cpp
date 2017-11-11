@@ -40,7 +40,7 @@ static void extract_desc_data(const char *l, /**/ char *desc, char *data) {
     strcpy(data, c);
 }
 
-static void parse_line(const char *l, /**/ char *dfname, BopData *d) {
+static BopStatus parse_line(const char *l, /**/ char *dfname, BopData *d) {
     char desc[CBUFSIZE] = {0}, data[CBUFSIZE] = {0};
     extract_desc_data(l, /**/ desc, data);
     
@@ -50,14 +50,19 @@ static void parse_line(const char *l, /**/ char *dfname, BopData *d) {
         read_type(data, /**/ d);
     else if (is_desc(desc, "VARIABLES"))
         read_variables(data, /**/ d);
-    else
-        fprintf(stderr, "unprocessed desc: <%s>, data: <%s>\n", desc, data);
+    else {
+        return BOP_WFORMAT;
+        sprintf(bop_error_msg, "unprocessed desc: <%s>, data: <%s>\n", desc, data);
+    }
+    return BOP_SUCCESS;
 }
 
-static void read_n_data(const char *data, /**/ BopData *d) {
+static BopStatus read_n_data(const char *data, /**/ BopData *d) {
     long n;
-    sscanf(data, "%ld", &n);
+    if (1 != sscanf(data, "%ld", &n))
+        return BOP_WFORMAT;
     d->n = n;
+    return BOP_SUCCESS;
 }
 
 static int count_vars(const char *var) {
@@ -73,29 +78,37 @@ static int count_vars(const char *var) {
     return i;
 }
 
-void read_header(const char *fname, /**/ char *dfname, BopData *d) {
+BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     FILE *f;
     char line[CBUFSIZE];
     int l = 0;
-
-    safe_open(fname, "r", &f);
+    BopStatus s;
+    
+    s = safe_open(fname, "r", &f);
+    if (s != BOP_SUCCESS) return s;
     
     while (EOF != fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", line)) {
-        if (l == 0) read_n_data(line, /**/ d);
-        else        parse_line(line, /**/ dfname, d);
+        if (l == 0) s = read_n_data(line, /**/ d);
+        else        s = parse_line(line, /**/ dfname, d);
+
+        if (s != BOP_SUCCESS) return s;
         ++l;
     }    
 
     d->nvars = count_vars(d->vars);
     
     fclose(f);
+    return s;
 }
 
 
 
-void write_header(const char *fhname, const char *fdname, const BopData *d) {
+BopStatus write_header(const char *fhname, const char *fdname, const BopData *d) {
     FILE *f;
-    safe_open(fhname, "w", &f);
+    BopStatus s;
+    
+    s = safe_open(fhname, "r", &f);
+    if (s != BOP_SUCCESS) return s;
     
     fprintf(f, "%ld\n", d->n);
     fprintf(f, "DATA_FILE: %s\n", fdname);
@@ -103,6 +116,7 @@ void write_header(const char *fhname, const char *fdname, const BopData *d) {
     fprintf(f, "VARIABLES %s\n", d->vars);
     
     fclose(f);
+    return s;
 }
 
 } // bop_header
