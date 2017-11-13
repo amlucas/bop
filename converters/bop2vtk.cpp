@@ -146,8 +146,8 @@ int main(int argc, char **argv) {
     bop_concatenate(nd, fdd, /**/ &d);
     if (read_int) bop_concatenate(nd, idd, /**/ &di);
 
-    bop_summary(&d);
-    if (read_int) bop_summary(&di);
+    // bop_summary(&d);
+    // if (read_int) bop_summary(&di);
         
     FILE *f = fopen(argv[1], "w");
     
