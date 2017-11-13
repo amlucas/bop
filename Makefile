@@ -1,4 +1,4 @@
-all: converters utils libbop
+all: converters utils libbop install installtools
 
 install: libbop
 	make -C src install
