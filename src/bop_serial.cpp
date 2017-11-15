@@ -139,4 +139,5 @@ BopStatus bop_read_values(const char *dfname, BopData *d) {
     case IASCII:
         return read_ascii_values<int>  (" %d%n", dfname, d->data);
     };
+    return BOP_SUCCESS;
 }
