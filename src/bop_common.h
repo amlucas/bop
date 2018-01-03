@@ -4,13 +4,13 @@
 struct Cbuf {char c[CBUFSIZE];};
 
 struct BopData {
-    long n;              /* total number of particles        */
-    int nvars;           /* number of variables per particle */
-    char vars[CBUFSIZE]; /* variable descriptions            */
+    long n;              /* total number of particles          */
+    int nvars;           /* number of variables per particle   */
+    char vars[CBUFSIZE]; /* variable descriptions              */
     enum Type {FLOAT, DOUBLE, INT, FASCII, IASCII} type;    
-    void *data;          /* particle data                    */
-    int nrank;           /* (opt) number of ranks            */
-    long *nprank;        /* number of particle on each rank  */
+    void *data;          /* particle data                      */
+    int nrank;           /* (opt) number of ranks              */
+    long *nprank;        /* (opt) number of particles per rank */
 };
 
 enum {
