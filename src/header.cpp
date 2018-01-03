@@ -78,6 +78,11 @@ static int count_vars(const char *var) {
     return i;
 }
 
+static bool read_line(FILE *f, char *l) {
+    auto ret = fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", l);
+    return EOF != ret;
+}
+
 BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     FILE *f;
     char line[CBUFSIZE];
@@ -87,7 +92,7 @@ BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     s = safe_open(fname, "r", &f);
     if (s != BOP_SUCCESS) return s;
     
-    while (EOF != fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", line)) {
+    while (read_line(f, line)) {
         if (l == 0) s = read_n_data(line, /**/ d);
         else        s = parse_line(line, /**/ dfname, d);
 
