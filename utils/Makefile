@@ -4,7 +4,7 @@ include $M/rules.mk
 
 BOP=../src
 
-LIBS      = -lbop
+LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
 CXXFLAGS += -I$(BOP)
 

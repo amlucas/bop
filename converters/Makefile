@@ -4,7 +4,7 @@ BOP=../src
 include $M/common.mk
 include $M/rules.mk
 
-LIBS      = -lbop
+LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
 CXXFLAGS += -I$(BOP)
 
