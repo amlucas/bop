@@ -9,7 +9,15 @@
 DATA_FILE: <file.values>
 DATA_FORMAT: <float|ascii|double|int|iascii>
 VARIABLES: <x> <y> <z> <vx> <vy> <vz> <id> ...
+NRANK: <m>
+<n1>
+<n2>
+<n3>
+...
+<nm>
 ----
+where `<n1>`, `<n2>`, ... are the number of particles per mpi rank.
+`NRANK` and these fields are optional.
 
 `file.values` format:
 
