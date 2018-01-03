@@ -40,7 +40,7 @@ static void extract_desc_data(const char *l, /**/ char *desc, char *data) {
     strcpy(data, c);
 }
 
-static BopStatus parse_line(const char *l, /**/ char *dfname, BopData *d) {
+static BopStatus parse_entry(const char *l, /**/ char *dfname, BopData *d) {
     char desc[CBUFSIZE] = {0}, data[CBUFSIZE] = {0};
     extract_desc_data(l, /**/ desc, data);
     
@@ -78,7 +78,7 @@ static int count_vars(const char *var) {
     return i;
 }
 
-static bool read_line(FILE *f, char *l) {
+static bool read_entry(FILE *f, char *l) {
     auto ret = fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", l);
     return EOF != ret;
 }
@@ -92,9 +92,10 @@ BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     s = safe_open(fname, "r", &f);
     if (s != BOP_SUCCESS) return s;
     
-    while (read_line(f, line)) {
+    while (read_entry(f, line)) {
+        /* first entry must contain number of particles */
         if (l == 0) s = read_n_data(line, /**/ d);
-        else        s = parse_line(line, /**/ dfname, d);
+        else        s = parse_entry(line, /**/ dfname, d);
 
         if (s != BOP_SUCCESS) return s;
         ++l;
