@@ -1,3 +1,4 @@
+/* use define instead of enum because of implementation details */
 #define CBUFSIZE 256
 
 enum Type {FLOAT, DOUBLE, INT, FASCII, IASCII};
