@@ -34,15 +34,15 @@ BopStatus safe_open(const char *fname, const char *mode, FILE **f) {
     return BOP_SUCCESS;
 }
 
-size_t get_bsize(Type t) {
+size_t get_bsize(BopData::Type t) {
     switch(t) {
-    case FLOAT:
-    case FASCII:
+    case BopData::FLOAT:
+    case BopData::FASCII:
         return sizeof(float);
-    case DOUBLE:
+    case BopData::DOUBLE:
         return sizeof(double);
-    case INT:
-    case IASCII:
+    case BopData::INT:
+    case BopData::IASCII:
         return sizeof(int);
     };
     return 0;
@@ -69,23 +69,23 @@ void get_fname_values(const char *fnbop, char *fnval) {
 
 #undef SEP
 
-Type str2type(const char *str) {
-    if      (strcmp(str,  "float") == 0) return FLOAT;
-    else if (strcmp(str, "double") == 0) return DOUBLE;
-    else if (strcmp(str,    "int") == 0) return INT;
-    else if (strcmp(str,  "ascii") == 0) return FASCII;
-    else if (strcmp(str, "iascii") == 0) return IASCII;
+BopData::Type str2type(const char *str) {
+    if      (strcmp(str,  "float") == 0) return BopData::FLOAT;
+    else if (strcmp(str, "double") == 0) return BopData::DOUBLE;
+    else if (strcmp(str,    "int") == 0) return BopData::INT;
+    else if (strcmp(str,  "ascii") == 0) return BopData::FASCII;
+    else if (strcmp(str, "iascii") == 0) return BopData::IASCII;
     // default is float
-    return FLOAT;
+    return BopData::FLOAT;
 }
 
-const char * type2str(Type t) {
+const char * type2str(BopData::Type t) {
     switch(t) {
-    case  FLOAT: return typestr[0];
-    case DOUBLE: return typestr[1];
-    case    INT: return typestr[2];
-    case FASCII: return typestr[3];
-    case IASCII: return typestr[4];
+    case BopData::FLOAT:  return typestr[0];
+    case BopData::DOUBLE: return typestr[1];
+    case BopData::INT:    return typestr[2];
+    case BopData::FASCII: return typestr[3];
+    case BopData::IASCII: return typestr[4];
     };
     return typestr[5];
 }

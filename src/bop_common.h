@@ -1,14 +1,13 @@
 /* use define instead of enum because of implementation details */
 #define CBUFSIZE 256
 
-enum Type {FLOAT, DOUBLE, INT, FASCII, IASCII};
 struct Cbuf {char c[CBUFSIZE];};
 
 struct BopData {
     long n;
     int nvars;
     char vars[CBUFSIZE];
-    Type type;    
+    enum Type {FLOAT, DOUBLE, INT, FASCII, IASCII} type;    
     void *data;
 };
 

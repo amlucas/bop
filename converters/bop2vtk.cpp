@@ -152,15 +152,15 @@ int main(int argc, char **argv) {
     FILE *f = fopen(argv[1], "w");
     
     switch (d.type) {
-    case FLOAT:
-    case FASCII:
+    case BopData::FLOAT:
+    case BopData::FASCII:
         vtk::init(d.n, d.nvars, (const float*) d.data);
         break;
-    case DOUBLE:
+    case BopData::DOUBLE:
         vtk::init(d.n, d.nvars, (const double *) d.data);
         break;
-    case INT:
-    case IASCII:
+    case BopData::INT:
+    case BopData::IASCII:
         break;
     };
 

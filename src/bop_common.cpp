@@ -56,7 +56,7 @@ BopStatus bop_summary(const BopData *d) {
 
 BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
-    const Type type = dd[0].type;
+    const BopData::Type type = dd[0].type;
     const int nvars = dd[0].nvars;
     size_t bsize;
     int i;

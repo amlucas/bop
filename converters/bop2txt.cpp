@@ -37,15 +37,15 @@ int main(int argc, char **argv) {
         // summary(&d);
     
         switch (d.type) {
-        case FLOAT:
-        case FASCII:
+        case BopData::FLOAT:
+        case BopData::FASCII:
             float_print((const float *) d.data, d.n, d.nvars);
             break;
-        case DOUBLE:
+        case BopData::DOUBLE:
             float_print((const double *) d.data, d.n, d.nvars);
             break;
-        case INT:
-        case IASCII:
+        case BopData::INT:
+        case BopData::IASCII:
             int_print((const int *) d.data, d.n, d.nvars);
             break;
         };

@@ -47,15 +47,15 @@ static BopStatus write_data(const char *fnval, const BopData *d) {
     if (s != BOP_SUCCESS) return s;
 
     switch(d->type) {
-    case FLOAT:
-    case DOUBLE:
-    case INT:
+    case BopData::FLOAT:
+    case BopData::DOUBLE:
+    case BopData::INT:
         fwrite(d->data, bsize, d->n * d->nvars, fd);
         break;
-    case FASCII:
+    case BopData::FASCII:
         write_ascii("%.6e ", (const float*) d->data, d->n, d->nvars, fd);
         break;
-    case IASCII:
+    case BopData::IASCII:
         write_ascii("%d ", (const int*) d->data, d->n, d->nvars, fd);
         break;
     }
@@ -130,13 +130,13 @@ BopStatus bop_read_values(const char *dfname, BopData *d) {
     bsize = get_bsize(d->type);
 
     switch (d->type) {
-    case  FLOAT: 
-    case DOUBLE: 
-    case    INT:
+    case BopData::FLOAT: 
+    case BopData::DOUBLE: 
+    case BopData::INT:
         return read_values(dfname, d->n, d->nvars, bsize, d->data);
-    case FASCII:
+    case BopData::FASCII:
         return read_ascii_values<float>(" %f%n", dfname, d->data);
-    case IASCII:
+    case BopData::IASCII:
         return read_ascii_values<int>  (" %d%n", dfname, d->data);
     };
     return BOP_SUCCESS;

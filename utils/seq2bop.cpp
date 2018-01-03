@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     const int N = atoi(argv[1]);
 
     d.n = N;
-    d.type = IASCII;
+    d.type = BopData::IASCII;
     d.nvars = 1;
 
     bop_alloc(&d);
