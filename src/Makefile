@@ -2,17 +2,26 @@ M=../make
 include $M/common.mk
 include $M/rules.mk
 
-inc=bop_common.h bop_serial.h
-lib=libbop.a
+inc=bop_common.h bop_serial.h bop_mpi.h
+lib=libbop.a libbop_serial.a libbop_mpi.a
+
+all: $(lib)
 
 libbop.a: bop_common.o utils.o header.o bop_serial.o
 	ar rcs $@ $^
 
-bop_common.o: bop_common.cpp bop_common.h macros.h utils.h
-bop_serial.o: bop_serial.cpp bop_serial.h macros.h utils.h header.h 
+libbop_serial.a: bop_serial.o header.o
+	ar rcs $@ $^
 
+libbop_mpi.a: $(MPI_TOK)bop_mpi.o header.o
+	ar rcs $@ $^
+
+bop_common.o: bop_common.cpp bop_common.h macros.h utils.h
 utils.o:  utils.cpp utils.h bop_common.h
 header.o: header.cpp header.h bop_common.h utils.h macros.h
+
+bop_serial.o: bop_serial.cpp bop_serial.h macros.h utils.h header.h 
+$(MPI_TOK)bop_mpi.o: bop_mpi.cpp bop_mpi.h macros.h utils.h header.h
 
 .PHONY: clean install
 clean:; rm -rf *.o *.a
