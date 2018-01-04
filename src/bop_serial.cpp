@@ -23,7 +23,7 @@ static BopStatus write_header(const char *fhname, const char *fdname, const BopD
     fprintf(f, "%ld\n", d->n);
     fprintf(f, "DATA_FILE: %s\n", fdname);
     fprintf(f, "DATA_FORMAT: %s\n", type2str(d->type));
-    fprintf(f, "VARIABLES %s\n", d->vars);
+    fprintf(f, "VARIABLES: %s\n", d->vars);
     
     fclose(f);
     return s;
