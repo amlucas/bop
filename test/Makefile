@@ -5,10 +5,10 @@ include $M/rules.mk
 BOP=$(INST_LIB)
 
 CXXFLAGS += -I$(BOP)/include
-LIBS     += -L$(BOP)/lib -lbop
+LIBS_B   += -L$(BOP)/lib -lbop
 
-LIBS_SERIAL = $(LIBS) -lbop_serial
-LIBS_MPI    = $(LIBS) -lbop_mpi
+LIBS     = $(LIBS_B) -lbop_serial
+LIBS_MPI = $(LIBS_B) -lbop_mpi
 
 PROGS = read write write_mpi
 
