@@ -13,24 +13,24 @@ int main(int argc, char **argv) {
     }
     
     int *data, i;
-    BopData d;
+    BopData *d;
 
     const int N = atoi(argv[1]);
 
-    d.n = N;
-    d.type = BopData::IASCII;
-    d.nvars = 1;
+    bop_ini(&d);
 
-    bop_alloc(&d);
-    data = (int *) d.data;
+    bop_set_n(N, d);
+    bop_set_type(BopIASCII, d);
+    bop_set_vars(1, "seq", d);
+
+    bop_alloc(d);
+    data = (int *) bop_get_data(d);
     
     for (i = 0; i < N; ++i) data[i] = i;
 
-    strcpy(d.vars, "seq");
-
-    bop_write_header(argv[2], &d);
-    bop_write_values(argv[2], &d);
+    bop_write_header(argv[2], d);
+    bop_write_values(argv[2], d);
     
-    bop_free(&d);
+    bop_fin(d);
     return 0;
 }

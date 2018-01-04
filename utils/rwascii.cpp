@@ -11,19 +11,20 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    BopData d;
-    char dfname[CBUFSIZE];
+    BopData *d;
+    char dfname[256];
 
-    bop_read_header(argv[1], /**/ &d, dfname);
-    bop_alloc(&d);
-    bop_read_values(dfname, /**/ &d);
+    bop_ini(&d);
+    bop_read_header(argv[1], /**/ d, dfname);
+    bop_alloc(d);
+    bop_read_values(dfname, /**/ d);
 
-    bop_summary(&d);
+    bop_summary(d);
 
-    bop_write_header(argv[2], &d);
-    bop_write_values(argv[2], &d);
+    bop_write_header(argv[2], d);
+    bop_write_values(argv[2], d);
     
-    bop_free(&d);
+    bop_fin(d);
     
     return 0;
 }
