@@ -15,8 +15,8 @@ all: $(PROGS)
 test: all
 	atest *.cpp
 
-bop2vtk.o: bop2vtk.cpp
-bop2txt.o: bop2txt.cpp
+bop2vtk.o: bop2vtk.cpp check.h
+bop2txt.o: bop2txt.cpp check.h
 
 install:
 	mkdir -p $(INST_BIN)
