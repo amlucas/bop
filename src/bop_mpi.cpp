@@ -171,4 +171,43 @@ BopStatus bop_read_header(MPI_Comm comm, const char *hfname, BopData *d, char *d
     return s;
 }
 
-BopStatus bop_read_values(MPI_Comm comm, const char *dfname, BopData *d) {}
+template <typename T>
+static BopStatus read_mpi(MPI_Comm comm, const char *fname, long n, MPI_Datatype type, T *data) {
+    MPI_Offset base, offset, len;
+    MPI_Status status;
+    MPI_File f;
+
+    MPI_File_open(comm, fname , MPI_MODE_RDONLY, MPI_INFO_NULL, &f);
+    MPI_File_get_position(f, &base);
+
+    len = n * sizeof(T);
+    offset = 0;
+    MPI_Exscan(&len, &offset, 1, MPI_OFFSET, MPI_SUM, comm);
+    MPI_File_read_at_all(f, base + offset, data, n, type, &status);
+    MPI_File_close(&f);
+    return BOP_SUCCESS;
+}
+
+template <typename T>
+static BopStatus read_ascii() {
+    return BOP_SUCCESS;    
+}
+
+BopStatus bop_read_values(MPI_Comm comm, const char *dfname, BopData *d) {
+    long n = d->nprank;
+    int nvars = d->nvars;
+
+    switch (d->type) {
+    case BopFLOAT:
+        return read_mpi(comm, dfname, n * nvars, MPI_FLOAT, (float *) d->data);
+    case BopDOUBLE:
+        return read_mpi(comm, dfname, n * nvars, MPI_DOUBLE, (double *) d->data);
+    case BopINT:
+        return read_mpi(comm, dfname, n * nvars, MPI_INT, (int *) d->data);
+    case BopFASCII:
+    case BopIASCII:
+        fprintf(stderr, "Not implemented\n");
+        return BOP_WFORMAT;
+    };
+    return BOP_SUCCESS;
+}
