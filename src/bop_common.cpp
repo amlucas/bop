@@ -33,7 +33,7 @@ BopStatus bop_ini(BopData **d) {
         b->type = BopFLOAT;
         b->data = NULL;
         b->nrank = 0;
-        b->nprank = NULL;
+        b->nprank = 0;
     }
     return s;
 }
@@ -48,7 +48,6 @@ BopStatus bop_alloc(BopData *d) {
 
 BopStatus bop_fin(BopData *d) {
     if (d->data) free(d->data);
-    // if (d->nprank) free(d->nprank);
     free(d);
     return BOP_SUCCESS;
 }

@@ -9,8 +9,8 @@ struct BopData {
     char vars[CBUFSIZE]; /* variable descriptions              */
     BopType type;    
     void *data;          /* particle data                      */
-    int nrank;           /* (opt) number of ranks              */
-    long *nprank;        /* (opt) number of particles per rank */
+    long nrank;          /* (opt) number of ranks              */
+    long nprank;         /* (opt) number of particles per rank */
 };
 
 /* error handling */
