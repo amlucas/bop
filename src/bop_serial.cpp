@@ -13,6 +13,22 @@
 using namespace bop_header;
 using namespace bop_utils;
 
+static BopStatus write_header(const char *fhname, const char *fdname, const BopData *d) {
+    FILE *f;
+    BopStatus s;
+    
+    s = safe_open(fhname, "r", &f);
+    if (s != BOP_SUCCESS) return s;
+    
+    fprintf(f, "%ld\n", d->n);
+    fprintf(f, "DATA_FILE: %s\n", fdname);
+    fprintf(f, "DATA_FORMAT: %s\n", type2str(d->type));
+    fprintf(f, "VARIABLES %s\n", d->vars);
+    
+    fclose(f);
+    return s;
+}
+
 BopStatus bop_write_header(const char *name, const BopData *d) {    
     char fnval[CBUFSIZE] = {0},
         fnval0[CBUFSIZE] = {0},

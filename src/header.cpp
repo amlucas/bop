@@ -124,22 +124,4 @@ BopStatus read_header(int rank, const char *fname, /**/ char *dfname, BopData *d
     return s;
 }
 
-
-
-BopStatus write_header(const char *fhname, const char *fdname, const BopData *d) {
-    FILE *f;
-    BopStatus s;
-    
-    s = safe_open(fhname, "r", &f);
-    if (s != BOP_SUCCESS) return s;
-    
-    fprintf(f, "%ld\n", d->n);
-    fprintf(f, "DATA_FILE: %s\n", fdname);
-    fprintf(f, "DATA_FORMAT: %s\n", type2str(d->type));
-    fprintf(f, "VARIABLES %s\n", d->vars);
-    
-    fclose(f);
-    return s;
-}
-
 } // bop_header
