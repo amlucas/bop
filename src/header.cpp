@@ -40,7 +40,16 @@ static void extract_desc_data(const char *l, /**/ char *desc, char *data) {
     strcpy(data, c);
 }
 
-static BopStatus parse_entry(const char *l, /**/ char *dfname, BopData *d) {
+static void read_nrank(const char *data, /* io */ FILE *f, /**/ BopData *d) {
+    int i, n;
+    sscanf(data, "%d", &n);
+    d->nrank = n;
+    safe_malloc(n * sizeof(long), (void**) &d->nprank);
+    for (i = 0; i < n; ++i)
+        fscanf(f, "%ld\n", d->nprank + i);
+}
+
+static BopStatus parse_entry(const char *l, /**/ FILE *f, char *dfname, BopData *d) {
     char desc[CBUFSIZE] = {0}, data[CBUFSIZE] = {0};
     extract_desc_data(l, /**/ desc, data);
     
@@ -50,9 +59,11 @@ static BopStatus parse_entry(const char *l, /**/ char *dfname, BopData *d) {
         read_type(data, /**/ d);
     else if (is_desc(desc, "VARIABLES"))
         read_variables(data, /**/ d);
+    else if (is_desc(desc, "NRANK"))
+        read_nrank(data, /**/ f, /**/ d);
     else {
-        return BOP_WFORMAT;
         sprintf(bop_error_msg, "unprocessed desc: <%s>, data: <%s>\n", desc, data);
+        return BOP_WFORMAT;
     }
     return BOP_SUCCESS;
 }
@@ -88,6 +99,9 @@ BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     char line[CBUFSIZE];
     int l = 0;
     BopStatus s;
+
+    d->nrank = 1;
+    d->nprank = NULL;
     
     s = safe_open(fname, "r", &f);
     if (s != BOP_SUCCESS) return s;
@@ -95,7 +109,7 @@ BopStatus read_header(const char *fname, /**/ char *dfname, BopData *d) {
     while (read_entry(f, line)) {
         /* first entry must contain number of particles */
         if (l == 0) s = read_n_data(line, /**/ d);
-        else        s = parse_entry(line, /**/ dfname, d);
+        else        s = parse_entry(line, /**/ f, dfname, d);
 
         if (s != BOP_SUCCESS) return s;
         ++l;

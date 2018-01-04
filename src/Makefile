@@ -7,7 +7,7 @@ lib=libbop.a libbop_serial.a libbop_mpi.a
 
 all: $(lib)
 
-libbop.a: bop_common.o utils.o header.o bop_serial.o
+libbop.a: bop_common.o utils.o header.o
 	ar rcs $@ $^
 
 libbop_serial.a: bop_serial.o header.o

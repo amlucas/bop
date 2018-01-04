@@ -23,13 +23,14 @@ static const char * err_desc[_BOP_NERR] = {
 BopStatus bop_alloc(BopData *d) {
     size_t sz, bsize;
     bsize = get_bsize(d->type);
-    sz = d->n * d->nvars * bsize;    
+    sz = d->n * d->nvars * bsize;
 
     return safe_malloc(sz, &d->data);
 }
 
 BopStatus bop_free(BopData *d) {
     if (d->data) free(d->data);
+    // if (d->nprank) free(d->nprank);
     return BOP_SUCCESS;
 }
 
