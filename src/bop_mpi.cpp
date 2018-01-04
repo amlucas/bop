@@ -102,11 +102,57 @@ BopStatus bop_write_header(MPI_Comm comm, const char *name, const BopData *d) {
     return write_header(comm, name, fnval0, d);
 }
 
-BopStatus bop_write_values(MPI_Comm comm, const char *name, const BopData *d) {}
+template <typename T>
+static BopStatus write_ascii(MPI_Comm comm, const char *pattern, const char *fname, const T *data, long n, int nvars) {
+    char *buf;
+    long i, k, j = 0, ns = 0;
+    BopStatus s;
+    enum {NPN = 16};
+
+    s = safe_malloc(NPN * n * nvars * sizeof(char), (void**) &buf);
+    if (s != BOP_SUCCESS) return s;
+    
+    for (i = 0; i < n; ++i) {
+        for (k = 0; k < nvars; ++k)
+            ns += sprintf(buf + ns, pattern, data[j++]);
+        ns += sprintf(buf + ns, "\n");
+    }
+    write_mpi(comm, fname, ns, buf, MPI_CHAR);
+    free(buf);    
+    return s;
+}
+
+static BopStatus write_data(MPI_Comm comm, const char *fnval, const BopData *d) {
+    long n = d->nprank;
+    int nvars = d->nvars;
+    
+    switch(d->type) {
+    case BopFLOAT:
+        write_mpi(comm, fnval, n * nvars, (const float *) d->data, MPI_FLOAT);
+        break;
+    case BopDOUBLE:
+        write_mpi(comm, fnval, n * nvars, (const double *) d->data, MPI_DOUBLE);
+        break;
+    case BopINT:
+        write_mpi(comm, fnval, n * nvars, (const int *) d->data, MPI_INT); 
+        break;
+    case BopFASCII:
+        return write_ascii(comm, "%.6e", fnval, (const float *) d->data, n, nvars);
+        break;
+    case BopIASCII:
+        return write_ascii(comm, "%d", fnval, (const int *) d->data, n, nvars);
+        break;
+    }
+    return BOP_SUCCESS;
+}
+
+BopStatus bop_write_values(MPI_Comm comm, const char *name, const BopData *d) {
+    char dfname[CBUFSIZE] = {0};
+    sprintf(dfname, "%s.values", name);
+    return write_data(comm, dfname, d);
+}
 
 BopStatus bop_read_header(MPI_Comm comm, const char *hfname, BopData *d, char *dfname) {
-    using namespace bop_header;
-    using namespace bop_utils;
     BopStatus s;
     char dfname0[CBUFSIZE] = {0}, locdfname[CBUFSIZE] = {0};
     int rank, size;
