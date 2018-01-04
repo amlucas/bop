@@ -86,6 +86,14 @@ BopStatus bop_get_n(const BopData *d, long *n) {
     return BOP_NULLPTR;
 }
 
+BopStatus bop_get_nvars(const BopData *d, int *n) {
+   if (d) {
+        *n = d->nvars;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
 static BopStatus extract_vars(int n, const char *v, /**/ Cbuf *vars) {
     int i, ret;
     for (i = 0; i < n; ++i) {
