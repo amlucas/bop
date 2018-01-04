@@ -17,7 +17,7 @@ static BopStatus write_header(const char *fhname, const char *fdname, const BopD
     FILE *f;
     BopStatus s;
     
-    s = safe_open(fhname, "r", &f);
+    s = safe_open(fhname, "w", &f);
     if (s != BOP_SUCCESS) return s;
     
     fprintf(f, "%ld\n", d->n);
@@ -40,7 +40,7 @@ BopStatus bop_write_header(const char *name, const BopData *d) {
     get_fname_values(fnhead, fnval0);
     strcat(fnval, fnval0);
 
-    return write_header(name, fnval0, d);
+    return write_header(fnhead, fnval0, d);
 }
 
 template <typename T>
