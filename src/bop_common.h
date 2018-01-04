@@ -16,9 +16,15 @@ BopStatus bop_set_n(long n, BopData *d);
 BopStatus bop_set_vars(int n, const char *vars, BopData *d);
 BopStatus bop_set_type(BopType type, BopData *d);
 
+BopStatus bop_get_n(const BopData *d, long *n);
+BopStatus bop_get_vars(const BopData *d, int *n, Cbuf *vars);
+BopStatus bop_get_type(const BopData *d, BopType *type);
+
 void* bop_get_data(BopData *d);
 
 BopStatus bop_extract_vars(const BopData *d, /**/ Cbuf *vars);
+
+/* tools */
 
 BopStatus bop_summary(const BopData *d);
 BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall);

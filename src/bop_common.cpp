@@ -16,8 +16,9 @@ static const char * err_desc[_BOP_NERR] = {
     "bad allocation",
     "bad file descriptor",
     "wrong number of variables",
-    "file types mismatch"
-    "wrong format"
+    "file types mismatch",
+    "wrong format",
+    "null pointer"
 };
 
 BopStatus bop_ini(BopData **d) {
@@ -52,10 +53,41 @@ BopStatus bop_fin(BopData *d) {
     return BOP_SUCCESS;
 }
 
-BopStatus bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
-    int i, n, ret;
-    const char *v = d->vars;
-    n = d->nvars;
+BopStatus bop_set_n(long n, BopData *d) {
+    if (d) {
+        d->n = n;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+        
+BopStatus bop_set_vars(int n, const char *vars, BopData *d) {
+    if (d) {
+        d->nvars = n;
+        strcpy(d->vars, vars);
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
+BopStatus bop_set_type(BopType type, BopData *d) {
+    if (d) {
+        d->type = type;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
+BopStatus bop_get_n(const BopData *d, long *n) {
+   if (d) {
+        *n = d->n;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
+static BopStatus extract_vars(int n, const char *v, /**/ Cbuf *vars) {
+    int i, ret;
     for (i = 0; i < n; ++i) {
         ret = sscanf(v, "%s", vars[i].c);
         if (ret != 1)
@@ -65,6 +97,27 @@ BopStatus bop_extract_vars(const BopData *d, /**/ Cbuf *vars) {
     }
     return BOP_SUCCESS;
 }
+
+BopStatus bop_get_vars(const BopData *d, int *n, Cbuf *vars) {
+   if (d) {
+        *n = d->nvars;
+        return extract_vars(d->nvars, d->vars, /**/ vars);
+    }
+    return BOP_NULLPTR;
+}
+
+BopStatus bop_get_type(const BopData *d, BopType *type) {
+   if (d) {
+        *type = d->type;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
+void* bop_get_data(BopData *d) {
+    return d->data;
+}
+
 
 BopStatus bop_summary(const BopData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
