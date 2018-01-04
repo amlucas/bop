@@ -106,9 +106,8 @@ static BopStatus extract_vars(int n, const char *v, /**/ Cbuf *vars) {
     return BOP_SUCCESS;
 }
 
-BopStatus bop_get_vars(const BopData *d, int *n, Cbuf *vars) {
+BopStatus bop_get_vars(const BopData *d, Cbuf *vars) {
    if (d) {
-        *n = d->nvars;
         return extract_vars(d->nvars, d->vars, /**/ vars);
     }
     return BOP_NULLPTR;
