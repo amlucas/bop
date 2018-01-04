@@ -11,14 +11,39 @@
 
 #include "bop_mpi.h"
 
-BopStatus bop_set_nrank(int n, BopData *d);
-BopStatus bop_set_nprank(long n, BopData *d);
+BopStatus bop_set_nrank(int n, BopData *d)  {
+    if (d) {
+        d->nrank = n;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
 
-BopStatus bop_get_nrank(const BopData *d, int *n);
-BopStatus bop_get_nprank(const BopData *d, long *n);
+BopStatus bop_set_nprank(long n, BopData *d)  {
+    if (d) {
+        d->nprank = n;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
 
+BopStatus bop_get_nrank(const BopData *d, int *n)  {
+    if (d) {
+        *n = d->nrank;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+BopStatus bop_get_nprank(const BopData *d, long *n)  {
+    if (d) {
+        *n = d->nprank;
+        return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
 
 BopStatus bop_write_header(MPI_Comm comm, const char *name, const BopData *d) {}
+
 BopStatus bop_write_values(MPI_Comm comm, const char *name, const BopData *d) {}
 
 BopStatus bop_read_header(MPI_Comm comm, const char *hfname, BopData *d, char *dfname) {
