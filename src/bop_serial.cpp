@@ -77,7 +77,7 @@ BopStatus bop_read_header(const char *hfname, BopData *d, char *dfname) {
     using namespace bop_utils;
     BopStatus s;
     char dfname0[CBUFSIZE] = {0}, locdfname[CBUFSIZE] = {0};
-    s = read_header(hfname, /**/ dfname0, d);
+    s = read_header(SERIAL, hfname, /**/ dfname0, d);
 
     get_path(hfname, locdfname);
     strcat(locdfname, dfname0);
