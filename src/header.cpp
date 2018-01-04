@@ -45,7 +45,7 @@ static void read_nrank(int rank, const char *data, /* io */ FILE *f, /**/ BopDat
     int i, n;
     long nloc;
     sscanf(data, "%d", &n);
-    d->nrank = n;
+    if (rank != SERIAL) d->nrank = n;
     safe_malloc(n * sizeof(long), (void**) &d->nprank);
     for (i = 0; i < n; ++i) {
         fscanf(f, "%ld\n", &nloc);
@@ -63,10 +63,8 @@ static BopStatus parse_entry(int rank, const char *l, /**/ FILE *f, char *dfname
         read_type(data, /**/ d);
     else if (is_desc(desc, "VARIABLES"))
         read_variables(data, /**/ d);
-    else if (is_desc(desc, "NRANK")) {
-        if (rank != SERIAL)
-            read_nrank(rank, data, /**/ f, /**/ d);
-    }
+    else if (is_desc(desc, "NRANK"))
+        read_nrank(rank, data, /**/ f, /**/ d);
     else {
         sprintf(bop_error_msg, "unprocessed desc: <%s>, data: <%s>\n", desc, data);
         return BOP_WFORMAT;
