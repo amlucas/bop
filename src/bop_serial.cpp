@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "type.h"
 #include "bop_common.h"
+#include "type.h"
 #include "header.h"
 #include "macros.h"
 #include "utils.h"
@@ -48,15 +48,15 @@ static BopStatus write_data(const char *fnval, const BopData *d) {
     if (s != BOP_SUCCESS) return s;
 
     switch(d->type) {
-    case BopData::FLOAT:
-    case BopData::DOUBLE:
-    case BopData::INT:
+    case BopFLOAT:
+    case BopDOUBLE:
+    case BopINT:
         fwrite(d->data, bsize, d->n * d->nvars, fd);
         break;
-    case BopData::FASCII:
+    case BopFASCII:
         write_ascii("%.6e ", (const float*) d->data, d->n, d->nvars, fd);
         break;
-    case BopData::IASCII:
+    case BopIASCII:
         write_ascii("%d ", (const int*) d->data, d->n, d->nvars, fd);
         break;
     }
@@ -131,13 +131,13 @@ BopStatus bop_read_values(const char *dfname, BopData *d) {
     bsize = get_bsize(d->type);
 
     switch (d->type) {
-    case BopData::FLOAT: 
-    case BopData::DOUBLE: 
-    case BopData::INT:
+    case BopFLOAT: 
+    case BopDOUBLE: 
+    case BopINT:
         return read_values(dfname, d->n, d->nvars, bsize, d->data);
-    case BopData::FASCII:
+    case BopFASCII:
         return read_ascii_values<float>(" %f%n", dfname, d->data);
-    case BopData::IASCII:
+    case BopIASCII:
         return read_ascii_values<int>  (" %d%n", dfname, d->data);
     };
     return BOP_SUCCESS;

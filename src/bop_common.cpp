@@ -3,8 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
-#include "type.h"
 #include "bop_common.h"
+#include "type.h"
 #include "macros.h"
 #include "utils.h"
 
@@ -20,6 +20,22 @@ static const char * err_desc[_BOP_NERR] = {
     "wrong format"
 };
 
+BopStatus bop_ini(BopData **d) {
+    BopStatus s;
+    BopData *b;
+    s = safe_malloc(sizeof(BopData), (void **) d);
+    if (s == BOP_SUCCESS) {
+        b = *d;
+        b->n = 0;
+        b->nvars = 0;
+        b->vars[0] = '\0';
+        b->type = BopFLOAT;
+        b->data = NULL;
+        b->nrank = 0;
+        b->nprank = NULL;
+    }
+    return s;
+}
 
 BopStatus bop_alloc(BopData *d) {
     size_t sz, bsize;
@@ -29,9 +45,10 @@ BopStatus bop_alloc(BopData *d) {
     return safe_malloc(sz, &d->data);
 }
 
-BopStatus bop_free(BopData *d) {
+BopStatus bop_fin(BopData *d) {
     if (d->data) free(d->data);
     // if (d->nprank) free(d->nprank);
+    free(d);
     return BOP_SUCCESS;
 }
 
@@ -58,7 +75,7 @@ BopStatus bop_summary(const BopData *d) {
 
 BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
     long n          = dd[0].n;
-    const BopData::Type type = dd[0].type;
+    const BopType type = dd[0].type;
     const int nvars = dd[0].nvars;
     size_t bsize;
     int i;

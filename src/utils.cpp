@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "type.h"
 #include "bop_common.h"
+#include "type.h"
 #include "utils.h"
 #include "macros.h"
 
@@ -35,15 +35,15 @@ BopStatus safe_open(const char *fname, const char *mode, FILE **f) {
     return BOP_SUCCESS;
 }
 
-size_t get_bsize(BopData::Type t) {
+size_t get_bsize(BopType t) {
     switch(t) {
-    case BopData::FLOAT:
-    case BopData::FASCII:
+    case BopFLOAT:
+    case BopFASCII:
         return sizeof(float);
-    case BopData::DOUBLE:
+    case BopDOUBLE:
         return sizeof(double);
-    case BopData::INT:
-    case BopData::IASCII:
+    case BopINT:
+    case BopIASCII:
         return sizeof(int);
     };
     return 0;
@@ -70,23 +70,23 @@ void get_fname_values(const char *fnbop, char *fnval) {
 
 #undef SEP
 
-BopData::Type str2type(const char *str) {
-    if      (strcmp(str,  "float") == 0) return BopData::FLOAT;
-    else if (strcmp(str, "double") == 0) return BopData::DOUBLE;
-    else if (strcmp(str,    "int") == 0) return BopData::INT;
-    else if (strcmp(str,  "ascii") == 0) return BopData::FASCII;
-    else if (strcmp(str, "iascii") == 0) return BopData::IASCII;
+BopType str2type(const char *str) {
+    if      (strcmp(str,  "float") == 0) return BopFLOAT;
+    else if (strcmp(str, "double") == 0) return BopDOUBLE;
+    else if (strcmp(str,    "int") == 0) return BopINT;
+    else if (strcmp(str,  "ascii") == 0) return BopFASCII;
+    else if (strcmp(str, "iascii") == 0) return BopIASCII;
     // default is float
-    return BopData::FLOAT;
+    return BopFLOAT;
 }
 
-const char * type2str(BopData::Type t) {
+const char * type2str(BopType t) {
     switch(t) {
-    case BopData::FLOAT:  return typestr[0];
-    case BopData::DOUBLE: return typestr[1];
-    case BopData::INT:    return typestr[2];
-    case BopData::FASCII: return typestr[3];
-    case BopData::IASCII: return typestr[4];
+    case BopFLOAT:  return typestr[0];
+    case BopDOUBLE: return typestr[1];
+    case BopINT:    return typestr[2];
+    case BopFASCII: return typestr[3];
+    case BopIASCII: return typestr[4];
     };
     return typestr[5];
 }
