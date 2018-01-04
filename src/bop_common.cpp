@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "type.h"
 #include "bop_common.h"
 #include "macros.h"
 #include "utils.h"

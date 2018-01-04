@@ -16,12 +16,12 @@ libbop_serial.a: bop_serial.o header.o
 libbop_mpi.a: $(MPI_TOK)bop_mpi.o header.o
 	ar rcs $@ $^
 
-bop_common.o: bop_common.cpp bop_common.h macros.h utils.h
-utils.o:  utils.cpp utils.h bop_common.h
-header.o: header.cpp header.h bop_common.h utils.h macros.h
+bop_common.o: bop_common.cpp bop_common.h macros.h utils.h type.h
+utils.o:  utils.cpp utils.h bop_common.h type.h
+header.o: header.cpp header.h bop_common.h utils.h macros.h type.h
 
-bop_serial.o: bop_serial.cpp bop_serial.h macros.h utils.h header.h 
-$(MPI_TOK)bop_mpi.o: bop_mpi.cpp bop_mpi.h macros.h utils.h header.h
+bop_serial.o: bop_serial.cpp bop_serial.h macros.h utils.h header.h type.h
+$(MPI_TOK)bop_mpi.o: bop_mpi.cpp bop_mpi.h macros.h utils.h header.h type.h
 
 .PHONY: clean install
 clean:; rm -rf *.o *.a

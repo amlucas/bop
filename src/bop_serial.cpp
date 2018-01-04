@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "type.h"
 #include "bop_common.h"
 #include "header.h"
 #include "macros.h"
