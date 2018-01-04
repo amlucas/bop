@@ -18,6 +18,7 @@ static const char * err_desc[_BOP_NERR] = {
     "wrong number of variables",
     "file types mismatch",
     "wrong format",
+    "wrong mpi size",
     "null pointer"
 };
 

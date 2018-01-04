@@ -23,5 +23,6 @@ enum {
     BOP_MISMATCH,
     BOP_WFORMAT,
     BOP_NULLPTR,
+    BOP_WMPISIZE,
     _BOP_NERR
 };
