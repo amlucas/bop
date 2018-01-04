@@ -134,10 +134,11 @@ BopStatus bop_summary(const BopData *d) {
     return BOP_SUCCESS;
 }
 
-BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
-    long n          = dd[0].n;
-    const BopType type = dd[0].type;
-    const int nvars = dd[0].nvars;
+BopStatus bop_concatenate(const int nd, const BopData **dd, BopData *dall) {
+    const BopData *d = dd[0];
+    long n             = d->n;
+    const BopType type = d->type;
+    const int nvars    = d->nvars;
     size_t bsize;
     int i;
     long ni, start;
@@ -145,8 +146,9 @@ BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
     char *dst;
     
     for (i = 1; i < nd; ++i) {
-        n += dd[i].n;
-        if (type != dd[i].type || nvars != dd[i].nvars)
+        d = dd[i];
+        n += d->n;
+        if (type != d->type || nvars != d->nvars)
             return BOP_MISMATCH;
     }
     bsize = get_bsize(type);
@@ -156,13 +158,15 @@ BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall) {
     dall->type = type;
     bop_alloc(dall);
 
-    strcpy(dall->vars, dd[0].vars);
+    d = dd[0];
+    strcpy(dall->vars, d->vars);
     
     start = 0;
     
     for (i = 0; i < nd; ++i) {
-        ni = dd[i].n;
-        src = dd[i].data;
+        d = dd[i];
+        ni = d->n;
+        src = d->data;
         dst = (char *) dall->data + bsize * start;
         memcpy(dst, src, ni * nvars * bsize);
         

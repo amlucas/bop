@@ -28,7 +28,7 @@ BopStatus bop_extract_vars(const BopData *d, /**/ Cbuf *vars);
 /* tools */
 
 BopStatus bop_summary(const BopData *d);
-BopStatus bop_concatenate(const int nd, const BopData *dd, BopData *dall);
+BopStatus bop_concatenate(const int nd, const BopData **dd, BopData *dall);
 
 /* error handling */
 const char * bob_report_error_desc(BopStatus status);
