@@ -4,6 +4,7 @@
 
 #include "bop_common.h"
 #include "bop_serial.h"
+#include "check.h"
 
 template <typename T>
 T EndSwap(T f) {
@@ -134,34 +135,34 @@ int main(int argc, char **argv) {
     fdd = new BopData*[nd];
     idd = new BopData*[nd];
 
-    bop_ini(&d);
-    if (read_int) bop_ini(&di);
+    BPC(bop_ini(&d));
+    if (read_int) BPC(bop_ini(&di));
         
     for (i = 0; i < nd; ++i) {
-        bop_ini(fdd + i);
-        bop_read_header(argv[2+i], /**/ fdd[i], dfname);
-        bop_alloc(fdd[i]);
-        bop_read_values(dfname, /**/ fdd[i]);
+        BPC(bop_ini(fdd + i));
+        BPC(bop_read_header(argv[2+i], /**/ fdd[i], dfname));
+        BPC(bop_alloc(fdd[i]));
+        BPC(bop_read_values(dfname, /**/ fdd[i]));
         
         if (read_int) {
-            bop_ini(idd + i);
-            bop_read_header(argv[i_int+i], /**/ idd[i], dfname);
-            bop_alloc(idd[i]);
-            bop_read_values(dfname, /**/ idd[i]);
+            BPC(bop_ini(idd + i));
+            BPC(bop_read_header(argv[i_int+i], /**/ idd[i], dfname));
+            BPC(bop_alloc(idd[i]));
+            BPC(bop_read_values(dfname, /**/ idd[i]));
         }
     }
 
-    bop_concatenate(nd, (const BopData**) fdd, /**/ d);
-    if (read_int) bop_concatenate(nd, (const BopData**) idd, /**/ di);
+    BPC(bop_concatenate(nd, (const BopData**) fdd, /**/ d));
+    if (read_int) BPC(bop_concatenate(nd, (const BopData**) idd, /**/ di));
 
-    // bop_summary(d);
-    // if (read_int) bop_summary(di);
+    // BPC(bop_summary(d));
+    // if (read_int) BPC(bop_summary(di));
         
     FILE *f = fopen(argv[1], "w");
 
-    bop_get_type(d, &type);
-    bop_get_n(d, &n);
-    bop_get_nvars(d, &nvars);
+    BPC(bop_get_type(d, &type));
+    BPC(bop_get_n(d, &n));
+    BPC(bop_get_nvars(d, &nvars));
     
     switch (type) {
     case BopFLOAT:
@@ -177,7 +178,7 @@ int main(int argc, char **argv) {
     };
 
     if (read_int) {
-        bop_get_nvars(di, &nivars);
+        BPC(bop_get_nvars(di, &nivars));
         vtk::init_i(n, nivars, (const int *) bop_get_data(di));
     }
 
@@ -185,11 +186,11 @@ int main(int argc, char **argv) {
     vars = ivars = NULL;
     
     vars = new Cbuf[nvars];
-    bop_get_vars(d, /**/ vars);
+    BPC(bop_get_vars(d, /**/ vars));
 
     if (read_int) {
         ivars = new Cbuf[nivars];
-        bop_get_vars(di, /**/ ivars);
+        BPC(bop_get_vars(di, /**/ ivars));
     }
     
     vtk::header  (f, n);
@@ -201,14 +202,14 @@ int main(int argc, char **argv) {
     fclose(f);
 
     for (i = 0; i < nd; ++i) {
-        bop_fin(fdd[i]);
-        if (read_int) bop_fin(idd[i]);
+        BPC(bop_fin(fdd[i]));
+        if (read_int) BPC(bop_fin(idd[i]));
     }
-    bop_fin(d);
+    BPC(bop_fin(d));
     delete[] vars;
 
     if (read_int) {
-        bop_fin(di);
+        BPC(bop_fin(di));
         delete[] ivars;
     }
     
