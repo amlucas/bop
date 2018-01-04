@@ -2,11 +2,6 @@
 /* see str macro                                                */
 #define CBUFSIZE 256
 
-/* buffer for small strings */
-struct Cbuf {
-    char c[CBUFSIZE];
-};
-
 /* structure to describe bop file */
 struct BopData {
     long n;              /* total number of particles          */
