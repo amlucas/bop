@@ -77,8 +77,8 @@ static BopStatus write_header(MPI_Comm comm, const char *fhname, const char *fdn
         n += sprintf(buf + n, "%ld\n", d->n);
         n += sprintf(buf + n, "DATA_FILE: %s\n", fdname);
         n += sprintf(buf + n, "DATA_FORMAT: %s\n", type2str(d->type));
-        n += sprintf(buf + n, "VARIABLES %s\n", d->vars);
-        n += sprintf(buf + n, "NRANK %ld\n", d->nrank);
+        n += sprintf(buf + n, "VARIABLES: %s\n", d->vars);
+        n += sprintf(buf + n, "NRANK: %ld\n", d->nrank);
     }
     n += sprintf(buf + n, "%ld\n", d->nprank);
 
@@ -99,7 +99,7 @@ BopStatus bop_write_header(MPI_Comm comm, const char *name, const BopData *d) {
     get_fname_values(fnhead, fnval0);
     strcat(fnval, fnval0);
 
-    return write_header(comm, name, fnval0, d);
+    return write_header(comm, fnhead, fnval0, d);
 }
 
 template <typename T>
