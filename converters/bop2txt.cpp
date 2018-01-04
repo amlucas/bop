@@ -22,34 +22,42 @@ void int_print(const int *data, const long n, const int nvars) {
 }
 
 int main(int argc, char **argv) {
-    char dfname[CBUFSIZE];
+    char dfname[256];
+    BopData *d;
+    BopType type;
+    int i, nvars;
+    long n;
     if (argc < 2) {
         fprintf(stderr, "usage: %s <in1.bop> <in2.bop> ...\n", argv[0]);
         exit(1);
     }
 
-    for (int i = 1; i < argc; ++i) {
-        BopData d;
+    for (i = 1; i < argc; ++i) {
 
-        bop_read_header(argv[i], /**/ &d, dfname);
-        bop_alloc(&d);
-        bop_read_values(dfname, /**/ &d);
-        // summary(&d);
-    
-        switch (d.type) {
-        case BopData::FLOAT:
-        case BopData::FASCII:
-            float_print((const float *) d.data, d.n, d.nvars);
+        bop_ini(&d);
+        bop_read_header(argv[i], /**/ d, dfname);
+        bop_alloc(d);
+        bop_read_values(dfname, /**/ d);
+        // bop_summary(d);
+
+        bop_get_type(d, &type);
+        bop_get_n(d, &n);
+        bop_get_nvars(d, &nvars);
+        
+        switch (type) {
+        case BopFLOAT:
+        case BopFASCII:
+            float_print((const float *) bop_get_data(d), n, nvars);
             break;
-        case BopData::DOUBLE:
-            float_print((const double *) d.data, d.n, d.nvars);
+        case BopDOUBLE:
+            float_print((const double *) bop_get_data(d), n, nvars);
             break;
-        case BopData::INT:
-        case BopData::IASCII:
-            int_print((const int *) d.data, d.n, d.nvars);
+        case BopINT:
+        case BopIASCII:
+            int_print((const int *) bop_get_data(d), n, nvars);
             break;
         };
-        bop_free(&d);
+        bop_fin(d);
     }    
     return 0;
 }
