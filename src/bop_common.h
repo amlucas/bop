@@ -2,8 +2,6 @@ struct Cbuf;
 struct BopData;
 typedef int BopStatus;
 
-extern char bop_error_msg[1024];
-
 BopStatus bop_alloc(BopData *d);
 BopStatus bop_free(BopData *d);
 
