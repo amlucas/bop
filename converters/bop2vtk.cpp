@@ -117,8 +117,11 @@ int main(int argc, char **argv) {
         exit(1);
     }
     int i_int, i, ninput, nd;
-    BopData *fdd, *idd, d, di;
-    char dfname[CBUFSIZE];
+    BopData **fdd, **idd, *d, *di;
+    BopType type;
+    int nvars, nivars;
+    long n;
+    char dfname[256];
     
     i_int = -1;
     for (i = 2; i < argc; ++i) if (strcmp(argv[i], "--") == 0) i_int = i + 1; 
@@ -128,73 +131,84 @@ int main(int argc, char **argv) {
     ninput = argc-2;
     nd = read_int ? (ninput - 1) / 2 : ninput;
     
-    fdd = new BopData[nd];
-    idd = new BopData[nd];
+    fdd = new BopData*[nd];
+    idd = new BopData*[nd];
 
+    bop_ini(&d);
+    if (read_int) bop_ini(&di);
+        
     for (i = 0; i < nd; ++i) {
-        bop_read_header(argv[2+i], /**/ fdd + i, dfname);
-        bop_alloc(fdd + i);
-        bop_read_values(dfname, /**/ fdd + i);
+        bop_ini(fdd + i);
+        bop_read_header(argv[2+i], /**/ fdd[i], dfname);
+        bop_alloc(fdd[i]);
+        bop_read_values(dfname, /**/ fdd[i]);
         
         if (read_int) {
-            bop_read_header(argv[i_int+i], /**/ idd + i, dfname);
-            bop_alloc(idd + i);
-            bop_read_values(dfname, /**/ idd + i);
+            bop_ini(idd + i);
+            bop_read_header(argv[i_int+i], /**/ idd[i], dfname);
+            bop_alloc(idd[i]);
+            bop_read_values(dfname, /**/ idd[i]);
         }
     }
 
-    bop_concatenate(nd, fdd, /**/ &d);
-    if (read_int) bop_concatenate(nd, idd, /**/ &di);
+    bop_concatenate(nd, (const BopData**) fdd, /**/ d);
+    if (read_int) bop_concatenate(nd, (const BopData**) idd, /**/ di);
 
-    // bop_summary(&d);
-    // if (read_int) bop_summary(&di);
+    // bop_summary(d);
+    // if (read_int) bop_summary(di);
         
     FILE *f = fopen(argv[1], "w");
+
+    bop_get_type(d, &type);
+    bop_get_n(d, &n);
+    bop_get_nvars(d, &nvars);
     
-    switch (d.type) {
-    case BopData::FLOAT:
-    case BopData::FASCII:
-        vtk::init(d.n, d.nvars, (const float*) d.data);
+    switch (type) {
+    case BopFLOAT:
+    case BopFASCII:
+        vtk::init(n, nvars, (const float*) bop_get_data(d));
         break;
-    case BopData::DOUBLE:
-        vtk::init(d.n, d.nvars, (const double *) d.data);
+    case BopDOUBLE:
+        vtk::init(n, nvars, (const double *) bop_get_data(d));
         break;
-    case BopData::INT:
-    case BopData::IASCII:
+    case BopINT:
+    case BopIASCII:
         break;
     };
 
-    if (read_int) vtk::init_i(di.n, di.nvars, (const int *) di.data);
+    if (read_int) {
+        bop_get_nvars(di, &nivars);
+        vtk::init_i(n, nivars, (const int *) bop_get_data(di));
+    }
 
     Cbuf *vars, *ivars;
     vars = ivars = NULL;
     
-    vars = new Cbuf[d.nvars];
-    bop_extract_vars(&d, /**/ vars);
+    vars = new Cbuf[nvars];
+    bop_get_vars(d, /**/ vars);
 
     if (read_int) {
-        ivars = new Cbuf[di.nvars];
-        bop_extract_vars(&di, /**/ ivars);
+        ivars = new Cbuf[nivars];
+        bop_get_vars(di, /**/ ivars);
     }
     
-    vtk::header  (f, d.n);
-    vtk::vertices(f, d.n);
-    vtk::fields  (f, d.n, d.nvars, vars);
-    if (read_int) vtk::ifields(f, di.n, di.nvars, ivars);
+    vtk::header  (f, n);
+    vtk::vertices(f, n);
+    vtk::fields  (f, n, nvars, vars);
+    if (read_int) vtk::ifields(f, n, nivars, ivars);
     vtk::finalize();
 
     fclose(f);
 
     for (i = 0; i < nd; ++i) {
-        bop_free(fdd + i);
-        if (read_int)
-            bop_free(idd + i);
+        bop_fin(fdd[i]);
+        if (read_int) bop_fin(idd[i]);
     }
-    bop_free(&d);
+    bop_fin(d);
     delete[] vars;
 
     if (read_int) {
-        bop_free(&di);
+        bop_fin(di);
         delete[] ivars;
     }
     
