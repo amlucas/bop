@@ -34,5 +34,6 @@ BopStatus bop_summary(const BopData *d);
 BopStatus bop_concatenate(const int nd, const BopData **dd, BopData *dall);
 
 /* error handling */
+bool         bop_success(BopStatus status);
 const char * bob_report_error_desc(BopStatus status);
 char *       bob_report_error_mesg();

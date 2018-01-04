@@ -175,6 +175,10 @@ BopStatus bop_concatenate(const int nd, const BopData **dd, BopData *dall) {
     return BOP_SUCCESS;
 }
 
+bool bop_success(BopStatus status) {
+    return status == BOP_SUCCESS;
+}
+
 const char * bob_report_error_desc(BopStatus status) {
     assert(status >= 0 && status < _BOP_NERR);
     return err_desc[status];
