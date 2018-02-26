@@ -179,12 +179,12 @@ bool bop_success(BopStatus status) {
     return status == BOP_SUCCESS;
 }
 
-const char * bob_report_error_desc(BopStatus status) {
+const char* bop_report_error_desc(BopStatus status) {
     assert(status >= 0 && status < _BOP_NERR);
     return err_desc[status];
 }
 
-char * bob_report_error_mesg() {
+char* bop_report_error_mesg() {
     return bop_error_msg;
 }
 
