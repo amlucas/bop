@@ -125,6 +125,10 @@ void* bop_get_data(BopData *d) {
     return d->data;
 }
 
+const void* bop_get_data(const BopData *d) {
+    return d->data;
+}
+
 
 BopStatus bop_summary(const BopData *d) {
     fprintf(stderr, "(reader) found %ld entries, %d field(s)\n", d->n, d->nvars);
