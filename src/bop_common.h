@@ -27,8 +27,6 @@ BopStatus bop_get_type(const BopData *d, BopType *type);
 void* bop_get_data(BopData *d);
 const void* bop_get_data(const BopData *d);
 
-BopStatus bop_extract_vars(const BopData *d, /**/ Cbuf *vars);
-
 /* tools */
 
 BopStatus bop_summary(const BopData *d);
