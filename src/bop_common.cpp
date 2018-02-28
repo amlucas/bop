@@ -113,6 +113,14 @@ BopStatus bop_get_vars(const BopData *d, Cbuf *vars) {
     return BOP_NULLPTR;
 }
 
+BopStatus bop_get_vars(const BopData *d, const char **vars) {
+   if (d) {
+       *vars = d->vars;
+       return BOP_SUCCESS;
+    }
+    return BOP_NULLPTR;
+}
+
 BopStatus bop_get_type(const BopData *d, BopType *type) {
    if (d) {
         *type = d->type;
