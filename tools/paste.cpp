@@ -167,4 +167,10 @@ int main(int argc, char **argv) {
 # ./paste ascii data/ascii-?.bop
 # cat ascii.values > ascii.out.txt 
 
+# TEST: iascii.t0
+# make 
+# set -eu
+# ./paste iascii data/iascii-?.bop
+# cat iascii.values > iascii.out.txt 
+
 */
