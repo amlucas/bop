@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
 /*
 
-# TEST: bop2txt.t0
+# TEST: fascii.t0
 # make 
 # set -eu
 # ./paste ascii data/ascii-?.bop
