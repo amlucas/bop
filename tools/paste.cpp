@@ -26,7 +26,7 @@ struct Args {
 };
 
 static void usg() {
-    ERR("usage: bop.paste <out> <f1.bop> <f2.bop> ... ");
+    ERR("usage: bop.paste <out> <f1.bop> <f2.bop> ... \n");
 }
 
 static int shift_args(int *c, char ***v) {
@@ -158,3 +158,13 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
+/*
+
+# nTEST: bop2txt.t0
+# make 
+# set -eu
+# ./paste ascii data/ascii-?.bop
+# cat ascii.values > ascii.out.txt 
+
+*/
