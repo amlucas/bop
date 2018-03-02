@@ -86,7 +86,6 @@ static void paste(long n, int nvars, int nin, BopData **in, BopData *out) {
 }
 
 
-
 int main(int argc, char **argv) {
     BopData **in, *out;
     Args a;
