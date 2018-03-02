@@ -77,7 +77,7 @@ static void paste(long n, int nvars, int nin, BopData **in, BopData *out) {
     const T *data_in;
     T *data_out = (T*) bop_get_data(out);
 
-    for (i = 0; i < n; ++i) {
+    for (i = 0; i < nin; ++i) {
         BPC(bop_get_nvars(in[i], &nvars0));
         data_in = (const T*) bop_get_data(in[i]);
         append(n, nvars0, data_in, nvars, start, data_out);
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
         BPC(bop_get_nvars(in[i], &nvars0));
         BPC(bop_get_vars (in[i], &vars));
         BPC(bop_get_type (in[i], &typecheck));
-
+        
         if (0 == i) {
             n = ncheck;
             type = typecheck;
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     BPC(bop_set_n    (n,              out));
     BPC(bop_set_vars (nvars, varsall, out));
     BPC(bop_set_type (type,           out));
-
+    
     BPC(bop_alloc(out));
 
     switch (type) {
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
 /*
 
-# nTEST: bop2txt.t0
+# TEST: bop2txt.t0
 # make 
 # set -eu
 # ./paste ascii data/ascii-?.bop
