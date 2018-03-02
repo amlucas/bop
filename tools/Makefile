@@ -17,10 +17,13 @@ test: all
 
 paste.o: paste.cpp
 
-install:
+
+P=bop
+install: $(PROGS)
 	mkdir -p $(INST_BIN)
-	cp $(PROGS) $(INST_BIN)
+	install0 () ( cp $$f $(INST_BIN)/$P.$$f; )    ;  \
+	for f in $(PROGS); do install0; done
 
 clean: ; rm -f $(PROGS) *.o
 
-.PHONY: clean test
+.PHONY: clean test install all
