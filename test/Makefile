@@ -20,7 +20,8 @@ write.o: write.cpp check.h
 
 $(MPI_TOK)write_mpi.o: write_mpi.cpp check.h
 
-test:; atest *.cpp
+test: all; atest *.cpp
 
-.PHONY: clean test
 clean:; rm -rf $(PROGS) *.o
+
+.PHONY: all clean test

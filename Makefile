@@ -27,4 +27,4 @@ clean:
 	make -C tools clean
 	make -C test clean
 
-.PHONY: clean install test tests libbop utils converters tools
+.PHONY: clean install test tests libbop utils converters tools installtools
