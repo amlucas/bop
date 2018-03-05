@@ -11,7 +11,7 @@ libbop: ; make -C src/
 
 utils:      libbop install ;  make -C utils/
 converters: libbop install ;  make -C converters/
-converters: libbop install ;  make -C tools/
+tools:      libbop install ;  make -C tools/
 tests:      libbop install ;  make -C test/
 
 test: all
