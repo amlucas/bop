@@ -1,30 +1,29 @@
 all: converters utils tools libbop install installtools tests
 
-install: libbop
-	make -C src install
+install: libbop ; (cd src; make install)
 
 installtools: converters tools
-	make -C converters install	
-	make -C tools      install
+	(cd converters; make install)	
+	(cd tools;      make install)
 
-libbop: ; make -C src/
+libbop: ; (cd src; make)
 
-utils:      libbop install ;  make -C utils/
-converters: libbop install ;  make -C converters/
-tools:      libbop install ;  make -C tools/
-tests:      libbop install ;  make -C test/
+utils:      libbop install ;  (cd utils;      make)
+converters: libbop install ;  (cd converters; make)
+tools:      libbop install ;  (cd tools;      make)
+tests:      libbop install ;  (cd test;       make)
 
 test: all
-	make -C utils test
-	make -C converters test
-	make -C tools test
-	make -C test test
+	(cd converters; make test)
+	(cd test;       make test)
+	(cd tools;      make test)
+	(cd utils;      make test)
 
 clean:
-	make -C src clean
-	make -C utils clean
-	make -C converters clean
-	make -C tools clean
-	make -C test clean
+	(cd converters; make clean)
+	(cd src;        make clean)
+	(cd test;       make clean)
+	(cd utils;      make clean)	
+	(cd tools;      make clean)
 
 .PHONY: clean install test tests libbop utils converters tools installtools
