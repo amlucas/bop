@@ -63,18 +63,27 @@ static void write_mpi(MPI_Comm comm, const char *fname, long n, const T *data, M
 }
 
 static BopStatus write_header(MPI_Comm comm, const char *fhname, const char *fdname, const BopData *d) {
+    enum {
+        ROOT     = 0,
+        MAX_SIZE = 2048
+    };
     int rank, n;
+    long nloc, ntot;
     char *buf;
     BopStatus s;
-    enum {MAX_SIZE = 2048};
+    
     MPI_Comm_rank(comm, &rank);
 
+    nloc = d->n;
+    ntot = 0;
+    MPI_Reduce(&nloc, &ntot, 1, MPI_LONG, MPI_SUM, ROOT, comm);
+    
     s = safe_malloc(MAX_SIZE * sizeof(char), (void**) &buf);
     if (s != BOP_SUCCESS) return s;
 
     n = 0;
-    if (rank == 0) {
-        n += sprintf(buf + n, "%ld\n", d->n);
+    if (rank == ROOT) {
+        n += sprintf(buf + n, "%ld\n", ntot);
         n += sprintf(buf + n, "DATA_FILE: %s\n", fdname);
         n += sprintf(buf + n, "DATA_FORMAT: %s\n", type2str(d->type));
         n += sprintf(buf + n, "VARIABLES: %s\n", d->vars);
