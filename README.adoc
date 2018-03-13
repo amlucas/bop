@@ -59,7 +59,7 @@ bop2txt in1.bop in2.bop ... inN.bop > out.txt
 
 == Testing
 
-Uses `atest` framework, see link:https://gitlab.ethz.ch/mavt-cse/atest[gitlab page]
+Uses link:https://gitlab.ethz.ch/mavt-cse/atest[atest] framework
 
 [source,sh]
 ----
