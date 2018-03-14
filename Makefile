@@ -1,4 +1,8 @@
-all: converters utils tools libbop install installtools tests
+M=make
+include $M/usr.mk
+include $M/common.mk
+
+all: converters utils tools libbop install installtools tests installconfig
 
 install: libbop ; (cd src; make install)
 
@@ -26,4 +30,20 @@ clean:
 	(cd utils;      make clean)	
 	(cd tools;      make clean)
 
-.PHONY: clean install test tests libbop utils converters tools installtools
+
+edit = sed \
+	-e 's|@prefix[@]|$(prefix)|g'
+
+conf=bop-config
+
+$(conf): $(conf).in
+	@$(edit) $@.in > $@.tmp
+	@chmod +x $@.tmp
+	@mv $@.tmp $@
+	@echo creted $@
+
+installconfig: $(conf)
+	@mkdir -p $(INST_BIN)
+	@cp $(conf) $(INST_BIN)
+
+.PHONY: clean install test tests libbop utils converters tools installtools installconfig
