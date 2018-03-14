@@ -2,6 +2,8 @@ M=make
 include $M/usr.mk
 include $M/common.mk
 
+conf=bop-config
+
 all: converters utils tools libbop install installtools tests installconfig
 
 install: libbop ; (cd src; make install)
@@ -29,18 +31,16 @@ clean:
 	(cd test;       make clean)
 	(cd utils;      make clean)	
 	(cd tools;      make clean)
-
+	rm -rf $(conf)
 
 edit = sed \
 	-e 's|@prefix[@]|$(prefix)|g'
-
-conf=bop-config
 
 $(conf): $(conf).in
 	@$(edit) $@.in > $@.tmp
 	@chmod +x $@.tmp
 	@mv $@.tmp $@
-	@echo creted $@
+	@echo created $@
 
 installconfig: $(conf)
 	@mkdir -p $(INST_BIN)
