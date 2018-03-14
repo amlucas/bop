@@ -1,4 +1,6 @@
 M=../make
+
+include $M/usr.mk
 include $M/common.mk
 include $M/rules.mk
 

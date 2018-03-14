@@ -1,0 +1,38 @@
+#!/bin/sh
+
+usg() {
+    cat <<EOF
+usage: configure [OPTION]
+
+Options:
+
+  --prefix <prefix>          set prefix bop installation prefix;
+  	   		     default: ${HOME}/prefix
+EOF
+    exit 1
+}
+
+dump() {
+    cat <<EOF
+prefix=$prefix
+EOF
+}
+
+prefix=${HOME}/prefix
+
+while test $# -gt 0; do
+    case "$1" in
+	--prefix)
+	    shift
+	    prefix="$1"
+	    ;;
+	*)
+	    usg
+	    ;;
+    esac
+    shift
+done
+
+dump > make/usr.mk
+
+exit 0

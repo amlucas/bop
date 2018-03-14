@@ -1,6 +1,7 @@
 M=../make
 BOP=../src
 
+include $M/usr.mk
 include $M/common.mk
 include $M/rules.mk
 
