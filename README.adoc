@@ -34,11 +34,14 @@ Th `iascii` format is the ascii version of integer data.
 == Installation
 
 The following will install the binaries into `${HOME}/bin`. This folder needs to be in the `PATH` variable.
-Furthermore, it installs the headers and library into `${HOME}/prefix/bop/include` and `${HOME}/prefix/bop/lib`, respectively.
+Furthermore, it installs the headers and library into
+`PREFIX/bop/include` and `PREFIX/bop/lib`, respectively.
+`PREFIX` is set to `${HOME}/prefix` by default.
 
 [source,sh]
 ----
-make && make install
+./configure --prefix PREFIX
+make
 ----
 
 == Usage
