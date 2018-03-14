@@ -1,0 +1,49 @@
+#!/bin/sh
+
+prefix=@prefix@
+BOP=$prefix/bop
+
+LIBS="-L$BOP/lib -lbop"
+INC="-I$BOP/include"
+
+usg() {
+    cat <<EOF
+usage: bop-config [OPTION]
+
+Options:
+
+  --prefix          print installation prefix
+  --libs            print library linking informations (serial)
+  --libs-mpi        print library linking informations (mpi)
+  --cflags	    print pre-processor and compiler flags
+  --help            print help message
+
+EOF
+    exit 1
+}
+
+while test $# -gt 0; do
+    case "$1" in
+	--prefix)
+	    echo $prefix
+	    ;;
+	--libs)
+	    echo $LIBS -lbop_serial
+	    ;;
+	--libs-mpi)
+	    echo $LIBS -lbop_mpi
+	    ;;
+	--cflags)
+	    echo $INC
+	    ;;
+	--help)
+	    usg
+	    ;;
+	*)
+	    usg
+	    ;;
+    esac
+    shift
+done
+
+exit 0
