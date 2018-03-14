@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
         n = N - n_ * (size-1);
     
     BPC(bop_ini(&d));
-    BPC(bop_set_n(N, d));
+    BPC(bop_set_n(n, d));
     BPC(bop_set_nrank(size, d));
     BPC(bop_set_nprank(n, d));
     BPC(bop_set_type(BopFLOAT, d));
