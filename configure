@@ -8,6 +8,7 @@ Options:
 
   --prefix <prefix>          set prefix bop installation prefix;
   	   		     default: ${HOME}/prefix
+  --help                     print help message
 EOF
     exit 1
 }
@@ -25,6 +26,9 @@ while test $# -gt 0; do
 	--prefix)
 	    shift
 	    prefix="$1"
+	    ;;
+	--help)
+	    usg
 	    ;;
 	*)
 	    usg
