@@ -1,1 +1,1 @@
-PAGES = index.html
+PAGES = main.html
