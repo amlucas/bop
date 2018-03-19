@@ -19,7 +19,8 @@ static const char * err_desc[_BOP_NERR] = {
     "file types mismatch",
     "wrong format",
     "wrong mpi size",
-    "null pointer"
+    "null pointer",
+    "overflow"
 };
 
 BopStatus bop_ini(BopData **d) {

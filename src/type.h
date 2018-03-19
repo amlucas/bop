@@ -22,5 +22,6 @@ enum {
     BOP_WFORMAT,
     BOP_NULLPTR,
     BOP_WMPISIZE,
+    BOP_OVERFLOW,
     _BOP_NERR
 };
