@@ -6,5 +6,6 @@ include::interface.common.adoc[]
 
 include::interface.serial.adoc[]
 
+include::interface.mpi.adoc[]
 
 
