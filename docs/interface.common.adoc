@@ -74,5 +74,3 @@ include::{src}/bop_common.h[tag=tools]
 <1> output summary in stdout stream
 <2> cancatenate `nd` `BopData` structures into one
 
-
-
