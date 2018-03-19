@@ -14,37 +14,6 @@
 using namespace bop_header;
 using namespace bop_utils;
 
-BopStatus bop_set_nrank(int n, BopData *d)  {
-    if (d) {
-        d->nrank = n;
-        return BOP_SUCCESS;
-    }
-    return BOP_NULLPTR;
-}
-
-BopStatus bop_set_nprank(long n, BopData *d)  {
-    if (d) {
-        d->nprank = n;
-        return BOP_SUCCESS;
-    }
-    return BOP_NULLPTR;
-}
-
-BopStatus bop_get_nrank(const BopData *d, int *n)  {
-    if (d) {
-        *n = d->nrank;
-        return BOP_SUCCESS;
-    }
-    return BOP_NULLPTR;
-}
-BopStatus bop_get_nprank(const BopData *d, long *n)  {
-    if (d) {
-        *n = d->nprank;
-        return BOP_SUCCESS;
-    }
-    return BOP_NULLPTR;
-}
-
 template <typename T>
 static void write_mpi(MPI_Comm comm, const char *fname, long n, const T *data, MPI_Datatype type) {
     MPI_Offset base, offset, len;
@@ -67,12 +36,13 @@ static BopStatus write_header(MPI_Comm comm, const char *fhname, const char *fdn
         ROOT     = 0,
         MAX_SIZE = 2048
     };
-    int rank, n;
+    int rank, size, nchar;
     long nloc, ntot;
     char *buf;
     BopStatus s;
     
     MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &size);
 
     nloc = d->n;
     ntot = 0;
@@ -81,17 +51,17 @@ static BopStatus write_header(MPI_Comm comm, const char *fhname, const char *fdn
     s = safe_malloc(MAX_SIZE * sizeof(char), (void**) &buf);
     if (s != BOP_SUCCESS) return s;
 
-    n = 0;
+    nchar = 0;
     if (rank == ROOT) {
-        n += sprintf(buf + n, "%ld\n", ntot);
-        n += sprintf(buf + n, "DATA_FILE: %s\n", fdname);
-        n += sprintf(buf + n, "DATA_FORMAT: %s\n", type2str(d->type));
-        n += sprintf(buf + n, "VARIABLES: %s\n", d->vars);
-        n += sprintf(buf + n, "NRANK: %ld\n", d->nrank);
+        nchar += sprintf(buf + nchar, "%ld\n", ntot);
+        nchar += sprintf(buf + nchar, "DATA_FILE: %s\n", fdname);
+        nchar += sprintf(buf + nchar, "DATA_FORMAT: %s\n", type2str(d->type));
+        nchar += sprintf(buf + nchar, "VARIABLES: %s\n", d->vars);
+        nchar += sprintf(buf + nchar, "NRANK: %d\n", size);
     }
-    n += sprintf(buf + n, "%ld\n", d->nprank);
+    nchar += sprintf(buf + nchar, "%ld\n", d->n);
 
-    write_mpi(comm, fhname, n, buf, MPI_CHAR);
+    write_mpi(comm, fhname, nchar, buf, MPI_CHAR);
     
     free(buf);    
     return s;
@@ -132,7 +102,7 @@ static BopStatus write_ascii(MPI_Comm comm, const char *pattern, const char *fna
 }
 
 static BopStatus write_data(MPI_Comm comm, const char *fnval, const BopData *d) {
-    long n = d->nprank;
+    long n = d->n;
     int nvars = d->nvars;
     
     switch(d->type) {
@@ -169,9 +139,6 @@ BopStatus bop_read_header(MPI_Comm comm, const char *hfname, BopData *d, char *d
     MPI_Comm_size(comm, &size);
     
     s = read_header(rank, hfname, /**/ dfname0, d);
-
-    if (d->nrank != size)
-        return BOP_WMPISIZE;
     
     get_path(hfname, locdfname);
     strcat(locdfname, dfname0);
@@ -203,7 +170,7 @@ static BopStatus read_ascii() {
 }
 
 BopStatus bop_read_values(MPI_Comm comm, const char *dfname, BopData *d) {
-    long n = d->nprank;
+    long n = d->n;
     int nvars = d->nvars;
 
     switch (d->type) {

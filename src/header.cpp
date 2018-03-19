@@ -42,14 +42,13 @@ static void extract_desc_data(const char *l, /**/ char *desc, char *data) {
 }
 
 static void read_nrank(int rank, const char *data, /* io */ FILE *f, /**/ BopData *d) {
-    int i, n;
+    int i, size;
     long nloc;
-    sscanf(data, "%d", &n);
-    if (rank != SERIAL) d->nrank = n;
-    safe_malloc(n * sizeof(long), (void**) &d->nprank);
-    for (i = 0; i < n; ++i) {
+    sscanf(data, "%d", &size);
+    if (rank == SERIAL) return;
+    for (i = 0; i < size; ++i) {
         fscanf(f, "%ld\n", &nloc);
-        if (i == rank) d->nprank = nloc;
+        if (i == rank) d->n = nloc;
     }
 }
 

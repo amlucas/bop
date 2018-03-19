@@ -4,13 +4,11 @@
 
 /* structure to describe bop file */
 struct BopData {
-    long n;              /* total number of particles          */
+    long n;              /* number of particles (per node)     */
     int nvars;           /* number of variables per particle   */
     char vars[CBUFSIZE]; /* variable descriptions              */
     BopType type;    
     void *data;          /* particle data                      */
-    long nrank;          /* (opt) number of ranks              */
-    long nprank;         /* (opt) number of particles per rank */
 };
 
 /* error handling */

@@ -33,8 +33,6 @@ BopStatus bop_ini(BopData **d) {
         b->vars[0] = '\0';
         b->type = BopFLOAT;
         b->data = NULL;
-        b->nrank = 0;
-        b->nprank = 0;
     }
     return s;
 }
