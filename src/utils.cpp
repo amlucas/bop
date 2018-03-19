@@ -16,9 +16,7 @@ BopStatus safe_malloc(size_t sz, void **data) {
     *data = malloc(sz);
     
     if (*data == NULL) {
-        sprintf(bop_error_msg,
-                ":%s:%d: could not allocate array of %ld bytes\n",
-                __FILE__, __LINE__, sz);
+        ERR("could not allocate array of %ld bytes\n", sz);
         return BOP_BADALLOC;
     }
     return BOP_SUCCESS;
@@ -27,9 +25,7 @@ BopStatus safe_malloc(size_t sz, void **data) {
 BopStatus safe_open(const char *fname, const char *mode, FILE **f) {
     *f = fopen(fname, mode);
     if (*f == NULL) {
-        sprintf(bop_error_msg,
-                ":%s:%d: could not open <%s>\n",
-                __FILE__, __LINE__, fname);
+        ERR("could not open <%s>\n", fname);
         return BOP_BADFILE;
     }
     return BOP_SUCCESS;
