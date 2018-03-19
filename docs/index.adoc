@@ -1,3 +1,6 @@
 = BOP documentation
 
+:leveloffset: 1
+
+include::interface.adoc[]
 

@@ -1,1 +1,1 @@
-index.html: index.adoc
+index.html: index.adoc interface.adoc
