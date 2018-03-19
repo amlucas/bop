@@ -45,7 +45,6 @@ static void read_nrank(int rank, const char *data, /* io */ FILE *f, /**/ BopDat
     int i, size;
     long nloc;
     sscanf(data, "%d", &size);
-    if (rank == SERIAL) return;
     for (i = 0; i < size; ++i) {
         fscanf(f, "%ld\n", &nloc);
         if (i == rank) d->n = nloc;

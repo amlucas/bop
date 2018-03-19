@@ -24,8 +24,6 @@ int main(int argc, char **argv) {
     
     BPC(bop_ini(&d));
     BPC(bop_set_n(n, d));
-    BPC(bop_set_nrank(size, d));
-    BPC(bop_set_nprank(n, d));
     BPC(bop_set_type(BopFLOAT, d));
     BPC(bop_set_vars(2, "x y", d));
     BPC(bop_alloc(d));
