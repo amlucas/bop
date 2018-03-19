@@ -2,5 +2,9 @@
 
 :leveloffset: 1
 
-include::interface.adoc[]
+include::interface.common.adoc[]
+
+include::interface.serial.adoc[]
+
+
 

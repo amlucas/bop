@@ -25,6 +25,12 @@
 <li><a href="#_convenient_tools">1.5. Convenient tools</a></li>
 </ul>
 </li>
+<li><a href="#_serial_interface">2. serial interface</a>
+<ul class="sectlevel2">
+<li><a href="#_write">2.1. write</a></li>
+<li><a href="#_read">2.2. read</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -199,6 +205,62 @@ The status can be interpreted by calling the functions:</p>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>cancatenate <code>nd</code> <code>BopData</code> structures into one</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_serial_interface">2. serial interface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Interface specific to sequential version</p>
+</div>
+<div class="sect2">
+<h3 id="_write">2.1. write</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_values</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>write the header file from <code>BopData</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>write the data file from <code>BopData</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note that <code>name</code> is the basename of the file, without the extension.
+This results in the header file <code>name.bop</code> and int the data file <code>name.values</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_read">2.2. read</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">hfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">,</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_values</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span>               <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>read and parse the header file. returns the name of the data file
+in the (user provided) buffer <code>dfname</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>read data file and store it inside the internal buffer of the
+<code>BopData</code> structure</td>
 </tr>
 </table>
 </div>
