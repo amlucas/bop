@@ -92,7 +92,7 @@ static int count_vars(const char *var) {
 }
 
 static bool read_entry(FILE *f, char *l) {
-    auto ret = fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", l);
+    int ret = fscanf(f, " %" xstr(CBUFSIZE) "[^\n]c", l);
     return EOF != ret;
 }
 
