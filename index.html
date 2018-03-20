@@ -17,25 +17,31 @@
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_introduction">1. Introduction</a></li>
-<li><a href="#_common_interface">2. Common Interface</a>
+<li><a href="#_installation">2. Installation</a></li>
+<li><a href="#_common_interface">3. Common Interface</a>
 <ul class="sectlevel2">
-<li><a href="#_memory_management">2.1. memory management</a></li>
-<li><a href="#_setters">2.2. setters</a></li>
-<li><a href="#_getters">2.3. getters</a></li>
-<li><a href="#_error_handling">2.4. Error handling</a></li>
-<li><a href="#_convenient_tools">2.5. Convenient tools</a></li>
+<li><a href="#_memory_management">3.1. memory management</a></li>
+<li><a href="#_setters">3.2. setters</a></li>
+<li><a href="#_getters">3.3. getters</a></li>
+<li><a href="#_error_handling">3.4. Error handling</a></li>
+<li><a href="#_convenient_tools">3.5. Convenient tools</a></li>
 </ul>
 </li>
-<li><a href="#_serial_interface">3. serial interface</a>
+<li><a href="#_serial_interface">4. serial interface</a>
 <ul class="sectlevel2">
-<li><a href="#_write">3.1. write</a></li>
-<li><a href="#_read">3.2. read</a></li>
+<li><a href="#_write">4.1. write</a></li>
+<li><a href="#_read">4.2. read</a></li>
 </ul>
 </li>
-<li><a href="#_mpi_interface">4. mpi interface</a>
+<li><a href="#_mpi_interface">5. mpi interface</a>
 <ul class="sectlevel2">
-<li><a href="#_write_2">4.1. write</a></li>
-<li><a href="#_read_2">4.2. read</a></li>
+<li><a href="#_write_2">5.1. write</a></li>
+<li><a href="#_read_2">5.2. read</a></li>
+</ul>
+</li>
+<li><a href="#_tools">6. Tools</a>
+<ul class="sectlevel2">
+<li><a href="#_converters">6.1. Converters</a></li>
 </ul>
 </li>
 </ul>
@@ -84,13 +90,54 @@ NRANK: &lt;m&gt;
 <p>where <code>&lt;n1&gt;</code>, <code>&lt;n2&gt;</code>, &#8230;&#8203; are the number of particles per mpi rank.
 <code>NRANK</code> and these fields are optional.</p>
 </div>
+<div class="paragraph">
+<p><code>file.values</code> format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>x[0] y[0] z[0] vx[0] vy[0] vz[0] id[0]
+...
+
+x[N-1] y[N-1] ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>ascii</code> format is assumed to be single precision floating points data.
+Th <code>iascii</code> format is the ascii version for integer data.
+Other formats are binary.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_common_interface">2. Common Interface</h2>
+<h2 id="_installation">2. Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following will install the binaries into <code>${HOME}/bin</code>. This folder needs to be in the <code>PATH</code> variable.
+Furthermore, it installs the headers and library into
+<code>PREFIX/bop/include</code> and <code>PREFIX/bop/lib</code>, respectively.
+<code>PREFIX</code> is set to <code>${HOME}/prefix</code> by default.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span>./configure --prefix PREFIX
+make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After installation, it is recommended to run tests (uses <a href="https://gitlab.ethz.ch/mavt-cse/atest">atest</a> framework):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span>make -s <span class="tok-nb">test</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_interface">3. Common Interface</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_memory_management">2.1. memory management</h3>
+<h3 id="_memory_management">3.1. memory management</h3>
 <div class="paragraph">
 <p>The <code>BopData</code> data structure is hidden from user and can be
 allocated/deallocated using the following functions:</p>
@@ -122,7 +169,7 @@ buffer for data</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_setters">2.2. setters</h3>
+<h3 id="_setters">3.2. setters</h3>
 <div class="paragraph">
 <p>A description of the data can be set using the following functions:</p>
 </div>
@@ -164,7 +211,7 @@ buffer for data</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_getters">2.3. getters</h3>
+<h3 id="_getters">3.3. getters</h3>
 <div class="paragraph">
 <p>The informations stored in the <code>BopData</code> descriptor can be retrieved
 by using the following getter functions:</p>
@@ -209,7 +256,7 @@ by using the following getter functions:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_error_handling">2.4. Error handling</h3>
+<h3 id="_error_handling">3.4. Error handling</h3>
 <div class="paragraph">
 <p>Any function from the library returns an error status encoded in the
 <code>BopStatus</code> type.
@@ -240,7 +287,7 @@ The status can be interpreted by calling the functions:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_convenient_tools">2.5. Convenient tools</h3>
+<h3 id="_convenient_tools">3.5. Convenient tools</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_summary</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span>                                    <i class="conum" data-value="1"></i><b>(1)</b>
@@ -263,13 +310,13 @@ The status can be interpreted by calling the functions:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_serial_interface">3. serial interface</h2>
+<h2 id="_serial_interface">4. serial interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Interface specific to sequential version</p>
 </div>
 <div class="sect2">
-<h3 id="_write">3.1. write</h3>
+<h3 id="_write">4.1. write</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -294,7 +341,7 @@ This results in the header file <code>name.bop</code> and int the data file <cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="_read">3.2. read</h3>
+<h3 id="_read">4.2. read</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">hfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">,</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -319,13 +366,13 @@ in the (user provided) buffer <code>dfname</code></td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_mpi_interface">4. mpi interface</h2>
+<h2 id="_mpi_interface">5. mpi interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Interface specific to mpi version</p>
 </div>
 <div class="sect2">
-<h3 id="_write_2">4.1. write</h3>
+<h3 id="_write_2">5.1. write</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_header</span><span class="tok-p">(</span><span class="tok-n">MPI_Comm</span> <span class="tok-n">comm</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -355,7 +402,7 @@ This results in the header file <code>name.bop</code> and int the data file <cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="_read_2">4.2. read</h3>
+<h3 id="_read_2">5.2. read</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_header</span><span class="tok-p">(</span><span class="tok-n">MPI_Comm</span> <span class="tok-n">comm</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">hfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">,</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">);</span>  <i class="conum" data-value="1"></i><b>(1)</b>
@@ -379,6 +426,30 @@ in the (user provided) buffer <code>dfname</code>.</td>
 <div class="paragraph">
 <p>Note: The collective read for ascii values is not supported.
 The user must use the serial implementation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tools">6. Tools</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_converters">6.1. Converters</h3>
+<div class="paragraph">
+<p>Convert bop files <code>in1.bop</code>, <code>in2.bop</code>, &#8230;&#8203;, <code>inN.bop</code> into a single vtk file <code>out.vtk</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span>bop2vtk out.vtk in1.bop in2.bop ... inN.bop</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dump ascii data from bop files <code>in1.bop</code>, <code>in2.bop</code>, &#8230;&#8203;, <code>inN.bop</code> into <code>out.txt</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span>bop2txt in1.bop in2.bop ... inN.bop &gt; out.txt</code></pre>
+</div>
 </div>
 </div>
 </div>
