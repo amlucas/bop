@@ -16,25 +16,26 @@
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_common_interface">1. Common Interface</a>
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_common_interface">2. Common Interface</a>
 <ul class="sectlevel2">
-<li><a href="#_memory_management">1.1. memory management</a></li>
-<li><a href="#_setters">1.2. setters</a></li>
-<li><a href="#_getters">1.3. getters</a></li>
-<li><a href="#_error_handling">1.4. Error handling</a></li>
-<li><a href="#_convenient_tools">1.5. Convenient tools</a></li>
+<li><a href="#_memory_management">2.1. memory management</a></li>
+<li><a href="#_setters">2.2. setters</a></li>
+<li><a href="#_getters">2.3. getters</a></li>
+<li><a href="#_error_handling">2.4. Error handling</a></li>
+<li><a href="#_convenient_tools">2.5. Convenient tools</a></li>
 </ul>
 </li>
-<li><a href="#_serial_interface">2. serial interface</a>
+<li><a href="#_serial_interface">3. serial interface</a>
 <ul class="sectlevel2">
-<li><a href="#_write">2.1. write</a></li>
-<li><a href="#_read">2.2. read</a></li>
+<li><a href="#_write">3.1. write</a></li>
+<li><a href="#_read">3.2. read</a></li>
 </ul>
 </li>
-<li><a href="#_mpi_interface">3. mpi interface</a>
+<li><a href="#_mpi_interface">4. mpi interface</a>
 <ul class="sectlevel2">
-<li><a href="#_write_2">3.1. write</a></li>
-<li><a href="#_read_2">3.2. read</a></li>
+<li><a href="#_write_2">4.1. write</a></li>
+<li><a href="#_read_2">4.2. read</a></li>
 </ul>
 </li>
 </ul>
@@ -42,10 +43,54 @@
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_common_interface">1. Common Interface</h2>
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <em>bop</em> (bricks of particles) format is a simple file format for cloud data.
+The name is inspired from the <em>bov</em> (bricks of values) format for
+grid data in visit.</p>
+</div>
+<div class="paragraph">
+<p>It consists in two files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a header file (extension: <code>.bop</code>), in ascii format, containing a description of the data</p>
+</li>
+<li>
+<p>a data file (extension: <code>.values</code>), in binary or ascii, containing the data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The header file has the following format, for <code>&lt;N&gt;</code> particles:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;N&gt;
+DATA_FILE: &lt;file.values&gt;
+DATA_FORMAT: &lt;float|ascii|double|int|iascii&gt;
+VARIABLES: &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;vx&gt; &lt;vy&gt; &lt;vz&gt; &lt;id&gt; ...
+NRANK: &lt;m&gt;
+&lt;n1&gt;
+&lt;n2&gt;
+&lt;n3&gt;
+...
+&lt;nm&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>&lt;n1&gt;</code>, <code>&lt;n2&gt;</code>, &#8230;&#8203; are the number of particles per mpi rank.
+<code>NRANK</code> and these fields are optional.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_interface">2. Common Interface</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_memory_management">1.1. memory management</h3>
+<h3 id="_memory_management">2.1. memory management</h3>
 <div class="paragraph">
 <p>The <code>BopData</code> data structure is hidden from user and can be
 allocated/deallocated using the following functions:</p>
@@ -77,7 +122,7 @@ buffer for data</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_setters">1.2. setters</h3>
+<h3 id="_setters">2.2. setters</h3>
 <div class="paragraph">
 <p>A description of the data can be set using the following functions:</p>
 </div>
@@ -119,7 +164,7 @@ buffer for data</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_getters">1.3. getters</h3>
+<h3 id="_getters">2.3. getters</h3>
 <div class="paragraph">
 <p>The informations stored in the <code>BopData</code> descriptor can be retrieved
 by using the following getter functions:</p>
@@ -164,7 +209,7 @@ by using the following getter functions:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_error_handling">1.4. Error handling</h3>
+<h3 id="_error_handling">2.4. Error handling</h3>
 <div class="paragraph">
 <p>Any function from the library returns an error status encoded in the
 <code>BopStatus</code> type.
@@ -195,7 +240,7 @@ The status can be interpreted by calling the functions:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_convenient_tools">1.5. Convenient tools</h3>
+<h3 id="_convenient_tools">2.5. Convenient tools</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_summary</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span>                                    <i class="conum" data-value="1"></i><b>(1)</b>
@@ -218,13 +263,13 @@ The status can be interpreted by calling the functions:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_serial_interface">2. serial interface</h2>
+<h2 id="_serial_interface">3. serial interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Interface specific to sequential version</p>
 </div>
 <div class="sect2">
-<h3 id="_write">2.1. write</h3>
+<h3 id="_write">3.1. write</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -249,7 +294,7 @@ This results in the header file <code>name.bop</code> and int the data file <cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="_read">2.2. read</h3>
+<h3 id="_read">3.2. read</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_header</span><span class="tok-p">(</span><span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">hfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">,</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -274,13 +319,13 @@ in the (user provided) buffer <code>dfname</code></td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_mpi_interface">3. mpi interface</h2>
+<h2 id="_mpi_interface">4. mpi interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Interface specific to mpi version</p>
 </div>
 <div class="sect2">
-<h3 id="_write_2">3.1. write</h3>
+<h3 id="_write_2">4.1. write</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_write_header</span><span class="tok-p">(</span><span class="tok-n">MPI_Comm</span> <span class="tok-n">comm</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">name</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
@@ -310,7 +355,7 @@ This results in the header file <code>name.bop</code> and int the data file <cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="_read_2">3.2. read</h3>
+<h3 id="_read_2">4.2. read</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-n">BopStatus</span> <span class="tok-nf">bop_read_header</span><span class="tok-p">(</span><span class="tok-n">MPI_Comm</span> <span class="tok-n">comm</span><span class="tok-p">,</span> <span class="tok-k">const</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">hfname</span><span class="tok-p">,</span> <span class="tok-n">BopData</span> <span class="tok-o">*</span><span class="tok-n">d</span><span class="tok-p">,</span> <span class="tok-kt">char</span> <span class="tok-o">*</span><span class="tok-n">dfname</span><span class="tok-p">);</span>  <i class="conum" data-value="1"></i><b>(1)</b>
