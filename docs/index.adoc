@@ -12,4 +12,6 @@ include::interface.serial.adoc[]
 
 include::interface.mpi.adoc[]
 
+include::tools.adoc[]
+
 
