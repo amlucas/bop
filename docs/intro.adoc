@@ -26,3 +26,16 @@ NRANK: <m>
 where `<n1>`, `<n2>`, ... are the number of particles per mpi rank.
 `NRANK` and these fields are optional.
 
+`file.values` format:
+
+----
+x[0] y[0] z[0] vx[0] vy[0] vz[0] id[0]
+...
+
+x[N-1] y[N-1] ...
+----
+
+The `ascii` format is assumed to be single precision floating points data.
+Th `iascii` format is the ascii version for integer data.
+Other formats are binary.
+
