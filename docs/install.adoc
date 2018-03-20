@@ -11,3 +11,9 @@ Furthermore, it installs the headers and library into
 make
 ----
 
+After installation, it is recommended to run tests (uses link:https://gitlab.ethz.ch/mavt-cse/atest[atest] framework):
+
+[source,sh]
+----
+make -s test
+----
