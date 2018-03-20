@@ -9,6 +9,19 @@ Options:
   --prefix <prefix>          set prefix bop installation prefix;
   	   		     default: ${HOME}/prefix
   --help                     print help message
+
+
+Compilation (after running configure):
+
+make [VARS]
+
+VARS:
+  
+  CXX           c compiler (default: g++)
+  CXXFLAGS      c flags for serial version
+  MPICXX        mpi compiler (default: mpic++)
+  MPICXXFLAGS   c flags for mpi version
+
 EOF
     exit 1
 }
