@@ -1,3 +1,7 @@
 = python wrapper
 
+Reference for c wrapper:
+
+https://docs.python.org/2/c-api/index.html
+
 TODO
