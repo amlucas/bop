@@ -19,7 +19,6 @@ Options:
   --help            print help message
 
 EOF
-    exit 1
 }
 
 while test $# -gt 0; do
@@ -38,9 +37,11 @@ while test $# -gt 0; do
 	    ;;
 	--help)
 	    usg
+	    exit 0
 	    ;;
 	*)
 	    usg
+	    exit 1
 	    ;;
     esac
     shift
