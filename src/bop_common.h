@@ -6,7 +6,8 @@ struct BopData;
 typedef int BopStatus;
 
 // tag::type[]
-enum BopType {BopFLOAT, BopDOUBLE, BopINT, BopFASCII, BopIASCII};
+enum {BopFLOAT, BopDOUBLE, BopINT, BopFASCII, BopIASCII, _BopNTYPES};
+typedef int BopType;
 // end::type[]
 
 // tag::mem[]

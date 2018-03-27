@@ -10,7 +10,7 @@
 namespace bop_utils {
 
 static const char *typestr[] = {
-    "float", "double", "int", "fascii", "iascii", ""};
+    "float", "double", "int", "fascii", "iascii"};
 
 BopStatus safe_malloc(size_t sz, void **data) {
     *data = malloc(sz);
@@ -77,14 +77,9 @@ BopType str2type(const char *str) {
 }
 
 const char * type2str(BopType t) {
-    switch(t) {
-    case BopFLOAT:  return typestr[0];
-    case BopDOUBLE: return typestr[1];
-    case BopINT:    return typestr[2];
-    case BopFASCII: return typestr[3];
-    case BopIASCII: return typestr[4];
-    };
-    return typestr[5];
+    if (t >= 0 && t < _BopNTYPES)
+        return typestr[t];
+    return NULL;
 }
 
 } // bop_header
