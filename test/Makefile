@@ -6,9 +6,8 @@ include $M/rules.mk
 
 BOP=$(INST_LIB)
 
-CXXFLAGS    += -I$(BOP)/include
-MPICXXFLAGS += -I$(BOP)/include
-LIBS_B   += -L$(BOP)/lib -lbop
+INCFLAGS = -I$(BOP)/include
+LIBS_B   = -L$(BOP)/lib -lbop
 
 LIBS     = $(LIBS_B) -lbop_serial
 LIBS_MPI = $(LIBS_B) -lbop_mpi

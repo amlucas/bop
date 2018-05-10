@@ -7,7 +7,7 @@ include $M/rules.mk
 
 LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
-CXXFLAGS += -I$(BOP)
+INCFLAGS  = -I$(BOP)
 
 PROGS = bop2vtk bop2txt
 

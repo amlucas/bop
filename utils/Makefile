@@ -8,7 +8,7 @@ BOP=../src
 
 LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
-CXXFLAGS += -I$(BOP)
+INCFLAGS  = -I$(BOP)
 
 PROGS = seq2bop rwascii
 
