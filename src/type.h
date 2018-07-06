@@ -1,6 +1,7 @@
 /* use define instead of enum because of implementation details */
 /* see str macro                                                */
 #define CBUFSIZE 256
+#define CERRSIZE 1024
 
 /* structure to describe bop file */
 struct BopData {
@@ -12,7 +13,8 @@ struct BopData {
 };
 
 /* error handling */
-extern char bop_error_msg[1024];
+extern char bop_error_msg[CERRSIZE];
+
 enum {
     BOP_SUCCESS,
     BOP_BADALLOC,

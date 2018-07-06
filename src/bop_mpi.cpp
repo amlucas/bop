@@ -62,7 +62,7 @@ static BopStatus write_header(MPI_Comm comm, const char *fhname, const char *fdn
     nchar += sprintf(buf + nchar, "%ld\n", d->n);
 
     if (nchar >= MAX_SIZE) {
-        ERR("buffer is too small for header: %d, %d\n", nchar, MAX_SIZE);
+        report_err("buffer is too small for header: %d, %d\n", nchar, MAX_SIZE);
         return BOP_OVERFLOW;
     }
     

@@ -64,7 +64,7 @@ static BopStatus parse_entry(int rank, const char *l, /**/ FILE *f, char *dfname
     else if (is_desc(desc, "NRANK"))
         read_nrank(rank, data, /**/ f, /**/ d);
     else {
-        ERR("unprocessed desc: <%s>, data: <%s>\n", desc, data);
+        report_err("unprocessed desc: <%s>, data: <%s>\n", desc, data);
         return BOP_WFORMAT;
     }
     return BOP_SUCCESS;
