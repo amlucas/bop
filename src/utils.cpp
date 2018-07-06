@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "bop_common.h"
 #include "type.h"
@@ -16,7 +17,7 @@ BopStatus safe_malloc(size_t sz, void **data) {
     *data = malloc(sz);
     
     if (*data == NULL) {
-        ERR("could not allocate array of %ld bytes\n", sz);
+        report_err("could not allocate array of %ld bytes\n", sz);
         return BOP_BADALLOC;
     }
     return BOP_SUCCESS;
@@ -25,7 +26,7 @@ BopStatus safe_malloc(size_t sz, void **data) {
 BopStatus safe_open(const char *fname, const char *mode, FILE **f) {
     *f = fopen(fname, mode);
     if (*f == NULL) {
-        ERR("could not open <%s>\n", fname);
+        report_err("could not open <%s>\n", fname);
         return BOP_BADFILE;
     }
     return BOP_SUCCESS;
@@ -80,6 +81,18 @@ const char * type2str(BopType t) {
     if (t >= 0 && t < _BopNTYPES)
         return typestr[t];
     return NULL;
+}
+
+void report_err(const char *fmt, ...) {
+    va_list ap;
+    char msg[CERRSIZE];
+    
+    va_start(ap, fmt);
+    vsnprintf(msg, CERRSIZE - 1, fmt, ap);
+    va_end(ap);
+
+    snprintf(bop_error_msg, CERRSIZE, ":%s:%d: %s",
+             __FILE__, __LINE__, msg);
 }
 
 } // bop_header
