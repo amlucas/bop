@@ -2,4 +2,4 @@
 
 python wrapper for bop object
 
-requires link::https://github.com/pybind/pybind11[pybind11]
+requires link:https://github.com/pybind/pybind11[pybind11]
