@@ -5,21 +5,19 @@ include $M/usr.mk
 include $M/common.mk
 include $M/rules.mk
 
-#TODO
-PYBIND_DIR=$(HOME)/projects/pybind11/include
+PYBIND_INC=$(PYBIND_PREFIX)/include
 PYCONF=python3-config
 
 LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
 CXXFLAGS += -I$(BOP)
-CXXFLAGS += -I$(PYBIND_DIR)
+CXXFLAGS += -I$(PYBIND_INC)
 
 CXXFLAGS += `$(PYCONF) --includes`
 LIBS     += `$(PYCONF) --ldflags`
 
 CXXFLAGS += -fvisibility=hidden
 
-#PYEXT  = .so
 PYEXT  = $(shell $(PYCONF) --extension-suffix)
 TARGET = pybop$(PYEXT)
 
@@ -33,7 +31,7 @@ $(TARGET): binding.o pybop.o
 
 clean:; rm -f *.o $(TARGET)
 
-test:
+test: $(TARGET)
 	atest `find test -name main`
 
 .PHONY: test clean test
