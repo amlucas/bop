@@ -10,24 +10,24 @@ PYCONF=python3-config
 
 BOP_CXXFLAGS = -I$(BOP)
 BOP_LDFLAGS  = -L$(BOP)
-LIBS      = -lbop -lbop_serial
+LIBS         = -lbop -lbop_serial
 
 PYBIND_CXXFLAGS = -I$(PYBIND_INC)
 PYBIND_LDFLAGS  =
 
-PY_CXXFLAGS += `$(PYCONF) --includes`
-PY_LDFLAGS  += `$(PYCONF) --ldflags`
+PY_CXXFLAGS = `$(PYCONF) --includes`
+PY_LDFLAGS  = `$(PYCONF) --ldflags`
 
-CXXFLAGS += $(BOP_CXXFLAGS)
-CXXFLAGS += $(PYBIND_CXXFLAGS)
-CXXFLAGS += $(PY_CXXFLAGS)
-CXXFLAGS += -fvisibility=hidden
+INCFLAGS = $(BOP_CXXFLAGS)  \
+	 $(PYBIND_CXXFLAGS) \
+	 $(PY_CXXFLAGS)     \
+	 -fvisibility=hidden
 
-LDFLAGS += $(BOP_LDFLAGS)
-LDFLAGS += $(PYBIND_LDFLAGS)
-LDFLAGS += $(PY_LDFLAGS)
+LDFLAGS += $(BOP_LDFLAGS) \
+	$(PYBIND_LDFLAGS) \
+	$(PY_LDFLAGS)
 
-PYEXT  = $(shell $(PYCONF) --extension-suffix)
+PYEXT  = .so
 TARGET = pybop$(PYEXT)
 
 all: $(TARGET)
