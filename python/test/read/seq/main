@@ -9,7 +9,7 @@ cat > $f.values <<EOF
 EOF
 :
 cat > $f.bop << EOF
-10
+2
 DATA_FILE: $f.values
 DATA_FORMAT: iascii
 VARIABLES: a b c
