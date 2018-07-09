@@ -6,7 +6,9 @@ usage: configure [OPTION]
 
 Options:
 
-  --prefix <prefix>          set prefix bop installation prefix;
+  --prefix <prefix>          set bop installation prefix;
+  	   		     default: ${HOME}/prefix
+  --prefix-pybind11 <prefix> set pybind11 installation prefix;
   	   		     default: ${HOME}/prefix
   --help                     print help message
 
@@ -29,16 +31,22 @@ EOF
 dump() {
     cat <<EOF
 prefix=$prefix
+PYBIND_PREFIX=$prefix_pybind11
 EOF
 }
 
 prefix=${HOME}/prefix
+prefix_pybind11=${HOME}/prefix
 
 while test $# -gt 0; do
     case "$1" in
 	--prefix)
 	    shift
 	    prefix="$1"
+	    ;;
+	--prefix-pybind11)
+	    shift
+	    prefix_pybind11="$1"
 	    ;;
 	--help)
 	    usg
