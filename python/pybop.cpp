@@ -127,3 +127,10 @@ void PyBop::write(string basename) {
     BPC(bop_write_header(basename.c_str(), d));
     BPC(bop_write_values(basename.c_str(), d));
 }
+
+void PyBop::read(std::string hname) {
+    char dfname[FILENAME_MAX];
+    BPC(bop_read_header(hname.c_str(), d, dfname));
+    this->alloc();
+    BPC(bop_read_values(dfname, d));
+}

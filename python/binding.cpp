@@ -22,6 +22,7 @@ PYBIND11_MODULE(pybop, m) {
         .def("get_int_data", &PyBop::get_datai)
         .def("get_float_data", &PyBop::get_dataf)
         .def("get_double_data", &PyBop::get_datad)
+        .def("read",  &PyBop::read)
         .def("write", &PyBop::write);
 }
  

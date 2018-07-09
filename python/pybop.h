@@ -28,6 +28,7 @@ public:
     std::vector<double> get_datad();
    
     void write(std::string basename);
+    void read(std::string hname);
     
 private:
     BopData *d;
