@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include "pybop.h"
 
 namespace py = pybind11;
@@ -8,7 +9,16 @@ PYBIND11_MODULE(pybop, m) {
 
     py::class_<PyBop>(m, "PyBop")
         .def(py::init<>())
-        .def("set_n", &PyBop::set_n)
-        .def("get_n", &PyBop::get_n);
+        .def("alloc",    &PyBop::alloc)
+        .def("set_n",    &PyBop::set_n)
+        .def("set_vars", &PyBop::set_vars)
+        .def("set_type", &PyBop::set_type)
+        .def("set_data", &PyBop::set_dataf)
+        .def("set_data", &PyBop::set_datad)
+        .def("set_data", &PyBop::set_datai)
+        .def("get_n",    &PyBop::get_n)
+        .def("get_vars", &PyBop::get_vars)
+        .def("get_type", &PyBop::get_type)
+        .def("write", &PyBop::write);
 }
  
