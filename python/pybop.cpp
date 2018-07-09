@@ -60,21 +60,21 @@ void PyBop::set_type(const std::string &type) {
 }
 
 template <typename T>
-static void copy(const vector<T> &src, BopData *d) {
+static void set_data(const vector<T> &src, BopData *d) {
     T *dst = (T*) bop_get_data(d);
     memcpy(dst, src.data(), src.size() * sizeof(T));
 }
 
 void PyBop::set_datai(const std::vector<int> &data) {
-    copy(data, d);
+    set_data(data, d);
 }
 
 void PyBop::set_dataf(const std::vector<float> &data) {
-    copy(data, d);
+    set_data(data, d);
 }
 
 void PyBop::set_datad(const std::vector<double> &data) {
-    copy(data, d);
+    set_data(data, d);
 }
 
 long PyBop::get_n() {
