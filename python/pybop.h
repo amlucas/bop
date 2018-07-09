@@ -23,6 +23,10 @@ public:
     void set_dataf(const std::vector<float>  &data);
     void set_datad(const std::vector<double> &data);
 
+    std::vector<int>    get_datai();
+    std::vector<float>  get_dataf();
+    std::vector<double> get_datad();
+   
     void write(std::string basename);
     
 private:

@@ -101,7 +101,27 @@ string PyBop::get_type() {
     return type_str[t];
 }
 
+template <typename T>
+static vector<T> get_data(const BopData *d) {
+    long n;
+    BPC(bop_get_n(d, &n));
+    const T *src = (const T*) bop_get_data(d);
+    vector<T> arr(n);
+    memcpy(arr.data(), src, n * sizeof(T));
+    return arr;
+}
 
+vector<int> PyBop::get_datai() {
+    return get_data<int>(d);
+}
+
+vector<float> PyBop::get_dataf() {
+    return get_data<float>(d);
+}
+
+vector<double> PyBop::get_datad() {
+    return get_data<double>(d);
+}
 
 void PyBop::write(string basename) {
     BPC(bop_write_header(basename.c_str(), d));
