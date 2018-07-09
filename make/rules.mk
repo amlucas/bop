@@ -6,6 +6,6 @@ MPI_TOK=MPI_SPECIFIC_
 $(MPI_TOK)%.o: %.cpp
 	$(MPICXX) $(MPICXXFLAGS) $(INCFLAGS) -c $< -o $@
 
-%: %.o; $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+%: %.o; $(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-%: $(MPI_TOK)%.o; $(MPICXX) $(MPICXXFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS_MPI)
+%: $(MPI_TOK)%.o; $(MPICXX) $(MPICXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS_MPI)
