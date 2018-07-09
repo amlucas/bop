@@ -8,15 +8,24 @@ include $M/rules.mk
 PYBIND_INC=$(PYBIND_PREFIX)/include
 PYCONF=python3-config
 
+BOP_CXXFLAGS = -I$(BOP)
+BOP_LDFLAGS  = -L$(BOP)
 LIBS      = -lbop -lbop_serial
-LDFLAGS   = -L$(BOP)
-CXXFLAGS += -I$(BOP)
-CXXFLAGS += -I$(PYBIND_INC)
 
-CXXFLAGS += `$(PYCONF) --includes`
-LIBS     += `$(PYCONF) --ldflags`
+PYBIND_CXXFLAGS = -I$(PYBIND_INC)
+PYBIND_LDFLAGS  =
 
+PY_CXXFLAGS += `$(PYCONF) --includes`
+PY_LDFLAGS  += `$(PYCONF) --ldflags`
+
+CXXFLAGS += $(BOP_CXXFLAGS)
+CXXFLAGS += $(PYBIND_CXXFLAGS)
+CXXFLAGS += $(PY_CXXFLAGS)
 CXXFLAGS += -fvisibility=hidden
+
+LDFLAGS += $(BOP_LDFLAGS)
+LDFLAGS += $(PYBIND_LDFLAGS)
+LDFLAGS += $(PY_LDFLAGS)
 
 PYEXT  = $(shell $(PYCONF) --extension-suffix)
 TARGET = pybop$(PYEXT)
@@ -35,3 +44,4 @@ test: $(TARGET)
 	atest `find test -name main`
 
 .PHONY: test clean test
+.SUFFIXES:
