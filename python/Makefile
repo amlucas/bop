@@ -5,27 +5,32 @@ include $M/usr.mk
 include $M/common.mk
 include $M/rules.mk
 
+#TODO
+PYBIND_DIR=$(HOME)/projects/pybind11/include
+PYCONF=python3-config
+
 LIBS      = -lbop -lbop_serial
 LDFLAGS   = -L$(BOP)
-INCFLAGS  = -I$(BOP)
+CXXFLAGS += -I$(BOP)
+CXXFLAGS += -I$(PYBIND_DIR)
 
+CXXFLAGS += `$(PYCONF) --includes`
+LIBS     += `$(PYCONF) --ldflags`
 
-all: libbop.so
+CXXFLAGS += -fvisibility=hidden
 
-libbop.so: bop.o
-	$(CXX) -shared -Wl,-install_name,$@ -o $@ $^ $(LDFLAGS) $(LIBS)
+#PYEXT  = .so
+PYEXT  = $(shell $(PYCONF) --extension-suffix)
+TARGET = pybop$(PYEXT)
 
-bop.o: bop.cpp
-	$(CXX) $(CXXFLAGS) $(INCFLAGS) -c -fPIC $< -o $@ 
+all: $(TARGET)
 
-bop2vtk.o: bop2vtk.cpp check.h
-bop2txt.o: bop2txt.cpp check.h
+pybop.o: pybop.cpp pybop.h
+binding.o: binding.cpp pybop.h
 
-install:
-	mkdir -p $(INST_BIN)
-	cp $(PROGS) $(INST_BIN)
+$(TARGET): binding.o pybop.o
+	$(CXX) $(CXXFLAGS) -shared $^ -o $@ $(LDFLAGS) $(LIBS)
 
-clean:
-	rm -f *.o *.so
+clean:; rm -f *.o $(TARGET)
 
 .PHONY: test clean install
