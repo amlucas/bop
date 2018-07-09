@@ -33,4 +33,7 @@ $(TARGET): binding.o pybop.o
 
 clean:; rm -f *.o $(TARGET)
 
-.PHONY: test clean install
+test:
+	atest `find test -name main`
+
+.PHONY: test clean test

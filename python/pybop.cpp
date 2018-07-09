@@ -40,6 +40,10 @@ static const string type_str[] = {
     "asciiint"
 };
 
+static const BopType type_key[] = {
+    BopFLOAT, BopFASCII, BopDOUBLE, BopINT, BopIASCII
+};
+
 void PyBop::set_type(const std::string &type) {
     BopType t;
     int found, i, n;
@@ -47,8 +51,9 @@ void PyBop::set_type(const std::string &type) {
     
     for (found = i = 0; i < n; ++i) {
         if (type == type_str[i]) {
-            t = i;
+            t = type_key[i];
             found = 1;
+            break;
         }
     }
             
