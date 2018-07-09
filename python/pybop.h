@@ -10,6 +10,8 @@ public:
     PyBop();
     ~PyBop();
 
+    void reset();
+    
     void alloc();
     void set_n(long n);
     void set_vars(int n, const std::string &vars);

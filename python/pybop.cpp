@@ -20,6 +20,11 @@ PyBop::~PyBop() {
     BPC(bop_fin(d));
 }
 
+void PyBop::reset() {
+    BPC(bop_fin(d));
+    BPC(bop_ini(&d));
+}
+
 void PyBop::alloc() {
     BPC(bop_alloc(d));
 }

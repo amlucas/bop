@@ -10,6 +10,7 @@ PYBIND11_MODULE(pybop, m) {
     py::class_<PyBop>(m, "PyBop")
         .def(py::init<>())
         .def("alloc",     &PyBop::alloc)
+        .def("reset",     &PyBop::reset)
         .def("set_n",     &PyBop::set_n)
         .def("set_vars",  &PyBop::set_vars)
         .def("set_type",  &PyBop::set_type)
