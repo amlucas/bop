@@ -23,7 +23,7 @@ INCFLAGS = $(BOP_CXXFLAGS)  \
 	 $(PY_CXXFLAGS)     \
 	 -fvisibility=hidden
 
-LDFLAGS += $(BOP_LDFLAGS) \
+LDFLAGS = $(BOP_LDFLAGS)  \
 	$(PYBIND_LDFLAGS) \
 	$(PY_LDFLAGS)
 
