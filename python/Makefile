@@ -1,4 +1,5 @@
 M=../make
+S=src
 BOP=../src
 
 include $M/usr.mk
@@ -27,15 +28,15 @@ LDFLAGS = $(BOP_LDFLAGS)  \
 	$(PYBIND_LDFLAGS) \
 	$(PY_LDFLAGS)
 
-PYEXT  = .so
+PYEXT  = $(shell $(PYCONF) --extension-suffix)
 TARGET = pybop$(PYEXT)
 
 all: $(TARGET)
 
-pybop.o: pybop.cpp pybop.h
-binding.o: binding.cpp pybop.h
+$S/pybop.o: $S/pybop.cpp $S/pybop.h
+$S/binding.o: $S/binding.cpp $S/pybop.h
 
-$(TARGET): binding.o pybop.o
+$(TARGET): $S/binding.o $S/pybop.o
 	$(CXX) $(CXXFLAGS) -shared $^ -o $@ $(LDFLAGS) $(LIBS)
 
 clean:; rm -f *.o $(TARGET)
