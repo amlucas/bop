@@ -22,7 +22,8 @@ PY_LDFLAGS  = `$(PYCONF) --ldflags`
 INCFLAGS = $(BOP_CXXFLAGS)  \
 	 $(PYBIND_CXXFLAGS) \
 	 $(PY_CXXFLAGS)     \
-	 -fvisibility=hidden
+	 -fvisibility=hidden \
+	-Wno-deprecated
 
 LDFLAGS = $(BOP_LDFLAGS)  \
 	$(PYBIND_LDFLAGS) \
@@ -39,10 +40,12 @@ $S/binding.o: $S/binding.cpp $S/pybop.h
 $(TARGET): $S/binding.o $S/pybop.o
 	$(CXX) $(CXXFLAGS) -shared $^ -o $@ $(LDFLAGS) $(LIBS)
 
-clean:; rm -f *.o $(TARGET)
+clean:; rm -f $S/*.o $(TARGET)
 
 test: $(TARGET)
 	atest `find test -name main`
 
-.PHONY: test clean test
+install: $(TARGET)
+
+.PHONY: test clean test install
 .SUFFIXES:
